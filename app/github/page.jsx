@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import GitHubExpanded from "../../components/GithubExpanded";
 
 export default function GitHubPage() {
