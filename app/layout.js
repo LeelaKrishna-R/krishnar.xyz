@@ -5,29 +5,23 @@ import Link from "next/link";
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
-  title: "Leelakrishna Ravuri — Portfolio",
-  description: "AI graduate student and software developer. Projects, skills, experience, and contact.",
+  title: "Leelakrishna Ravuri: Systems integration & infrastructure",
+  description: "Systems integration, moving into infrastructure and networking. Homelab tooling, AI agents, and real shipped projects.",
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" }
-    ],
-    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
-    other: [{ rel: "mask-icon", url: "/safari-pinned-tab.svg", color: "#bd93f9" }]
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   },
   openGraph: {
-    title: "Leelakrishna Ravuri — Portfolio",
-    description: "AI graduate student and software developer.",
+    title: "Leelakrishna Ravuri: Systems integration & infrastructure",
+    description: "Systems integration, moving into infrastructure and networking. Homelab tooling, AI agents, and real shipped projects.",
     url: "https://krishnar.xyz/",
     siteName: "Leelakrishna Ravuri",
-    images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Leelakrishna Ravuri — Portfolio",
-    description: "AI graduate student and software developer.",
-    images: ["/twitter-image.png"]
+    title: "Leelakrishna Ravuri: Systems integration & infrastructure",
+    description: "Systems integration, moving into infrastructure and networking.",
   },
   manifest: "/manifest.webmanifest",
 };
@@ -53,10 +47,13 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap"
           rel="stylesheet"
         />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
-        />
+        <noscript>
+          <style
+            dangerouslySetInnerHTML={{
+              __html: ".reveal-up{opacity:1!important;transform:none!important}",
+            }}
+          />
+        </noscript>
       </head>
       <ThemeProvider>
         <BodyWrapper>
@@ -65,17 +62,37 @@ export default function RootLayout({ children }) {
           </main>
 
           <footer className="site-footer">
-            <div className="footer-inner">
-              <p>
-                © {new Date().getFullYear()} Leelakrishna Ravuri. All rights reserved.{" "}
-                <Link
-                  href="https://github.com/LeelaKrishna-R/mywebsite/blob/main/LICENSE"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  MIT License
-                </Link>
-              </p>
+            <div className="container footer-inner">
+              <div className="footer-top">
+                <div className="footer-brand">
+                  <strong>Leelakrishna Ravuri</strong>
+                  <p>Systems integration, moving into infrastructure and networking.</p>
+                </div>
+                <nav className="footer-nav" aria-label="Footer">
+                  <Link href="/">Home</Link>
+                  <Link href="/projects">Projects</Link>
+                  <Link href="/homelab">Homelab</Link>
+                  <Link href="/blog">Blog</Link>
+                  <Link href="/contact">Contact</Link>
+                </nav>
+                <div className="footer-social">
+                  <a href="https://github.com/LeelaKrishna-R" target="_blank" rel="noopener noreferrer">GitHub</a>
+                  <a href="https://www.linkedin.com/in/leelakrishnaravuri/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                  <a href="mailto:email@krishnar.xyz">Email</a>
+                </div>
+              </div>
+              <div className="footer-bottom">
+                <p>
+                  © {new Date().getFullYear()} Leelakrishna Ravuri.{" "}
+                  <Link
+                    href="https://github.com/LeelaKrishna-R/krishnar.xyz/blob/main/LICENSE"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    MIT License
+                  </Link>
+                </p>
+              </div>
             </div>
           </footer>
         </BodyWrapper>

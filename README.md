@@ -159,13 +159,13 @@ Feel free to fork and adapt it for your own portfolio!
 ---
 
 ## ‼️ Issues
-- I do have some issues time to time which can be found [here](https://github.com/LeelaKrishna-R/mywebsite/issues)
--  if you have a solution to my issue, feel free to open a [PR](https://github.com/LeelaKrishna-R/mywebsite/pulls)
+- I do have some issues time to time which can be found [here](https://github.com/LeelaKrishna-R/krishnar.xyz/issues)
+-  if you have a solution to my issue, feel free to open a [PR](https://github.com/LeelaKrishna-R/krishnar.xyz/pulls)
 
 ---
 
 ## ✈️ Todo 
 - I will update my todo list time to time 
-- You can see the known issues, bugs, improvements planned [here](https://github.com/LeelaKrishna-R/mywebsite/blob/main/todo/todo.md)
+- You can see the known issues, bugs, improvements planned [here](https://github.com/LeelaKrishna-R/krishnar.xyz/blob/main/todo/todo.md)
 
 ---

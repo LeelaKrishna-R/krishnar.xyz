@@ -42,10 +42,7 @@ export default function BlogIndex() {
                 openIndex === index ? "expanded" : "collapsed"
               }`}
             >
-              <div>✍️ {post.author}</div>
-              <div>⏱ {post.readingTime}</div>
-              <div>📅 {post.date}</div>
-         
+              <div>{post.date} · {post.readingTime}</div>
             </div>
           </div>
         ))}

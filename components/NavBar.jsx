@@ -35,7 +35,7 @@ export default function NavBar() {
           </button>
 
           <Link href="/" className="brand" aria-label="Home">
-            <div className="brand-logo">LR</div>
+            <img className="brand-logo" src="/logo.png" alt="" width="34" height="34" />
             <span>Leelakrishna Ravuri</span>
           </Link>
         </div>
@@ -44,10 +44,9 @@ export default function NavBar() {
         <div className="nav-right">
           <nav className="nav-links" aria-label="Primary">
             <NavItem href="/">Home</NavItem>
-            <NavItem href="/skills">Skills</NavItem>
             <NavItem href="/projects">Projects</NavItem>
+            <NavItem href="/homelab">Homelab</NavItem>
             <NavItem href="/blog">Blog</NavItem>
-            <NavItem href="/resume">Resume</NavItem>
             <NavItem href="/contact">Contact</NavItem>
           </nav>
           <div className="toggle-wrap">
@@ -60,10 +59,9 @@ export default function NavBar() {
       {open && (
         <div id="mobile-menu" className="container mobile-menu">
           <NavItem href="/" onClick={() => setOpen(false)}>Home</NavItem>
-          <NavItem href="/skills" onClick={() => setOpen(false)}>Skills</NavItem>
           <NavItem href="/projects" onClick={() => setOpen(false)}>Projects</NavItem>
+          <NavItem href="/homelab" onClick={() => setOpen(false)}>Homelab</NavItem>
           <NavItem href="/blog" onClick={() => setOpen(false)}>Blog</NavItem>
-          <NavItem href="/resume" onClick={() => setOpen(false)}>Resume</NavItem>
           <NavItem href="/contact" onClick={() => setOpen(false)}>Contact</NavItem>
         </div>
       )}
