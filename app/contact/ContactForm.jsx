@@ -1,18 +1,28 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
+const inputStyle = {
+  width: "100%",
+  marginTop: "6px",
+  padding: "12px",
+  borderRadius: "10px",
+  border: "1px solid var(--border)",
+  background: "var(--surface-2)",
+  color: "var(--text)",
+  fontSize: "14px",
+};
 
 export default function ContactForm() {
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
-  const [fadeOut, setFadeOut] = useState(false);
 
   async function onSubmit(e) {
     e.preventDefault();
     setError("");
     if (submitting) return;
 
-    const formEl = e.currentTarget; // keep reference before async
+    const formEl = e.currentTarget;
     const fd = new FormData(formEl);
     const payload = {
       name: fd.get("name"),
@@ -35,7 +45,6 @@ export default function ContactForm() {
       });
       const data = await res.json();
       if (!res.ok || !data.ok) throw new Error(data.error || "Something went wrong");
-
       setSent(true);
       formEl.reset();
     } catch (err) {
@@ -45,54 +54,34 @@ export default function ContactForm() {
     }
   }
 
-  // Handle auto-close after 5s
-  useEffect(() => {
-    if (sent) {
-      const timer = setTimeout(() => {
-        setFadeOut(true);
-        setTimeout(() => {
-          setSent(false);
-          setFadeOut(false);
-          document.querySelector("#contact-form")?.scrollIntoView({ behavior: "smooth" });
-        }, 800);
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [sent]);
-
   if (sent) {
     return (
-      <div
-        className={`fx-pop success-card ${fadeOut ? "fade-out" : ""}`}
-        style={{
-          background: "var(--surface-2)",
-          border: "1px solid var(--accent)",
-          borderRadius: "14px",
-          padding: "28px",
-          textAlign: "center",
-          boxShadow: "0 0 25px rgba(34,197,94,0.4)", // 🌿 green glow
-        }}
-      >
-        <img
-          src="/images/checkMark.gif"
-          alt="Success"
-          width={48}
-          height={48}
-          style={{ marginBottom: "10px" }}
-        />
-        <h2 style={{ margin: "0 0 8px", color: "var(--accent)" }}>
-          Message Sent!
-        </h2>
-        <p style={{ margin: 0, fontSize: "14px", color: "var(--muted)" }}>
-          Thanks for reaching out. I’ll get back to you shortly.
-        </p>
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="var(--accent)"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+          style={{ marginTop: 2, flexShrink: 0 }}
+        >
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+        <div>
+          <strong style={{ display: "block", marginBottom: 4 }}>Message sent</strong>
+          <span className="small muted">Thanks for reaching out. I'll get back to you soon.</span>
+        </div>
       </div>
     );
   }
 
   return (
     <form id="contact-form" method="post" onSubmit={onSubmit}>
-      <div style={{ display: "grid", gap: "12px" }}>
+      <div style={{ display: "grid", gap: "16px" }}>
         <input
           type="text"
           name="website"
@@ -103,55 +92,20 @@ export default function ContactForm() {
         />
         <label>
           <span className="small muted">Your name</span>
-          <br />
-          <input
-            required
-            name="name"
-            placeholder="Leelakrishna Ravuri"
-            style={{
-              width: "100%",
-              padding: "12px",
-              borderRadius: "10px",
-              border: "1px solid var(--border)",
-              background: "var(--surface)",
-              color: "var(--text)",
-            }}
-          />
+          <input required name="name" placeholder="Jane Doe" style={inputStyle} />
         </label>
         <label>
           <span className="small muted">Email</span>
-          <br />
-          <input
-            required
-            type="email"
-            name="email"
-            placeholder="your@example.com"
-            style={{
-              width: "100%",
-              padding: "12px",
-              borderRadius: "10px",
-              border: "1px solid var(--border)",
-              background: "var(--surface)",
-              color: "var(--text)",
-            }}
-          />
+          <input required type="email" name="email" placeholder="you@example.com" style={inputStyle} />
         </label>
         <label>
           <span className="small muted">Message</span>
-          <br />
           <textarea
             required
             name="message"
             rows={6}
-            placeholder="Hello Krishna — loved your Shero bot..."
-            style={{
-              width: "100%",
-              padding: "12px",
-              borderRadius: "10px",
-              border: "1px solid var(--border)",
-              background: "var(--surface)",
-              color: "var(--text)",
-            }}
+            placeholder="What's on your mind?"
+            style={{ ...inputStyle, resize: "vertical" }}
           ></textarea>
         </label>
         {error && (
@@ -159,17 +113,14 @@ export default function ContactForm() {
             {error}
           </div>
         )}
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <button
-            className="btn btn-primary"
-            type="submit"
-            aria-label="Send Message"
-            disabled={submitting}
-            style={{ minWidth: "120px" }}
-          >
-            {submitting ? "Sending..." : "📨 Send"}
-          </button>
-        </div>
+        <button
+          className="btn btn-primary"
+          type="submit"
+          disabled={submitting}
+          style={{ justifySelf: "start" }}
+        >
+          {submitting ? "Sending..." : "Send message"}
+        </button>
       </div>
     </form>
   );

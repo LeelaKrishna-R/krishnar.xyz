@@ -1,74 +1,70 @@
 "use client";
 
 import RevealOnScroll from "../../components/RevealOnScroll";
-import ProjectCard from "../../components/ProjectCard";
 import BackToTop from "../../components/BackToTop";
-import SectionGraphic from "../../components/SectionGraphic";
-import ThreeBackground from "../../components/ThreeBackground";
 import RootClient from "../../components/RootClient";
-import { useTheme } from "../../components/ThemeProvider";
+import { featuredProjects, earlierProjects } from "../../lib/projects";
+
+function Tile({ p }) {
+  return (
+    <div className="project-tile">
+      <h3>{p.title}</h3>
+      {p.meta && <div className="tile-meta">{p.meta}</div>}
+      <p>{p.desc}</p>
+      {p.detail && <p className="tile-detail">{p.detail}</p>}
+      <div className="tags">
+        {p.tags.map((t) => (
+          <span className="tag" key={t}>
+            {t}
+          </span>
+        ))}
+      </div>
+      <div className="tile-links">
+        {p.links.map((l, i) => (
+          <a
+            key={l.href}
+            className={`btn ${i === 0 ? "btn-primary" : ""}`}
+            href={l.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {l.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function ClientProjectsPage() {
-  const { theme } = useTheme();
-
   return (
     <div>
       <RootClient />
       <main>
         <RevealOnScroll />
-        <section
-          className="reveal"
-          style={{ position: "relative", overflow: "hidden" }}
-        >
-          <SectionGraphic variant="grid" />
-          <SectionGraphic variant="blob" style={{ bottom: "-160px", top: "auto" }} />
-          <ThreeBackground height={260} />
-
+        <section className="reveal">
           <div className="container">
             <h1 className="section-title">Projects</h1>
             <p className="small muted">
-              Click a card to flip. Only one card opens at a time.
+              Real, shipped work first, then genuine earlier projects.
             </p>
-            <div className="projects">
-              <ProjectCard
-                title="Dynamic Trivia Content Generation"
-                desc="Trivia game content generated programmatically; experimentation with Prolog for rule-based logic."
-                image="/images/project-trivia.svg"
-                tags={["Prolog", "CLI", "Game"]}
-                links={[
-                  {
-                    label: "Repository",
-                    href: "https://github.com/LeelaKrishna-R/Dynamic-Trivia-Content-Generation",
-                  },
-                  { label: "Case study", href: "/projects/dynamic-trivia" },
-                ]}
-                backTitle="Under the hood"
-                backText="Rule-based question generation, category weighting, difficulty scaling, and deterministic seeding for reproducible sets."
-              />
-              <ProjectCard
-                title="Shero — Discord Bot"
-                desc="Feature-rich Discord bot with sharding, Redis integration, and performance monitoring."
-                image="/images/project-shero.svg"
-                tags={["Node.js", "Redis", "Discord.js"]}
-                links={[
-                  { label: "Code", href: "https://github.com/LeelaKrishna-R" },
-                  { label: "Case study", href: "/projects/shero" },
-                ]}
-                backTitle="Highlights"
-                backText="Sharded architecture with broadcastEval, Redis-backed queues and metrics, structured logging, and health dashboards."
-              />
-              <ProjectCard
-                title="Wellness Wave"
-                desc="Mental-wellness mobile app concepts and prototypes with focus on privacy and simple UX."
-                image="/images/project-wellness.svg"
-                tags={["React Native", "Expo"]}
-                links={[
-                  { label: "Code", href: "https://github.com/LeelaKrishna-R" },
-                  { label: "Case study", href: "/projects/shero" },
-                ]}
-                backTitle="Concepts"
-                backText="Local-first journaling, on-device embeddings for habit insights, and minimalistic mood tracking."
-              />
+
+            <h2 className="section-title" style={{ fontSize: 18, marginTop: 28 }}>
+              Shipped
+            </h2>
+            <div className="feature-grid">
+              {featuredProjects.map((p) => (
+                <Tile key={p.title} p={p} />
+              ))}
+            </div>
+
+            <h2 className="section-title" style={{ fontSize: 18, marginTop: 40 }}>
+              Earlier work
+            </h2>
+            <div className="feature-grid">
+              {earlierProjects.map((p) => (
+                <Tile key={p.title} p={p} />
+              ))}
             </div>
           </div>
         </section>

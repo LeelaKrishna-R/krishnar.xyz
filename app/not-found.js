@@ -8,7 +8,7 @@ export default function NotFound(){
         <div className="container" style={{padding:'96px 0', maxWidth:'760px'}}>
           <div className="fx-pop" style={{textAlign:'center'}}>
             <img src="/images/404-illustration.svg" alt="Not found" style={{display:"block",margin:"0 auto 16px",width:"220px",height:"160px"}}/>
-            <h1 className="section-title">404 — Page not found</h1>
+            <h1 className="section-title">404 · Page not found</h1>
             <p className="small muted fx-delay-1 fx-fadeUp" style={{marginTop:8}}>
               The page you’re looking for doesn’t exist or has been moved.
             </p>
