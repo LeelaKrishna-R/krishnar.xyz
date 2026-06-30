@@ -2,11 +2,8 @@
 
 import BackToTop from "../../components/BackToTop";
 import RootClient from "../../components/RootClient";
-import { useTheme } from "../../components/ThemeProvider";
 
 export default function ClientResumePage() {
-  const { theme } = useTheme();
-
   return (
     <div>
       <RootClient />
