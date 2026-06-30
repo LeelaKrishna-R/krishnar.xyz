@@ -4,7 +4,7 @@ import BodyWrapper from "../components/BodyWrapper";
 import Link from "next/link";
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.krishnar.xyz"),
   title: "Leelakrishna Ravuri: Systems integration & infrastructure",
   description: "Systems integration, moving into infrastructure and networking. Homelab tooling, AI agents, and real shipped projects.",
   icons: {
@@ -15,7 +15,7 @@ export const metadata = {
   openGraph: {
     title: "Leelakrishna Ravuri: Systems integration & infrastructure",
     description: "Systems integration, moving into infrastructure and networking. Homelab tooling, AI agents, and real shipped projects.",
-    url: "https://krishnar.xyz/",
+    url: "https://www.krishnar.xyz/",
     siteName: "Leelakrishna Ravuri",
   },
   twitter: {
