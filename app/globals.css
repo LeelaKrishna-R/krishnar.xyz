@@ -869,7 +869,7 @@ a.sticker,
 
 .id-note {
   position: absolute;
-  right: -36px;
+  right: -8px;
   top: -58px;
   rotate: 5deg;
   flex-direction: row-reverse;
@@ -926,12 +926,12 @@ a.sticker,
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 900px) {
   .live-card {
     position: relative;
     right: auto;
     bottom: auto;
-    margin: -18px auto 0;
+    margin: -14px auto 0;
     width: fit-content;
   }
 }
@@ -982,9 +982,12 @@ a.sticker,
   flex: 1;
 }
 
+/* fills its grid cell; a fixed ratio would grow with the text column and overflow */
 .project.wide .cover {
   margin: 22px 0 22px 24px;
-  height: auto;
+  aspect-ratio: auto;
+  min-height: 280px;
+  min-width: 0;
 }
 
 .project.wide.flip .project-inner {
@@ -1011,7 +1014,7 @@ a.sticker,
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top center;
+  object-position: left top;
   transition: transform 0.6s var(--ease-out);
 }
 
@@ -1208,6 +1211,7 @@ a.sticker,
     order: 0;
     margin: 22px 24px 0;
     aspect-ratio: 16 / 10;
+    min-height: 0;
   }
 }
 
