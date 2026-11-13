@@ -1,15 +1,18 @@
 import "./globals.css";
-import { Bricolage_Grotesque, Figtree, Shantell_Sans, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import ScrollFx from "../components/ScrollFx";
 import { site } from "../lib/site";
 
-// Self-hosted at build time by next/font, so they load on every OS.
-const display = Bricolage_Grotesque({ subsets: ["latin"], weight: ["700", "800"], variable: "--font-display", display: "swap" });
-const body = Figtree({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-body", display: "swap" });
-const hand = Shantell_Sans({ subsets: ["latin"], weight: ["500"], variable: "--font-hand", display: "swap" });
-const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-mono", display: "swap" });
+// The font files live in the repo (latin subsets from Google Fonts, SIL OFL).
+// next/font/google downloads them during the build instead, and Google
+// sometimes answers with a file URL next/font can't parse, which failed
+// Vercel's production builds.
+const display = localFont({ src: "./fonts/bricolage.woff2", weight: "700 800", variable: "--font-display", display: "swap" });
+const body = localFont({ src: "./fonts/figtree.woff2", weight: "400 700", variable: "--font-body", display: "swap" });
+const hand = localFont({ src: "./fonts/shantell.woff2", weight: "500", variable: "--font-hand", display: "swap" });
+const mono = localFont({ src: "./fonts/jetbrains-mono.woff2", weight: "500 700", variable: "--font-mono", display: "swap" });
 
 export const metadata = {
   metadataBase: new URL(site.url),
