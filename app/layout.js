@@ -1,102 +1,68 @@
 import "./globals.css";
-import { ThemeProvider } from "../components/ThemeProvider";
-import BodyWrapper from "../components/BodyWrapper";
-import Link from "next/link";
+import { Bricolage_Grotesque, Figtree, Shantell_Sans, JetBrains_Mono } from "next/font/google";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
+import ScrollFx from "../components/ScrollFx";
+import { site } from "../lib/site";
+
+// Self-hosted at build time by next/font, so they load on every OS.
+const display = Bricolage_Grotesque({ subsets: ["latin"], weight: ["700", "800"], variable: "--font-display", display: "swap" });
+const body = Figtree({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-body", display: "swap" });
+const hand = Shantell_Sans({ subsets: ["latin"], weight: ["500"], variable: "--font-hand", display: "swap" });
+const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-mono", display: "swap" });
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.krishnar.xyz"),
-  title: "Leelakrishna Ravuri: Systems integration & infrastructure",
-  description: "Systems integration, moving into infrastructure and networking. Homelab tooling, AI agents, and real shipped projects.",
-  icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png",
+  metadataBase: new URL(site.url),
+  title: {
+    default: `${site.name}: Discord bots, a personal AI, and a homelab`,
+    template: `%s · ${site.name}`,
   },
+  description: site.description,
   openGraph: {
-    title: "Leelakrishna Ravuri: Systems integration & infrastructure",
-    description: "Systems integration, moving into infrastructure and networking. Homelab tooling, AI agents, and real shipped projects.",
-    url: "https://www.krishnar.xyz/",
-    siteName: "Leelakrishna Ravuri",
+    type: "website",
+    url: site.url,
+    siteName: site.name,
+    title: site.name,
+    description: site.description,
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Leelakrishna Ravuri: Systems integration & infrastructure",
-    description: "Systems integration, moving into infrastructure and networking.",
-  },
-  manifest: "/manifest.webmanifest",
+  twitter: { card: "summary_large_image", title: site.name, description: site.description },
 };
 
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0f0f10" },
-    { media: "(prefers-color-scheme: light)", color: "#f7f7f8" }
-  ]
+    { media: "(prefers-color-scheme: light)", color: "#f3ebdc" },
+    { media: "(prefers-color-scheme: dark)", color: "#18150f" },
+  ],
 };
+
+// Runs before first paint: picks the saved or system theme and marks that
+// scripts work, which turns on the scroll-in animations. If the app's own
+// script never starts, the animations switch back off after 3 s so nothing
+// stays hidden.
+const boot = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";d.dataset.theme=t}catch(e){d.dataset.theme="light"}d.classList.add("js");setTimeout(function(){if(!window.__fx)d.classList.remove("js")},3000)})();`;
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      data-theme="light"
+      className={`${display.variable} ${body.variable} ${hand.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
-        {/* Fonts & Devicon */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap"
-          rel="stylesheet"
-        />
-        <noscript>
-          <style
-            dangerouslySetInnerHTML={{
-              __html: ".reveal-up{opacity:1!important;transform:none!important}",
-            }}
-          />
-        </noscript>
+        <script dangerouslySetInnerHTML={{ __html: boot }} />
       </head>
-      <ThemeProvider>
-        <BodyWrapper>
-          <main className="main-content">
-            {children}
-          </main>
-
-          <footer className="site-footer">
-            <div className="container footer-inner">
-              <div className="footer-top">
-                <div className="footer-brand">
-                  <strong>Leelakrishna Ravuri</strong>
-                  <p>Systems integration, moving into infrastructure and networking.</p>
-                </div>
-                <nav className="footer-nav" aria-label="Footer">
-                  <Link href="/">Home</Link>
-                  <Link href="/projects">Projects</Link>
-                  <Link href="/homelab">Homelab</Link>
-                  <Link href="/blog">Blog</Link>
-                  <Link href="/contact">Contact</Link>
-                </nav>
-                <div className="footer-social">
-                  <a href="https://github.com/LeelaKrishna-R" target="_blank" rel="noopener noreferrer">GitHub</a>
-                  <a href="https://www.linkedin.com/in/leelakrishnaravuri/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                  <a href="mailto:email@krishnar.xyz">Email</a>
-                </div>
-              </div>
-              <div className="footer-bottom">
-                <p>
-                  © {new Date().getFullYear()} Leelakrishna Ravuri.{" "}
-                  <Link
-                    href="https://github.com/LeelaKrishna-R/krishnar.xyz/blob/main/LICENSE"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    MIT License
-                  </Link>
-                </p>
-              </div>
-            </div>
-          </footer>
-        </BodyWrapper>
-      </ThemeProvider>
+      <body>
+        <a className="skip" href="#main">
+          Skip to content
+        </a>
+        <Nav />
+        <main id="main">{children}</main>
+        <Footer />
+        <ScrollFx />
+      </body>
     </html>
   );
 }

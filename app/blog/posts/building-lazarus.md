@@ -12,7 +12,7 @@ The idea is boring on purpose. A service in my homelab would die, I would get an
 
 So the restarting itself was never the hard part. The hard part was trusting it.
 
-## How it actually works
+## How it works
 
 lazarus reads a single YAML config that lists the hosts and services to watch and the checks to run against them. There are three kinds of check:
 
@@ -33,7 +33,7 @@ A monitor that can run commands on your hosts is also a monitor that can do real
 
 ## Why it is so small
 
-lazarus is deliberately tiny: Python, a single runtime dependency (PyYAML), and 42 tests. The small dependency surface is a feature, not laziness, and the tests are the real point. If I am going to let a piece of software act on its own against my machines, I want a lot of evidence that it does the right thing in the cases that matter, including the ugly ones like a flapping host or a remediation that itself fails.
+lazarus is deliberately tiny: Python, a single runtime dependency (PyYAML), and 42 tests. Keeping the dependencies down is deliberate, and the tests matter more than anything else in the repo. If I am going to let a piece of software act on its own against my machines, I want a lot of evidence that it does the right thing in the cases that matter, including the ugly ones like a flapping host or a remediation that itself fails.
 
 It is not trying to replace a real observability stack. It is trying to handle the boring, repeatable recoveries safely, so I do not have to be the one SSHing in at 2am.
 

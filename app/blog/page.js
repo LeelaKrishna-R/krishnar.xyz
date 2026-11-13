@@ -1,52 +1,44 @@
-"use client";
-
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { getAllPosts } from "../../lib/posts"; // server function
+import SectionHead from "../../components/SectionHead";
+import { getAllPosts, formatDate } from "../../lib/posts";
 
-export default function BlogIndex() {
-  const [posts, setPosts] = useState([]);
-  const [openIndex, setOpenIndex] = useState(null);
+export const metadata = {
+  title: "Writing",
+  description: "Notes on building lazarus and net-triage, and on moving from AI into infrastructure.",
+};
 
-  useEffect(() => {
-    async function loadPosts() {
-      const allPosts = await getAllPosts();
-      setPosts(allPosts);
-    }
-    loadPosts();
-  }, []);
-
-  const toggle = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
-
+export default async function BlogIndex() {
+  const posts = await getAllPosts();
   return (
-    <main className="container mx-auto px-4 py-10">
-      <h1 className="text-4xl font-extrabold mb-8">Blog</h1>
-
-      <div className="blog-list">
-        {posts.map((post, index) => (
-          <div
-            key={post.slug}
-            className={`blog-card ${openIndex === index ? "open" : ""}`}
-            onClick={() => toggle(index)} // toggle expand
-          >
-            {/* Title links directly to blog page */}
-            <Link href={`/blog/${post.slug}`} className="blog-title-link">
-              {post.title}
-            </Link>
-
-            {/* Meta info toggle */}
-            <div
-              className={`blog-meta ${
-                openIndex === index ? "expanded" : "collapsed"
-              }`}
-            >
-              <div>{post.date} · {post.readingTime}</div>
-            </div>
+    <>
+      <header className="page-head wrap">
+        <SectionHead
+          as="h1"
+          path="~/writing"
+          before="Notes from the "
+          mark="build"
+          lede="What I learned building the tools on this site, written up after the fact."
+        />
+      </header>
+      <section className="page-section">
+        <div className="wrap">
+          <div className="post-list">
+            {posts.map((p) => (
+              <Link key={p.slug} href={`/blog/${p.slug}`} className="sticker post-row" data-reveal>
+                <time dateTime={p.date}>
+                  {formatDate(p.date)}
+                  <br />
+                  {p.minutes} min read
+                </time>
+                <div>
+                  <h2>{p.title}</h2>
+                  <p>{p.excerpt}</p>
+                </div>
+              </Link>
+            ))}
           </div>
-        ))}
-      </div>
-    </main> 
+        </div>
+      </section>
+    </>
   );
 }

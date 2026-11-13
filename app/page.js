@@ -1,231 +1,355 @@
-"use client";
+import Image from "next/image";
 import Link from "next/link";
-import BackToTop from "../components/BackToTop";
-import SocialBar from "../components/SocialBar";
-import ContribGraph from "../components/ContribGraph";
-import GithubStats from "../components/GithubStats";
-import TypingText from "../components/TypingText";
-import RevealUp from "../components/RevealUp";
-import { featuredProjects } from "../lib/projects";
+import SectionHead from "../components/SectionHead";
+import Marker from "../components/Marker";
+import CountUp from "../components/CountUp";
+import Calendar from "../components/Calendar";
+import ProjectCard from "../components/ProjectCard";
+import ToolCard from "../components/ToolCard";
+import { GitHub, LinkedIn, XLogo, Mail, ArrowRight, Scribble } from "../components/Icons";
+import { projects, tools } from "../lib/projects";
+import { nodes, figures, incidents } from "../lib/lab";
+import { timeline } from "../lib/timeline";
+import { getAllPosts, formatDate } from "../lib/posts";
+import { getGithub, getCommunity } from "../lib/live";
+import { links, site } from "../lib/site";
 
-const work = [
-  {
-    group: "Hands-on",
-    note: "Built real things with these",
-    items: ["JavaScript", "Node.js", "discord.js", "Linux", "Git"],
-  },
-  {
-    group: "Building with",
-    note: "Shipping projects, still leveling up",
-    items: ["Python", "TypeScript", "Anthropic SDK"],
-  },
-  {
-    group: "Learning now",
-    note: "Where I'm headed next",
-    items: ["Networking", "CCNA", "Infrastructure"],
-  },
-];
+// Live numbers are refreshed at most every ten minutes.
+export const revalidate = 600;
 
-export default function HomePage() {
+const TILTS = ["-0.6deg", "0.5deg", "0.4deg", "-0.5deg", "0.3deg"];
+
+export default async function Home() {
+  const [gh, community, posts] = await Promise.all([getGithub(), getCommunity(), getAllPosts()]);
+
   return (
-    <div>
-      <main>
-        <RevealUp />
-        {/* HERO */}
-        <section className="hero" style={{ borderTop: "none" }}>
-          <div className="container">
-            <div className="hero-grid">
-              {/* Left */}
-              <div>
-                <span className="kicker">
-                  Systems integration → infrastructure &amp; networking
+    <>
+      {/* ---------- hero ---------- */}
+      <section className="hero">
+        <div className="wrap hero-grid">
+          <div>
+            <span className="status">
+              <i className="dot-live" aria-hidden="true" /> Studying for the CCNA
+            </span>
+            <h1 className="in">
+              <span className="line">Leelakrishna</span>
+              <span className="line">
+                <Marker>Ravuri</Marker>
+              </span>
+            </h1>
+            <p className="lede">
+              I build <strong>Discord bots</strong>, a personal AI called <strong>Friday</strong>, and small tools
+              for my <strong>homelab</strong>. I have an M.S. in Artificial Intelligence from the
+              University of North Texas.
+            </p>
+            <div className="cta">
+              <a className="btn btn-gold" href="#work">
+                See my work <ArrowRight />
+              </a>
+              <a className="btn" href={`mailto:${site.email}`}>
+                Email me
+              </a>
+            </div>
+            <div className="socials">
+              <a className="icon-btn" href={links.github} aria-label="GitHub">
+                <GitHub />
+              </a>
+              <a className="icon-btn" href={links.linkedin} aria-label="LinkedIn">
+                <LinkedIn />
+              </a>
+              <a className="icon-btn" href={links.x} aria-label="X">
+                <XLogo />
+              </a>
+              <a className="icon-btn" href={`mailto:${site.email}`} aria-label="Email">
+                <Mail />
+              </a>
+            </div>
+          </div>
+
+          <div className="id-wrap">
+            <div className="id-float">
+              <div className="sticker id-card">
+                <span className="tape" aria-hidden="true" />
+                <div className="id-photo">
+                  <Image
+                    src="/images/me.webp"
+                    alt="An illustrated portrait of Leelakrishna Ravuri"
+                    width={640}
+                    height={640}
+                    priority
+                    sizes="(max-width: 900px) 320px, 360px"
+                  />
+                </div>
+                <div className="id-name">Leelakrishna Ravuri</div>
+                <dl className="id-rows">
+                  <dt>based in</dt>
+                  <dd>Denton, Texas</dd>
+                  <dt>from</dt>
+                  <dd>India</dd>
+                  <dt>degree</dt>
+                  <dd>M.S. AI, UNT</dd>
+                </dl>
+              </div>
+            </div>
+            <span className="note id-note">
+              me, Ghibli-style
+              <Scribble />
+            </span>
+            {community ? (
+              <a className="sticker live-card" href="https://discord.gg/dexterai">
+                <i className="dot-live" aria-hidden="true" />
+                <span>
+                  <b>{community.members.toLocaleString("en-US")}</b>
+                  <small>
+                    in the Dexter AI community
+                    {community.online ? <><br />{community.online.toLocaleString("en-US")} online now</> : null}
+                  </small>
                 </span>
-                <TypingText
-                  className="title"
-                  text="I keep real systems alive, and build small tools when they break too often."
-                />
-                <p className="subtitle">
-                  I run a homelab, and most of what I make starts there: something falls over one
-                  too many times, so I build a tool to deal with it. I lean on AI where it
-                  genuinely helps, and I try to be honest about what I'm still figuring out.
-                </p>
+              </a>
+            ) : null}
+          </div>
+        </div>
+      </section>
 
-                <div className="status-row">
-                  <Link className="status-pill" href="/homelab">Homelab</Link>
-                  <span className="status-pill">Studying for CCNA</span>
-                  <span className="status-pill">MS in AI, UNT</span>
+      {/* ---------- work ---------- */}
+      <section className="section" id="work">
+        <div className="wrap">
+          <SectionHead
+            path="~/work"
+            before="Things I've "
+            mark="built"
+            lede="The bigger projects first, then the small tools that came out of running a homelab."
+          />
+          <div className="work-grid">
+            {projects.map((p, i) => (
+              <ProjectCard key={p.slug} p={p} community={community} tilt={TILTS[i % TILTS.length]} />
+            ))}
+          </div>
+
+          <div className="tools-head" data-reveal>
+            <h3>Small tools</h3>
+          </div>
+          <div className="tools-grid">
+            {tools.map((t, i) => (
+              <ToolCard key={t.name} t={t} tilt={TILTS[(i + 2) % TILTS.length]} />
+            ))}
+            <Link className="sticker tool tool-more" href="/projects" data-reveal>
+              <b>Every project, with the details</b>
+              <p>What each one does, how it's built, and the earlier work.</p>
+              <ArrowRight />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ---------- homelab ---------- */}
+      <section className="section section-band" id="homelab">
+        <div className="wrap">
+          <SectionHead path="~/lab" before="The " mark="homelab" />
+          <div className="lab-grid">
+            <div className="lab-copy" data-reveal>
+              <p>
+                Two Dell micro PCs in a <strong>Proxmox cluster</strong>. node1 runs production, including the VM the
+                Dexter bots live on. node2 runs DNS, the reverse proxy, monitoring, backups, media and Home Assistant.
+              </p>
+              <p>
+                Alerts go to my phone, and each nightly backup is copied to both machines, so either disk can fail
+                without losing them. When something breaks, it goes in the log below.
+              </p>
+              <div className="lab-figures">
+                {figures.map((f) => (
+                  <div key={f.label}>
+                    <b>{f.value}</b>
+                    <span>{f.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rack">
+              {nodes.map((n) => (
+                <div key={n.name} data-reveal>
+                  <div className="sticker node">
+                    <div className="node-head">
+                      <h3>
+                        <span className="leds" aria-hidden="true">
+                          <i />
+                          <i />
+                        </span>
+                        {n.name}
+                      </h3>
+                      <span className="spec">{n.spec.split(" · ").slice(1).join(" · ")}</span>
+                    </div>
+                    <p className="role">{n.role}</p>
+                    <div className="guests">
+                      {n.guests.map((g) => (
+                        <span key={g.label} className={`guest${g.vm ? " vm" : ""}`}>
+                          {g.label}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
+              ))}
+            </div>
+          </div>
 
-                <div className="cta">
-                  <Link className="btn btn-primary" href="/projects">
-                    View projects
-                  </Link>
-                  <Link className="btn" href="/contact">
-                    Get in touch
-                  </Link>
+          <div className="tools-head" data-reveal>
+            <h3>What broke lately</h3>
+            <Link className="more-link" href="/homelab">
+              The whole lab →
+            </Link>
+          </div>
+          <ol className="log">
+            {incidents.slice(0, 3).map((x) => (
+              <li key={x.date} className="sticker" data-reveal>
+                <time dateTime={x.date}>{x.date}</time>
+                <div>
+                  <h3>{x.title}</h3>
+                  <p>
+                    {x.text} <b>Fix:</b> {x.fix}
+                  </p>
                 </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
 
-                <div style={{ marginTop: 20 }}>
-                  <SocialBar />
+      {/* ---------- github ---------- */}
+      {gh.days || gh.repos !== null ? (
+        <section className="section" id="github">
+          <div className="wrap">
+            <SectionHead
+              path="~/commits"
+              before="A year on "
+              mark="GitHub"
+              lede="Pulled live from GitHub. Most of the work is in private repositories, which is why the graph is busier than the repo count."
+            />
+            <div className="stats">
+              {[
+                { v: gh.lastYear, l: "contributions in the last year" },
+                { v: gh.longest, l: "days, longest streak" },
+                { v: gh.current, l: "days, current streak" },
+                { v: gh.repos, l: "public repositories" },
+              ]
+                .filter((s) => typeof s.v === "number")
+                .map((s, i) => (
+                  <div key={s.l} className="sticker stat" data-reveal style={{ "--tilt": TILTS[i] }}>
+                    <b>
+                      <CountUp value={s.v} />
+                    </b>
+                    <span>{s.l}</span>
+                  </div>
+                ))}
+            </div>
+            {gh.days ? (
+              <div className="sticker calendar" data-reveal>
+                <div className="calendar-scroll">
+                  <Calendar days={gh.days} />
+                </div>
+                <div className="calendar-foot">
+                  <a href={links.github}>github.com/LeelaKrishna-R</a>
+                  <span className="legend">
+                    less
+                    <i className="lvl0" style={{ background: "color-mix(in srgb, var(--ink) 7%, transparent)" }} />
+                    <i style={{ background: "color-mix(in srgb, var(--gold) 35%, transparent)" }} />
+                    <i style={{ background: "color-mix(in srgb, var(--gold) 60%, transparent)" }} />
+                    <i style={{ background: "var(--gold)" }} />
+                    <i style={{ background: "var(--coral)" }} />
+                    more
+                  </span>
                 </div>
               </div>
-
-              {/* Right */}
-              <aside aria-label="Profile" style={{ display: "grid", gap: 16 }}>
-                <div className="hero-card" style={{ padding: 16 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                    <img className="pfp" src="/images/me-ghibli.png" alt="Leelakrishna Ravuri" />
-                    <div>
-                      <div style={{ fontWeight: 700 }}>Leelakrishna Ravuri</div>
-                      <div style={{ color: "var(--muted)" }}>Based in USA · from India</div>
-                    </div>
-                  </div>
-
-                  <div className="meta" style={{ marginTop: 12, lineHeight: 1.5 }}>
-                    <div className="m">
-                      <b>Focus</b> Homelab, infra, dev tooling
-                    </div>
-                    <div className="m">
-                      <b>Learning</b> Networking, CCNA
-                    </div>
-                    <div className="m">
-                      <b>Currently</b> Dev at dexterai.org
-                    </div>
-                    <div className="m">
-                      <b>Email</b>{" "}
-                      <a href="mailto:email@krishnar.xyz">email@krishnar.xyz</a>
-                    </div>
-                  </div>
-                </div>
-              </aside>
-            </div>
+            ) : null}
           </div>
         </section>
+      ) : null}
 
-        {/* WHAT I WORK WITH */}
-        <section className="reveal-up">
-          <div className="container">
-            <h2 className="section-title">What I actually work with</h2>
-            <p className="subtitle" style={{ maxWidth: "60ch", marginBottom: 20 }}>
-              The honest version: what I reach for, what I'm building with, and what I'm actively
-              learning. No proficiency bars, nothing I've touched once and listed as a skill.
-            </p>
-            <div className="skills-grid">
-              {work.map((g) => (
-                <div className="skill-box" key={g.group} style={{ cursor: "default" }}>
-                  <div className="work-head">
-                    <h3>{g.group}</h3>
-                    <p className="muted">{g.note}</p>
-                  </div>
-                  <div className="skill-pills">
-                    {g.items.map((s) => (
-                      <span className="skill-pill" key={s}>
-                        <span className="label">{s}</span>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
+      {/* ---------- path ---------- */}
+      <section className="section section-band" id="path">
+        <div className="wrap">
+          <SectionHead path="~/path" before="How I got " mark="here" />
+          <div className="timeline">
+            <div className="timeline-line" aria-hidden="true">
+              <i />
             </div>
+            {timeline.map((t) => (
+              <div key={t.title} className={`tl${t.now ? " tl-now" : ""}`} data-reveal style={{ "--c": t.color }}>
+                <span className="tl-dot" aria-hidden="true" />
+                <div className="sticker tl-card">
+                  <div className="tl-when">{t.when}</div>
+                  <h3>{t.title}</h3>
+                  <p>{t.text}</p>
+                </div>
+              </div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* FEATURED PROJECTS */}
-        <section className="reveal-up">
-          <div className="container">
-            <div
-              style={{
-                display: "flex",
-                alignItems: "baseline",
-                justifyContent: "space-between",
-                gap: 16,
-                flexWrap: "wrap",
-              }}
-            >
-              <h2 className="section-title" style={{ marginBottom: 0 }}>
-                Pinned projects
-              </h2>
-              <Link href="/projects" className="small" style={{ fontWeight: 600 }}>
-                See all projects →
+      {/* ---------- writing ---------- */}
+      <section className="section" id="writing">
+        <div className="wrap">
+          <SectionHead path="~/writing" before="Notes from the " mark="build">
+            <Link className="more-link" href="/blog">
+              All posts →
+            </Link>
+          </SectionHead>
+          <div className="posts">
+            {posts.slice(0, 3).map((p, i) => (
+              <Link
+                key={p.slug}
+                href={`/blog/${p.slug}`}
+                className="sticker post-card"
+                data-reveal
+                style={{ "--tilt": TILTS[(i + 1) % TILTS.length] }}
+              >
+                <time dateTime={p.date}>
+                  {formatDate(p.date)} · {p.minutes} min
+                </time>
+                <h3>{p.title}</h3>
+                <p>{p.excerpt}</p>
+                <span className="read">Read →</span>
               </Link>
-            </div>
-            <div className="feature-grid" style={{ marginTop: 20 }}>
-              {featuredProjects.map((p) => (
-                <a
-                  className="feature-card"
-                  key={p.title}
-                  href={p.links[0].href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <h3>{p.title}</h3>
-                  <p>{p.desc}</p>
-                  <div className="tags">
-                    {p.tags.map((t) => (
-                      <span className="tag" key={t}>
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </a>
-              ))}
-            </div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* GITHUB */}
-        <section className="reveal-up">
-          <div className="container">
-            <h2 className="section-title">My GitHub</h2>
-            <p className="subtitle" style={{ maxWidth: "62ch", marginBottom: 20 }}>
-              The last year of commits. Most of it is the homelab tooling and the projects above.
-            </p>
-            <div style={{ marginBottom: 18 }}>
-              <GithubStats />
-            </div>
-            <div className="contrib-wrap">
-              <ContribGraph />
-            </div>
-          </div>
-        </section>
-
-        {/* CONTACT CTA */}
-        <section className="reveal-up">
-          <div className="container">
-            <div className="contact-card" style={{ textAlign: "center" }}>
-              <h2 className="section-title" style={{ marginBottom: 8 }}>
-                Get in touch
+      {/* ---------- contact ---------- */}
+      <section className="section" id="contact" style={{ paddingTop: 0, paddingBottom: "clamp(64px, 8vw, 104px)" }}>
+        <div className="wrap">
+          <div className="sticker contact-card" data-reveal>
+            <div>
+              <span className="path-label">~/contact</span>
+              <h2 style={{ marginTop: 18 }}>
+                Say <Marker>hello</Marker>
               </h2>
-              <p className="subtitle" style={{ margin: "0 auto 18px" }}>
-                I'm open to work in infrastructure, networking, and dev tooling. The fastest way to
-                reach me is email or LinkedIn.
+              <p>
+                I'm open to work in infrastructure, networking and developer tooling. Email is the fastest way to
+                reach me.
               </p>
-              <div className="cta" style={{ justifyContent: "center", marginTop: 0 }}>
-                <a className="btn btn-primary" href="mailto:email@krishnar.xyz">
-                  Email me
-                </a>
-                <a
-                  className="btn"
-                  href="https://www.linkedin.com/in/leelakrishnaravuri/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+            </div>
+            <div className="contact-actions">
+              <a className="email" href={`mailto:${site.email}`}>
+                {site.email}
+              </a>
+              <div className="cta" style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 8 }}>
+                <Link className="btn btn-gold" href="/contact">
+                  Send a message
+                </Link>
+                <a className="btn" href={links.linkedin}>
                   LinkedIn
                 </a>
-                <a
-                  className="btn"
-                  href="https://github.com/LeelaKrishna-R"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub
-                </a>
+                <Link className="btn" href="/resume">
+                  Resume
+                </Link>
               </div>
             </div>
           </div>
-        </section>
-      </main>
-      <BackToTop />
-    </div>
+        </div>
+      </section>
+    </>
   );
 }

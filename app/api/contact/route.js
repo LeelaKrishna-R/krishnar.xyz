@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Built on first use, so a missing key fails one request instead of the build.
+let resend;
 
 // Escape HTML so a sender can't inject markup/scripts into the email we receive.
 function escapeHtml(s) {
@@ -25,7 +26,6 @@ function cleanText(input, max) {
 
 // Best-effort in-memory throttle. On serverless this only bounds a single warm
 // instance; real protection needs a shared store (KV/Redis).
-// ponytail: good enough for a portfolio contact form, upgrade to KV if it gets abused.
 const hits = new Map();
 function rateLimited(ip) {
   const now = Date.now();
@@ -63,6 +63,11 @@ export async function POST(req) {
     }
 
     const to = process.env.CONTACT_TO_EMAIL;
+    if (!process.env.RESEND_API_KEY) {
+      console.error("Contact API: RESEND_API_KEY is not set");
+      return NextResponse.json({ ok: false, error: "Email is not configured right now." }, { status: 500 });
+    }
+    resend ??= new Resend(process.env.RESEND_API_KEY);
     const from = process.env.CONTACT_FROM_EMAIL || "onboarding@resend.dev";
     if (!to) {
       console.error("Contact API: CONTACT_TO_EMAIL is not set");

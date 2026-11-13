@@ -1,42 +1,46 @@
 # krishnar.xyz
 
-My personal portfolio. It covers what I work on (infrastructure, networking, and the tooling I build), my projects, my homelab, and a small blog.
+My personal site: the Discord bots I build, Friday, Iris, my homelab, and a few blog posts.
 
 Live at [krishnar.xyz](https://krishnar.xyz).
 
 ## Stack
 
-- [Next.js 15](https://nextjs.org/) (App Router) with React 19
-- Plain CSS with theme variables (clean dark + light)
-- [react-github-calendar](https://github.com/grubersjoe/react-github-calendar) for the contribution graph
+- [Next.js 15](https://nextjs.org/) (App Router) and React 19
+- Plain CSS in `app/globals.css`, with every colour as a token and a dark theme that only swaps the tokens
+- Fonts self-hosted through `next/font`: Bricolage Grotesque, Figtree, Shantell Sans, JetBrains Mono
 - [Resend](https://resend.com/) for the contact form
-- [lucide-react](https://lucide.dev/) for icons
-- Deployed on [Vercel](https://vercel.com/)
+- Deployed on [Vercel](https://vercel.com/), which builds every push to `main`
+
+No UI framework, no icon library, no animation library. The scroll effects are one small client component (`components/ScrollFx.jsx`).
 
 ## Pages
 
-- **Home** — intro, an honest "what I actually work with" section, pinned projects, and a live GitHub section (public repos, followers, contributions in the last year, current and longest streak, and the contribution graph). The stats come from GitHub's public API, so no token is required.
-- **Projects** — shipped work and earlier projects, each with a short write-up and links.
-- **Homelab** — the infrastructure I actually run at home.
-- **Blog** — Markdown posts under `app/blog/posts/`. Drop in a `.md` file with frontmatter and it renders.
-- **Contact** — a form wired to Resend, with HTML escaping, input validation, and basic rate limiting.
+- **Home**: intro, the four main projects and five small tools, the homelab, a live year of GitHub contributions, a timeline, recent posts, contact.
+- **Work** (`/projects`): every project with details.
+- **Homelab**: the machines, what runs on them, and a log of what broke and how it was fixed.
+- **Writing** (`/blog`): Markdown posts in `app/blog/posts/`.
+- **Contact** and **Resume**.
 
-## Project structure
+## Live numbers
 
-```
-app/
-  blog/posts/      Markdown blog posts
-  projects/        Projects page
-  homelab/         Homelab page
-  contact/         Contact form + page
-  api/             Server routes (contact, github, log)
-  layout.js        Root layout + metadata
-  opengraph-image.js  Generated link-preview image
-  globals.css      Theme tokens, layout, components
-components/         UI components
-lib/               Shared project data and blog helpers
-public/            Static assets (logo, images)
-```
+Fetched on the server and cached (`lib/live.js`), so they're in the HTML rather than loading in:
+
+- GitHub profile and contribution data: `api.github.com` and `github-contributions-api.jogruber.de`, refreshed hourly.
+- Dexter AI community member and online counts: Discord's public invite endpoint, refreshed every ten minutes.
+
+If a source is down, that number is left out instead of showing zero.
+
+## Where the content lives
+
+| What | File |
+|---|---|
+| Name, email, links, nav | `lib/site.js` |
+| Projects and tools | `lib/projects.js` |
+| Timeline | `lib/timeline.js` |
+| Homelab machines, services, incident log | `lib/lab.js` |
+| Blog posts | `app/blog/posts/*.md` (frontmatter: `title`, `date`) |
+| Project screenshots | `public/work/` |
 
 ## Local development
 
@@ -51,23 +55,18 @@ Open http://localhost:3000.
 
 ## Environment variables
 
-Only needed for the contact form (and the optional expanded GitHub view). Create `.env.local`:
+Only the contact form needs them. Create `.env.local`:
 
 ```env
-# Contact form (Resend)
 RESEND_API_KEY=your_resend_key
 CONTACT_TO_EMAIL=you@example.com
 CONTACT_FROM_EMAIL=onboarding@resend.dev
 
-# Optional: higher GitHub API rate limits
+# Optional: a token raises the GitHub API rate limit
 GITHUB_TOKEN=your_github_token
 ```
 
-The home page GitHub stats and contribution graph use public APIs and work without any token.
-
-## Deployment
-
-Hosted on Vercel with automatic builds on push to `main`. Set the environment variables in the Vercel project settings.
+Without `RESEND_API_KEY` the site still builds; the form just reports that email isn't configured.
 
 ## License
 

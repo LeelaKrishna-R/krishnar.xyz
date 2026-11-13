@@ -6,7 +6,7 @@ author: "Leelakrishna Ravuri"
 
 [net-triage](https://github.com/LeelaKrishna-R/net-triage) reads a network log or a device config, tells you what is probably wrong, and points at the exact lines that gave it away. Under the hood it asks a language model. That part is easy. Anyone can wire up an API call and get a confident answer back.
 
-The part I actually care about is knowing whether that answer is any good.
+The part I care about is knowing whether that answer is any good.
 
 ## Confident is not the same as correct
 
@@ -24,11 +24,11 @@ The center of net-triage is not the prompt. It is the eval harness around it.
 
 It works like this. I keep a set of fixtures, each one a realistic log or config paired with the diagnosis I already know is correct. The harness runs the agent across all of them and scores how often it lands on the right category. That turns a vague "trust me, it works" into a measured number. On the cases it ships with, it gets 6 out of 6.
 
-I will be honest about that number: six is a small sample, and a real production system would want far more fixtures across far more failure modes. But the point is the method, not the score. The harness is what lets the score grow later without me fooling myself in the meantime.
+Six is a small sample, and a production system would want far more fixtures across far more failure modes. The method matters more than the score. The harness is what lets the score grow later without me fooling myself in the meantime.
 
 ## The boring engineering around it
 
-A few things I am quietly proud of, because they are the parts that make it real software rather than a demo:
+Three details that make it usable day to day:
 
 - It tracks token usage and cost for every run, computed straight from the API response, so I always know what a diagnosis actually costs.
 - It runs directly off the TypeScript source with no build step, using Node's native type stripping, so there is nothing to compile and nothing to fall out of sync.
@@ -36,6 +36,8 @@ A few things I am quietly proud of, because they are the parts that make it real
 
 ## Why it changes how you work
 
-Without an eval you are just vibing. You tweak a prompt, it feels better, you ship it, and you genuinely do not know if you improved anything or just moved the failure somewhere you were not looking. With an eval, every change either moves the number or it does not. That is the whole difference between guessing and engineering.
+Without an eval you are guessing. You tweak a prompt, it feels better, you ship it, and you do not know whether you improved anything or just moved the failure somewhere you were not looking. With an eval, every change either moves the number or it does not.
 
 The eval is the headline feature. The model call is just the part everyone already knows how to do. The code is on GitHub: [github.com/LeelaKrishna-R/net-triage](https://github.com/LeelaKrishna-R/net-triage).
+
+> **Update, November 2026.** The harness now has 16 fixtures across 10 failure categories, all real Cisco IOS log and show-command output. net-triage scores 16 out of 16 on them with Claude Sonnet 4.6, for about $0.20 a run. The fixtures are still clear-cut on purpose; messier and multi-fault cases are next.

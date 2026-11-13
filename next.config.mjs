@@ -1,17 +1,15 @@
-import createMDX from '@next/mdx';
-const withMDX = createMDX({ extension: /\.mdx?$/ });
-
 /** @type {import('next').NextConfig} */
-const nextConfig = withMDX({
-  pageExtensions: ['js', 'jsx', 'md', 'mdx'],
+const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
+    formats: ["image/avif", "image/webp"],
   },
-});
+  async redirects() {
+    // Routes the old site had that no longer exist.
+    return [
+      { source: "/github", destination: "/#github", permanent: true },
+      { source: "/forbidden", destination: "/", permanent: true },
+    ];
+  },
+};
 
 export default nextConfig;

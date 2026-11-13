@@ -1,56 +1,127 @@
-export const metadata = { title: "Homelab · Leelakrishna Ravuri" };
+import SectionHead from "../../components/SectionHead";
+import { nodes, figures, gear, services, incidents } from "../../lib/lab";
 
-const gear = [
-  {
-    name: "Dell i7 Micro PC",
-    spec: "24GB RAM",
-    role: "The always-on node. Runs the homelab services and the monitoring and self-healing tooling I build.",
-  },
-  {
-    name: "TP-Link TL-SG108E",
-    spec: "8-port managed gigabit",
-    role: "Smart-managed switch. VLANs and port config here are how I practice for the CCNA on real hardware instead of a simulator.",
-  },
-  {
-    name: "CyberPower CP1500AVRLCD",
-    spec: "1500VA UPS",
-    role: "Rides out power blips so nothing corrupts on an unexpected cut, and gives the lab time to shut down cleanly.",
-  },
-  {
-    name: "WD Elements Desktop",
-    spec: "12TB",
-    role: "Bulk storage and backups for the lab.",
-  },
-  {
-    name: "Monoprice Cat6 (slim)",
-    role: "Slim Cat6 runs between the nodes and the switch. Cable management is half of keeping a lab sane.",
-  },
-];
+export const metadata = {
+  title: "Homelab",
+  description:
+    "A two-node Proxmox cluster at home: what runs on it, how it's watched and backed up, and a log of what broke and how it was fixed.",
+};
 
 export default function HomelabPage() {
   return (
-    <main>
-      <section>
-        <div className="container">
-          <h1 className="section-title">Homelab</h1>
-          <p className="subtitle" style={{ maxWidth: "64ch", marginBottom: 24 }}>
-            The small infrastructure I run at home, and where most of my tools come from. When
-            something here breaks one too many times, I build something to deal with it. It is
-            modest on purpose: enough to run real services and practice real networking.
-          </p>
-          <div className="gear-grid">
-            {gear.map((it) => (
-              <div className="gear-card" key={it.name}>
-                <div className="gear-name">
-                  {it.name}
-                  {it.spec ? <span className="gear-spec">{it.spec}</span> : null}
+    <>
+      <header className="page-head wrap">
+        <SectionHead
+          as="h1"
+          path="~/lab"
+          before="The "
+          mark="homelab"
+          lede="Two Dell micro PCs in a Proxmox cluster. It runs the Dexter community's bots, my DNS, monitoring and backups, and a handful of apps. Most of my tools started as a fix for something here."
+        />
+        <div className="lab-figures" style={{ maxWidth: 620 }} data-reveal>
+          {figures.map((f) => (
+            <div key={f.label}>
+              <b>{f.value}</b>
+              <span>{f.label}</span>
+            </div>
+          ))}
+        </div>
+      </header>
+
+      <section className="page-section">
+        <div className="wrap">
+          <h2 className="sub-h" data-reveal>
+            The machines
+          </h2>
+          <div className="rack rack-2">
+            {nodes.map((n) => (
+              <div key={n.name} className="sticker node" data-reveal>
+                <div className="node-head">
+                  <h3>
+                    <span className="leds" aria-hidden="true">
+                      <i />
+                      <i />
+                    </span>
+                    {n.name}
+                  </h3>
                 </div>
-                <p className="gear-role">{it.role}</p>
+                <p className="spec-line">{n.spec}</p>
+                <p className="role">{n.role}</p>
+                <div className="guests">
+                  {n.guests.map((g) => (
+                    <span key={g.label} className={`guest${g.vm ? " vm" : ""}`}>
+                      {g.label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="key" data-reveal>
+            <span className="guest vm">gold</span> virtual machine · <span className="guest">plain</span> container
+          </p>
+        </div>
+      </section>
+
+      <section className="page-section" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <h2 className="sub-h" data-reveal>
+            What runs on it
+          </h2>
+          <div className="svc-groups">
+            {services.map((g) => (
+              <div key={g.title} className="sticker" data-reveal>
+                <h3>{g.title}</h3>
+                <ul className="svc">
+                  {g.items.map(([name, what]) => (
+                    <li key={name}>
+                      <b>{name}</b>: {what}
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
         </div>
       </section>
-    </main>
+
+      <section className="page-section" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <h2 className="sub-h" data-reveal>
+            Hardware
+          </h2>
+          <div className="gear">
+            {gear.map((g) => (
+              <div key={g.name} className="sticker" data-reveal>
+                <h3>{g.name}</h3>
+                <div className="spec">{g.spec}</div>
+                <p>{g.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section" style={{ paddingTop: 0 }} id="log">
+        <div className="wrap">
+          <h2 className="sub-h" data-reveal>
+            What broke, and the fix
+          </h2>
+          <ol className="log">
+            {incidents.map((x) => (
+              <li key={x.date} className="sticker" data-reveal>
+                <time dateTime={x.date}>{x.date}</time>
+                <div>
+                  <h3>{x.title}</h3>
+                  <p>
+                    {x.text} <b>Fix:</b> {x.fix}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+    </>
   );
 }
