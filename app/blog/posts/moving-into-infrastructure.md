@@ -4,7 +4,7 @@ date: "2026-06-25"
 author: "Leelakrishna Ravuri"
 ---
 
-I did my master's in AI, but the part that holds my attention is not the models. It is everything around them. The boxes they run on, the network they talk over, and what happens at 2am when one of those quietly falls over.
+I did my master's in AI, but what I like working on is the infrastructure under the models: the servers, the network, and what breaks at 2am.
 
 This is where I am heading, and why.
 
@@ -22,8 +22,8 @@ A lot of that is unglamorous. Subnetting drills are not exciting. But it is the 
 
 ## How I use AI
 
-I still use AI every day, and it does not do the hard part. It helps me move faster on the tooling I build, especially in languages I am still getting comfortable in. The judgment calls are mine: deciding what to build, scoping it down, and making sure it is safe to run on real hardware. The model is a fast pair of hands, not the engineer.
+I still use AI every day, and it does not do the hard part. It helps me move faster on the tooling I build, especially in languages I am still getting comfortable in. The judgment calls are mine: deciding what to build, scoping it down, and making sure it is safe to run on real hardware.
 
 So that is where I am: an AI background, pointed at infrastructure and networking, learning the fundamentals properly.
 
-If you want to see the output, the projects are one click away.
+The projects are on the [Work](/projects) page.

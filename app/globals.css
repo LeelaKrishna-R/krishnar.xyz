@@ -1144,9 +1144,17 @@ a.sticker,
   scrollbar-width: thin;
 }
 
+/* in a card, long lines wrap under a hanging indent instead of scrolling */
 .term.clip {
   overflow: hidden;
-  mask-image: linear-gradient(90deg, #000 85%, transparent);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.term.clip > span {
+  display: block;
+  padding-left: 2ch;
+  text-indent: -2ch;
 }
 
 .term .p {

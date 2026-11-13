@@ -1,2 +1,9 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Binary formats git must never convert line endings in
+*.pdf binary
+*.png binary
+*.webp binary
+*.ttf binary
+*.ico binary

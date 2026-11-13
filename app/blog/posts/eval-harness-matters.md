@@ -20,7 +20,7 @@ That alone makes the tool more useful. You get a diagnosis you can act on and th
 
 ## The eval is the real project
 
-The center of net-triage is not the prompt. It is the eval harness around it.
+Most of the work in net-triage went into the eval harness.
 
 It works like this. I keep a set of fixtures, each one a realistic log or config paired with the diagnosis I already know is correct. The harness runs the agent across all of them and scores how often it lands on the right category. That turns a vague "trust me, it works" into a measured number. On the cases it ships with, it gets 6 out of 6.
 
@@ -38,6 +38,6 @@ Three details that make it usable day to day:
 
 Without an eval you are guessing. You tweak a prompt, it feels better, you ship it, and you do not know whether you improved anything or just moved the failure somewhere you were not looking. With an eval, every change either moves the number or it does not.
 
-The eval is the headline feature. The model call is just the part everyone already knows how to do. The code is on GitHub: [github.com/LeelaKrishna-R/net-triage](https://github.com/LeelaKrishna-R/net-triage).
+The code is on GitHub: [github.com/LeelaKrishna-R/net-triage](https://github.com/LeelaKrishna-R/net-triage).
 
 > **Update, November 2026.** The harness now has 16 fixtures across 10 failure categories, all real Cisco IOS log and show-command output. net-triage scores 16 out of 16 on them with Claude Sonnet 4.6, for about $0.20 a run. The fixtures are still clear-cut on purpose; messier and multi-fault cases are next.

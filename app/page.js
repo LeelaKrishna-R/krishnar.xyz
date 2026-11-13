@@ -38,8 +38,8 @@ export default async function Home() {
               </span>
             </h1>
             <p className="lede">
-              I build <strong>Discord bots</strong>, a personal AI called <strong>Friday</strong>, and small tools
-              for my <strong>homelab</strong>. I have an M.S. in Artificial Intelligence from the
+              I build <strong>Discord bots</strong>, a personal AI called <strong>Friday</strong>, and small
+              developer tools. The bots run on a <strong>homelab</strong> I keep at home. I have an M.S. in Artificial Intelligence from the
               University of North Texas.
             </p>
             <div className="cta">
@@ -118,7 +118,7 @@ export default async function Home() {
             path="~/work"
             before="Things I've "
             mark="built"
-            lede="The bigger projects first, then the small tools that came out of running a homelab."
+            lede="The bigger projects first, then five small tools: three for running servers, one for network logs, one for LLM costs."
           />
           <div className="work-grid">
             {projects.map((p, i) => (
@@ -134,8 +134,8 @@ export default async function Home() {
               <ToolCard key={t.name} t={t} tilt={TILTS[(i + 2) % TILTS.length]} />
             ))}
             <Link className="sticker tool tool-more" href="/projects" data-reveal>
-              <b>Every project, with the details</b>
-              <p>What each one does, how it's built, and the earlier work.</p>
+              <b>All projects</b>
+              <p>More detail on each one, plus an older engineering project.</p>
               <ArrowRight />
             </Link>
           </div>
@@ -153,8 +153,8 @@ export default async function Home() {
                 Dexter bots live on. node2 runs DNS, the reverse proxy, monitoring, backups, media and Home Assistant.
               </p>
               <p>
-                Alerts go to my phone, and each nightly backup is copied to both machines, so either disk can fail
-                without losing them. When something breaks, it goes in the log below.
+                Alerts go to my phone. Nightly backups go to a backup server on node1, and node2 keeps a two-day copy
+                of node1's machines, bots included. When something breaks, it goes in the log below.
               </p>
               <div className="lab-figures">
                 {figures.map((f) => (

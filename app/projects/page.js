@@ -10,7 +10,7 @@ export const revalidate = 600;
 export const metadata = {
   title: "Work",
   description:
-    "The Dexter AI community bots, Friday, Iris, Shero, and the homelab tools: what each one does and how it's built.",
+    "The Dexter AI community bots, Friday, Iris, Shero, and five small tools: what each one does and how it's built.",
 };
 
 export default async function ProjectsPage() {
@@ -23,7 +23,7 @@ export default async function ProjectsPage() {
           path="~/work"
           before="Everything I've "
           mark="built"
-          lede="The four bigger projects, the tools that came out of running a homelab, and some earlier work."
+          lede="The four bigger projects, five small tools, and an older engineering project."
         />
       </header>
 
@@ -73,7 +73,7 @@ export default async function ProjectsPage() {
       <section className="page-section" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <h2 className="sub-h" data-reveal>
-            Homelab tools
+            Small tools
           </h2>
           {tools.map((t) => (
             <article key={t.name} id={t.name} className="sticker project-full" data-reveal style={{ "--accent": "var(--teal)" }}>

@@ -16,7 +16,7 @@ export default function HomelabPage() {
           path="~/lab"
           before="The "
           mark="homelab"
-          lede="Two Dell micro PCs in a Proxmox cluster. It runs the Dexter community's bots, my DNS, monitoring and backups, and a handful of apps. Most of my tools started as a fix for something here."
+          lede="Two Dell micro PCs in a Proxmox cluster. It runs the Dexter community's bots, my DNS, monitoring and backups, and a handful of apps. lazarus started as a fix for something that kept breaking here."
         />
         <div className="lab-figures" style={{ maxWidth: 620 }} data-reveal>
           {figures.map((f) => (
