@@ -61,10 +61,13 @@ export default function ResumePage() {
         </p>
         <p className="resume-sum">{summary}</p>
         <div className="btns resume-btns">
-          <PrintButton>Print or save as PDF</PrintButton>
+          <a className="btn btn-gold" href="/resume/Krishna-Ravuri-Resume.pdf" download>
+            Download PDF
+          </a>
           <a className="btn" href="/resume.txt">
             Plain text
           </a>
+          <PrintButton>Print</PrintButton>
         </div>
       </header>
 
@@ -99,12 +102,6 @@ export default function ResumePage() {
         <Defs rows={skills} />
       </section>
 
-      <p className="r-old">
-        Need the older formatted version?{" "}
-        <a className="inline" href="/resume/Leelakrishna-Ravuri-ATS.pdf" download>
-          Old PDF
-        </a>
-      </p>
     </article>
   );
 }
