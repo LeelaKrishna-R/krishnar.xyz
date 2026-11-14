@@ -20,6 +20,11 @@ export default function HomelabPage() {
       <div className="wrap narrow end">
         <section className="block">
           <div className="rack">
+            <div className="cable rack-cable" aria-hidden="true">
+              <i />
+              <i />
+              <i />
+            </div>
             {nodes.map((n) => (
               <div key={n.name} className="sticker node">
                 {n.note ? <span className="note node-note">{n.note}</span> : null}

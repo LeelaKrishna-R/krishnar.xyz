@@ -7,6 +7,7 @@ export default function StoryRail({ chapters }) {
   const [active, setActive] = useState(-1);
   const [shown, setShown] = useState(false);
   const fill = useRef(null);
+  const bar = useRef(null);
 
   useEffect(() => {
     const els = chapters.map((c) => document.getElementById(c.id)).filter(Boolean);
@@ -27,6 +28,7 @@ export default function StoryRail({ chapters }) {
         const total = end - first;
         const p = total > 0 ? (mid - first) / total : 0;
         fill.current.style.transform = `scaleY(${Math.max(0, Math.min(1, p))})`;
+        if (bar.current) bar.current.style.transform = `scaleX(${Math.max(0, Math.min(1, p))})`;
       }
     };
     const onScroll = () => {
@@ -43,6 +45,10 @@ export default function StoryRail({ chapters }) {
   }, [chapters]);
 
   return (
+    <>
+    <div className={`story-bar${shown ? " shown" : ""}`} aria-hidden="true">
+      <i ref={bar} />
+    </div>
     <nav className={`rail${shown ? " shown" : ""}`} aria-label="Chapters">
       <span className="rail-line" aria-hidden="true">
         <i ref={fill} />
@@ -54,5 +60,6 @@ export default function StoryRail({ chapters }) {
         </a>
       ))}
     </nav>
+    </>
   );
 }

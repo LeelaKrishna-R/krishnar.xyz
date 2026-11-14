@@ -944,7 +944,7 @@ a.row:hover .row-img {
 .rack {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 64px;
   margin: 8px 0 12px;
 }
 
@@ -2456,4 +2456,81 @@ a.row:hover .row-img {
 .is-scrolled .scroll-hint {
   opacity: 0;
   pointer-events: none;
+}
+
+/* page arrival */
+@media (prefers-reduced-motion: no-preference) {
+  .page-in {
+    animation: page-in 0.45s var(--ease-out) backwards;
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* story progress on narrow screens, where the rail is hidden */
+.story-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  z-index: 60;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.story-bar.shown {
+  opacity: 1;
+}
+
+.story-bar i {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--gold), var(--coral));
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+}
+
+@media (min-width: 1261px) {
+  .story-bar {
+    display: none;
+  }
+}
+
+/* homelab page: a cable between the two nodes */
+.rack {
+  position: relative;
+}
+
+.rack-cable {
+  position: absolute;
+  left: calc(50% - 32px);
+  width: 64px;
+  top: 50%;
+  z-index: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rack-cable i {
+    animation: packet 2.4s linear infinite;
+  }
+  .rack-cable i:nth-child(2) {
+    animation-delay: 0.8s;
+  }
+  .rack-cable i:nth-child(3) {
+    animation-delay: 1.6s;
+    animation-direction: reverse;
+  }
+}
+
+@media (max-width: 720px) {
+  .rack-cable {
+    display: none;
+  }
 }
