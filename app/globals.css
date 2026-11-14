@@ -85,7 +85,9 @@ body {
   font-size: 17.5px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  /* clip, not hidden: hidden makes body a scroll box, and the sticky nav
+     then sticks to body instead of the screen when the menu locks <html> */
+  overflow-x: clip;
 }
 
 main {
@@ -787,7 +789,7 @@ a.row:hover .row-img {
 }
 
 .row-img.iris {
-  background: #ece8f3;
+  background: #fbf8fb;
 }
 
 .row-img.iris img {
@@ -868,7 +870,7 @@ a.row:hover .row-img {
 }
 
 .media .frame.iris {
-  background: #ece8f3;
+  background: #fbf8fb;
   aspect-ratio: 16 / 9;
 }
 
@@ -2167,6 +2169,7 @@ a.row:hover .row-img {
   padding: 18px 18px 16px;
   text-decoration: none;
   display: grid;
+  align-content: start;
   gap: 4px;
   transition:
     transform 0.25s var(--ease-out),
@@ -2590,6 +2593,7 @@ a.row:hover .row-img {
 .live-pill {
   display: inline-flex;
   align-items: center;
+  margin-right: 16px;
   margin-top: 16px !important;
   padding: 5px 12px;
   border: 1.5px solid var(--faint);
@@ -2662,9 +2666,7 @@ a.row:hover .row-img {
 /* phones */
 @media (max-width: 600px) {
   .scene-year {
-    top: auto;
-    bottom: 2%;
-    font-size: 120px;
+    display: none;
   }
   .lab-nodes {
     flex-direction: column;
@@ -2846,4 +2848,39 @@ a.row:hover .row-img {
 
 .article + .pager {
   margin-top: 0;
+}
+
+/* print: always the light palette, whatever the screen theme */
+@media print {
+  :root,
+  :root[data-theme="dark"] {
+    --paper: #fff;
+    --paper-band: #fff;
+    --card: #fff;
+    --card-2: #fff;
+    --ink: #111;
+    --muted: #333;
+    --faint: #bbb;
+    --line: #111;
+    --shadow: transparent;
+    --dot: transparent;
+    --gold-text: #6b4500;
+    color-scheme: light;
+  }
+  .page-in {
+    animation: none;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    translate: none;
+  }
+  .r-old {
+    display: none;
+  }
+}
+
+.r-old {
+  margin-top: 40px;
+  font-size: 15px;
+  color: var(--muted);
 }
