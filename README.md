@@ -12,16 +12,17 @@ Live at [krishnar.xyz](https://krishnar.xyz).
 - [Resend](https://resend.com/) for the contact form
 - Deployed on [Vercel](https://vercel.com/), which builds every push to `main`
 
-No UI framework, no icon library, no animation library.
+No UI framework, no icon library, no animation library. The story animations are CSS, triggered by one small observer (`components/ScrollFx.jsx`), and every scene shows finished with reduced motion or without JavaScript.
 
 ## Pages
 
-- **Home**: a short intro, the main projects, what I am up to lately, recent posts.
+- **Home**: a scroll story, one animated scene per chapter (2019 bots, Shero, Madurai to Texas, the Dexter bots, the homelab and the AI side projects, now), ending on what I'm looking for. Scenes are in `components/story/Story.jsx`.
 - **Work** (`/work`): everything, with a page per project at `/work/<slug>`.
 - **Homelab**: the two nodes, what runs on them, and what broke.
 - **Writing** (`/blog`): Markdown posts in `app/blog/posts/`.
 - **About**: bio, timeline, a year of GitHub contributions.
-- **Contact** and **Resume**.
+- **Resume**: an HTML page and `/resume.txt`, both from `lib/resume.js`.
+- **Contact**.
 
 ## Live numbers
 
