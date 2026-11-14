@@ -17,7 +17,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const p = getProject(slug);
   if (!p) return {};
-  return { title: p.name, description: p.lede };
+  return { title: p.name, description: p.lede, openGraph: { title: p.name, description: p.lede } };
 }
 
 export default async function ProjectPage({ params }) {
@@ -55,6 +55,13 @@ export default async function ProjectPage({ params }) {
           <p key={para.slice(0, 24)}>{para}</p>
         ))}
       </div>
+
+      {p.try ? (
+        <section className="try">
+          <h2>Try it</h2>
+          <Term lines={p.try.map((l) => ["", "$ " + l])} label={`How to run ${p.name}`} />
+        </section>
+      ) : null}
 
       <div className="facts">
         {community ? (

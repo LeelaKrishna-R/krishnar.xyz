@@ -975,6 +975,7 @@ a.row:hover .row-img {
   background: #15120e;
   color: #e9dfcb;
   font: 13px/1.65 var(--f-mono);
+  font-variant-ligatures: none;
   overflow-x: auto;
   white-space: pre;
   box-shadow: var(--shadow-md);
@@ -1249,6 +1250,7 @@ a.row:hover .row-img {
 
 .article code {
   font-family: var(--f-mono);
+  font-variant-ligatures: none;
   font-size: 0.86em;
   padding: 1px 5px;
   border-radius: 5px;
@@ -1444,4 +1446,13 @@ a.row:hover .row-img {
   text-decoration-color: var(--gold);
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
+}
+
+.try {
+  margin-top: 32px;
+}
+
+.try h2 {
+  font-size: 20px;
+  margin-bottom: 12px;
 }
