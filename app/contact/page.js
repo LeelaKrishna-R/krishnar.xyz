@@ -1,3 +1,4 @@
+import PageHead from "../../components/PageHead";
 import ContactForm from "./ContactForm";
 import { site } from "../../lib/site";
 
@@ -9,8 +10,7 @@ export const metadata = {
 export default function ContactPage() {
   return (
     <>
-      <header className="wrap narrow page-head">
-        <h1>Contact</h1>
+      <PageHead title="Contact" sfx={{ text: "RING RING", color: "#f2c76b", rotate: -7, size: 1.15 }}>
         <p className="lede">
           Email me at{" "}
           <a className="inline" href={`mailto:${site.email}`}>
@@ -18,7 +18,7 @@ export default function ContactPage() {
           </a>{" "}
           or use the form. I read everything.
         </p>
-      </header>
+      </PageHead>
       <div className="wrap narrow end">
         <ContactForm />
       </div>

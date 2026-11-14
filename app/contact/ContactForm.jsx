@@ -34,6 +34,10 @@ export default function ContactForm() {
   if (state === "sent") {
     return (
       <div className="sticker form form-done" role="status">
+        <svg className="plane-fly" viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M4 30 L60 6 L44 58 L32 38 Z" />
+          <path d="M60 6 L32 38 L30 52 L24 41" fill="none" />
+        </svg>
         <Check />
         <div>
           <strong>Message sent.</strong>

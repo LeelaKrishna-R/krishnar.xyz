@@ -17,8 +17,17 @@ export default async function Home() {
       <section className="hero">
         <div className="wrap hero-grid">
           <div>
-            <h1>
+            <h1 className="hero-title">
               Hi, I&apos;m <Marker>Krishna</Marker>.
+              <svg className="twinkle t1" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 1 L14.5 9.5 L23 12 L14.5 14.5 L12 23 L9.5 14.5 L1 12 L9.5 9.5 Z" />
+              </svg>
+              <svg className="twinkle t2" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 1 L14.5 9.5 L23 12 L14.5 14.5 L12 23 L9.5 14.5 L1 12 L9.5 9.5 Z" />
+              </svg>
+              <svg className="twinkle t3" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 1 L14.5 9.5 L23 12 L14.5 14.5 L12 23 L9.5 14.5 L1 12 L9.5 9.5 Z" />
+              </svg>
             </h1>
             <p className="lede">
               I work on AI for streamers at Dexter, train models on my own machine, and run the homelab my bots live on.
@@ -48,6 +57,9 @@ export default async function Home() {
           <div className="id-wrap">
             <figure className="sticker id-card" style={{ margin: 0 }}>
               <span className="tape" aria-hidden="true" />
+              <span className="hero-hi" aria-hidden="true">
+                hi!
+              </span>
               <div className="id-photo">
                 <Image
                   src="/images/me.webp"

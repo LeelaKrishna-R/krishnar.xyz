@@ -1,3 +1,4 @@
+import PageHead from "../../components/PageHead";
 import Link from "next/link";
 import { getAllPosts, formatDate } from "../../lib/posts";
 
@@ -10,10 +11,7 @@ export default async function BlogIndex() {
   const posts = await getAllPosts();
   return (
     <>
-      <header className="wrap narrow page-head">
-        <h1>Writing</h1>
-        <p className="lede">Write-ups about things I built.</p>
-      </header>
+      <PageHead title="Writing" lede="Write-ups about things I built." sfx={{ text: "SCRIBBLE", color: "#c9d7f2", rotate: -6, size: 1.15 }} />
       <div className="wrap narrow end">
         <ul className="rows">
           {posts.map((p) => (

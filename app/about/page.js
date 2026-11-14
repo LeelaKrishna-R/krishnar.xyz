@@ -1,3 +1,4 @@
+import PageHead from "../../components/PageHead";
 import Link from "next/link";
 import Calendar from "../../components/Calendar";
 import { timeline } from "../../lib/timeline";
@@ -15,9 +16,7 @@ export default async function AboutPage() {
   const gh = await getGithub();
   return (
     <>
-      <header className="wrap narrow page-head">
-        <h1>About</h1>
-      </header>
+      <PageHead title="About" sfx={{ text: "HELLO!", color: "#f4b8a4", rotate: 8 }} />
 
       <div className="wrap narrow end">
         <section className="block prose">

@@ -1,3 +1,4 @@
+import PageHead from "../../components/PageHead";
 import Link from "next/link";
 import { nodes, running, incidents } from "../../lib/lab";
 
@@ -9,13 +10,15 @@ export const metadata = {
 export default function HomelabPage() {
   return (
     <>
-      <header className="wrap narrow page-head">
-        <h1>Homelab</h1>
+      <PageHead title="Homelab" sfx={{ text: "BEEP BOOP", color: "#bfe0c8", rotate: 7, size: 1.15 }}>
         <p className="lede">
-          Two Dell OptiPlex micro PCs running Proxmox. They host the <Link className="inline" href="/work/dexter">Dexter bots</Link>,
-          my DNS, monitoring and backups, and a pile of apps.
+          Two Dell OptiPlex micro PCs running Proxmox. They host the{" "}
+          <Link className="inline" href="/work/dexter">
+            Dexter bots
+          </Link>
+          , my DNS, monitoring and backups, and a pile of apps.
         </p>
-      </header>
+      </PageHead>
 
       <div className="wrap narrow end">
         <section className="block">

@@ -3,6 +3,7 @@ import Link from "next/link";
 import CountUp from "../CountUp";
 import StoryRail from "./StoryRail";
 import { Scribble } from "../Icons";
+import Sfx from "../Sfx";
 import { site } from "../../lib/site";
 
 // The home page story, cut like a short film: seven scenes, grouped by
@@ -36,7 +37,7 @@ export const chapters = [
   { label: "now", ids: ["s-now"] },
 ];
 
-function Scene({ id, n, year, flip, kicker, title, children, visual }) {
+function Scene({ id, n, year, flip, kicker, title, children, visual, sfx }) {
   return (
     <section className={`scene${flip ? " flip" : ""}`} id={id} data-scene aria-labelledby={`${id}-h`}>
       {year ? (
@@ -56,7 +57,10 @@ function Scene({ id, n, year, flip, kicker, title, children, visual }) {
           <h2 id={`${id}-h`}>{title}</h2>
           {children}
         </div>
-        <div className="scene-visual">{visual}</div>
+        <div className="scene-visual">
+          {visual}
+          {sfx ? <Sfx {...sfx} /> : null}
+        </div>
       </div>
     </section>
   );
@@ -78,6 +82,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-2019"
+        sfx={{"text":"BEEP!","color":"#f2c76b","rotate":8,"delay":"1.05s","style":{"right":"-18px","top":"36%"}}}
         n={1}
         year="2019"
         kicker="2019 · Chennai"
@@ -126,6 +131,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-2021"
+        sfx={{"text":"WHOA!","color":"#bfe0c8","rotate":-10,"delay":"1.3s","style":{"left":"-8%","top":"-16%"}}}
         n={2}
         year="2021"
         flip
@@ -159,6 +165,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-texas"
+        sfx={{"text":"WHOOSH!","color":"#c9d7f2","rotate":-6,"delay":"0.9s","size":1.1,"style":{"left":"2%","top":"4%"}}}
         n={3}
         kicker="2021 → 2025"
         title="Madurai to Texas."
@@ -170,7 +177,7 @@ export default function Story({ community }) {
               </mask>
             </defs>
             <path className="route-line" d="M560 250 L512 222 C 420 40, 220 40, 96 132" mask="url(#route-mask)" />
-            <text x="318" y="58" textAnchor="middle" className="route-km">
+            <text x="372" y="58" textAnchor="middle" className="route-km">
               about 9,400 miles
             </text>
             <g className="pin pin-a">
@@ -214,6 +221,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-dexter"
+        sfx={{"text":"DING!","color":"#f4b8a4","rotate":10,"delay":"1.75s","style":{"right":"-22px","top":"24%"}}}
         n={4}
         year="2026"
         flip
@@ -290,6 +298,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-home"
+        sfx={{"text":"WHIRRR","color":"#f2c76b","rotate":-9,"delay":"0.9s","style":{"left":"-34px","top":"38%"}}}
         n={5}
         year="home"
         kicker="2026 · at home"
@@ -363,6 +372,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-side"
+        sfx={{"text":"THUD!","color":"#f4b8a4","rotate":7,"delay":"2.05s","style":{"left":"34%","bottom":"-18px"}}}
         n={6}
         year="side"
         flip
@@ -418,6 +428,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-now"
+        sfx={{"text":"AHA!","color":"#bfe0c8","rotate":9,"delay":"1.6s","style":{"right":"-14px","top":"-14%"}}}
         n={7}
         year="now"
         kicker="Now"

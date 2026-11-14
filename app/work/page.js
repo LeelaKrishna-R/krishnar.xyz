@@ -1,3 +1,4 @@
+import PageHead from "../../components/PageHead";
 import { Rows, ProjectRow } from "../../components/Rows";
 import { bigProjects, tools, older } from "../../lib/projects";
 
@@ -9,10 +10,11 @@ export const metadata = {
 export default function WorkPage() {
   return (
     <>
-      <header className="wrap narrow page-head">
-        <h1>Work</h1>
-        <p className="lede">The bigger stuff first. Each one has its own page with more about it.</p>
-      </header>
+      <PageHead
+        title="Work"
+        lede="The bigger stuff first. Each one has its own page with more about it."
+        sfx={{ text: "BUILT!", color: "#f2c76b", rotate: -8 }}
+      />
 
       <div className="wrap narrow end">
         <section className="block">

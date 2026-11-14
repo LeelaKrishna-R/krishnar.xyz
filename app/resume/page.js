@@ -1,5 +1,6 @@
 import Link from "next/link";
 import PrintButton from "../../components/PrintButton";
+import Sfx from "../../components/Sfx";
 import { summary, experience, projects, education, skills } from "../../lib/resume";
 import { links, site } from "../../lib/site";
 
@@ -42,9 +43,12 @@ function Item({ what, when, where, points = [] }) {
 
 export default function ResumePage() {
   return (
-    <article className="wrap narrow end resume">
+    <article className="wrap narrow end resume cartoon-head">
       <header className="page-head">
-        <h1>Krishna Ravuri</h1>
+        <h1 className="ph-title">
+          Krishna Ravuri
+          <Sfx text="HIRE ME?" color="#bfe0c8" rotate={8} delay="0.5s" style={{ left: "calc(100% + 16px)", top: "-22%" }} />
+        </h1>
         <p className="lede">
           Denton, Texas ·{" "}
           <a className="inline" href={`mailto:${site.email}`}>
