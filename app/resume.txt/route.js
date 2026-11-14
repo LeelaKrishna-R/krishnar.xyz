@@ -10,7 +10,7 @@ export function GET() {
   out.push(`Denton, Texas | ${site.email} | ${links.github} | ${links.linkedin}`);
   out.push("", summary, "", "EXPERIENCE");
   for (const e of experience) {
-    out.push(`${e.what} | ${e.when} | ${e.where}`);
+    out.push([e.what, e.when, e.where].filter(Boolean).join(" | "));
     for (const p of e.points) out.push(`- ${p}`);
   }
   out.push("", "PROJECTS");

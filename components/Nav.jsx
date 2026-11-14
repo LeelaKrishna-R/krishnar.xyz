@@ -1,18 +1,26 @@
 "use client";
 // Top bar. Transparent at the top of the page, a floating sticker once you
-// scroll. A gold pill slides under whichever page you're on.
+// scroll. Each link has the same hand-drawn highlighter as the name on the
+// home page: it draws in on hover and stays drawn under the current page.
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Mark from "./Mark";
 import { nav } from "../lib/site";
 import { Sun, Moon, MenuIcon, CloseIcon } from "./Icons";
 
-const useIsoLayout = typeof window === "undefined" ? useEffect : useLayoutEffect;
-
 function activeHref(pathname) {
   const hit = nav.find((n) => pathname === n.href || pathname.startsWith(n.href + "/"));
   return hit ? hit.href : null;
+}
+
+function Ink() {
+  return (
+    <svg className="nav-ink" viewBox="0 0 100 14" preserveAspectRatio="none" aria-hidden="true">
+      <path pathLength="1" d="M3 9 C 25 5, 55 4, 97 7" />
+      <path className="thin" pathLength="1" d="M8 13 C 40 11, 70 11, 94 12" />
+    </svg>
+  );
 }
 
 export default function Nav() {
@@ -20,13 +28,13 @@ export default function Nav() {
   const active = activeHref(pathname);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const linksRef = useRef(null);
-  const pillRef = useRef(null);
-  const placed = useRef(false);
 
   useEffect(() => {
+    let last = null;
     const onScroll = () => {
       const y = window.scrollY > 40;
+      if (y === last) return;
+      last = y;
       setScrolled(y);
       document.documentElement.classList.toggle("is-scrolled", y);
     };
@@ -51,36 +59,6 @@ export default function Nav() {
     };
   }, [open]);
 
-  // Move the pill under the active link. Transitions only switch on (the
-  // "animate" class) after the first placement has painted, so the pill
-  // never flies in from the left on load.
-  useIsoLayout(() => {
-    const place = () => {
-      const pill = pillRef.current;
-      const box = linksRef.current;
-      if (!pill || !box) return;
-      const link = active && box.querySelector(`a[href="${active}"]`);
-      if (!link) {
-        pill.style.opacity = "0";
-        return;
-      }
-      pill.style.width = `${link.offsetWidth}px`;
-      pill.style.left = `${link.offsetLeft}px`;
-      pill.style.opacity = "1";
-      if (!placed.current) {
-        placed.current = true;
-        // Resolve the pill's style now, so turning transitions on later can't
-        // animate it in from width 0 (a background tab may not have painted yet).
-        void getComputedStyle(pill).width;
-        requestAnimationFrame(() => requestAnimationFrame(() => box.classList.add("animate")));
-      }
-    };
-    place();
-    document.fonts?.ready.then(place);
-    window.addEventListener("resize", place);
-    return () => window.removeEventListener("resize", place);
-  }, [active]);
-
   const toggleTheme = () => {
     const root = document.documentElement;
     const next = root.dataset.theme === "dark" ? "light" : "dark";
@@ -104,11 +82,11 @@ export default function Nav() {
             </svg>
           </Link>
 
-          <nav className="nav-links" aria-label="Main" ref={linksRef}>
-            <span className="nav-pill" ref={pillRef} aria-hidden="true" />
+          <nav className="nav-links" aria-label="Main">
             {nav.map((n) => (
               <Link key={n.href} href={n.href} className="nav-link" aria-current={active === n.href ? "page" : undefined}>
                 {n.label}
+                <Ink />
               </Link>
             ))}
           </nav>

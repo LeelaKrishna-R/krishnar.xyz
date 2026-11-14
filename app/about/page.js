@@ -26,9 +26,13 @@ export default async function AboutPage() {
             communication engineering at Kalasalingam University, then moved to Texas for a master&apos;s in AI at UNT.
           </p>
           <p>
-            I&apos;ve been making Discord bots since 2019. Lately I care more about the stuff underneath: servers,
-            networks, keeping things up. That&apos;s why there&apos;s a <Link href="/homelab">homelab</Link> and why
-            I&apos;m studying for the CCNA.
+            I&apos;m a developer at Dexter AI, on <Link href="/work/copilot">Dexter Copilot</Link> itself and the bots
+            around it. I train and run models on my own hardware, I&apos;ve done several freelance projects (under NDA,
+            so they&apos;re not listed here), and I&apos;ve been making Discord bots since 2019.
+          </p>
+          <p>
+            Lately I care a lot about the stuff underneath: servers, networks, keeping things up. That&apos;s why
+            there&apos;s a <Link href="/homelab">homelab</Link> and why I&apos;m studying for the CCNA.
           </p>
           <p>
             I&apos;m open to work in infrastructure, networking or dev tooling. Email is the best way to reach me:{" "}

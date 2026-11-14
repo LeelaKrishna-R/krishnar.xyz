@@ -12,6 +12,8 @@ export default async function Home() {
 
   return (
     <>
+      <div className="letterbox top" aria-hidden="true" />
+      <div className="letterbox bottom" aria-hidden="true" />
       <section className="hero">
         <div className="wrap hero-grid">
           <div>
@@ -19,9 +21,21 @@ export default async function Home() {
               Hi, I&apos;m <Marker>Krishna</Marker>.
             </h1>
             <p className="lede">
-              I make Discord bots and small dev tools, and I&apos;m building Friday, a personal AI. Here&apos;s how I
-              got here.
+              I build AI for streamers at Dexter, train models on my own machine, and run the homelab my bots live on.
+              Here&apos;s how I got here.
             </p>
+            <ul className="badges" aria-label="Quick facts">
+              {[
+                ["dev @ Dexter AI", "#f2c76b"],
+                ["Shero: 13,000+ servers", "#bfe0c8"],
+                ["training local models", "#f4b8a4"],
+                ["CCNA in progress", "#c9d7f2"],
+              ].map(([t, c], i) => (
+                <li key={t} className="badge" style={{ background: c, "--d": `${0.5 + i * 0.12}s`, "--r": `${[-3, 2, -2, 3][i]}deg` }}>
+                  {t}
+                </li>
+              ))}
+            </ul>
             <div className="btns">
               <a className="btn btn-gold" href="#s-2019">
                 Start the story ↓

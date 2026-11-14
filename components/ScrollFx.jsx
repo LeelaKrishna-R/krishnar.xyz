@@ -47,9 +47,18 @@ export default function ScrollFx() {
       owner.set(target, el);
       so.observe(target);
     });
+    // .on marks scenes near the viewport; looping animations pause without it.
+    const vis = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) e.target.classList.toggle("on", e.isIntersecting);
+      },
+      { rootMargin: "25% 0px 25% 0px" },
+    );
+    document.querySelectorAll("[data-scene]").forEach((el) => vis.observe(el));
     return () => {
       io.disconnect();
       so.disconnect();
+      vis.disconnect();
     };
   }, [pathname]);
 

@@ -38,13 +38,16 @@ export const chapters = [
   { label: "2019", ids: ["s-2019"] },
   { label: "2021", ids: ["s-2021"] },
   { label: "2025", ids: ["s-texas"] },
-  { label: "2026", ids: ["s-2026", "s-lab", "s-ai"] },
+  { label: "2026", ids: ["s-copilot", "s-2026", "s-lab", "s-models", "s-ai", "s-freelance"] },
   { label: "now", ids: ["s-now", "s-next"] },
 ];
 
-function Scene({ id, year, flip, kicker, title, children, visual }) {
+function Scene({ id, n, year, flip, kicker, title, children, visual }) {
   return (
     <section className={`scene${flip ? " flip" : ""}`} id={id} data-scene aria-labelledby={`${id}-h`}>
+      <svg className="thread" viewBox="0 0 1200 24" preserveAspectRatio="none" aria-hidden="true">
+        <path pathLength="1" d="M0 12 C 100 2, 200 22, 300 12 S 500 2, 600 12 S 800 22, 900 12 S 1100 2, 1200 12" />
+      </svg>
       {year ? (
         <span className="scene-year" aria-hidden="true">
           {year}
@@ -52,7 +55,12 @@ function Scene({ id, year, flip, kicker, title, children, visual }) {
       ) : null}
       <div className="wrap scene-grid">
         <div className="scene-text">
-          <p className="kicker">{kicker}</p>
+          <p className="kicker">
+            <span className="slate" aria-hidden="true">
+              scene {String(n).padStart(2, "0")}
+            </span>
+            {kicker}
+          </p>
           <h2 id={`${id}-h`}>{title}</h2>
           {children}
         </div>
@@ -69,6 +77,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-2019"
+        n={1}
         year="2019"
         kicker="2019 · Chennai"
         title="It started with Discord bots."
@@ -116,6 +125,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-2021"
+        n={2}
         year="2021"
         flip
         kicker="2021"
@@ -148,6 +158,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-texas"
+        n={3}
         kicker="2021 → 2025"
         title="Madurai to Texas."
         visual={
@@ -201,11 +212,62 @@ export default function Story({ community }) {
       </Scene>
 
       <Scene
-        id="s-2026"
+        id="s-copilot"
+        n={4}
         year="2026"
         flip
-        kicker="2026"
-        title="Six bots, one Discord server."
+        kicker="2026 · Dexter AI"
+        title="I build Dexter Copilot."
+        visual={
+          <div className="sticker stream" aria-hidden="true">
+            <div className="stream-bar">
+              <span className="live-tag">LIVE</span>
+              <span>minecraft · day 12</span>
+            </div>
+            <div className="stream-body">
+              <div className="say me" style={{ "--d": "0.2s" }}>
+                <span className="mic">
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                </span>
+                ask chat, minecraft or fortnite?
+              </div>
+              <div className="say dex" style={{ "--d": "1s" }}>
+                <b>Dexter</b> poll is live, 60 seconds on the clock
+              </div>
+              <div className="poll" style={{ "--d": "1.6s" }}>
+                <div className="poll-row">
+                  <span>minecraft</span>
+                  <i style={{ "--w": "71%" }} />
+                </div>
+                <div className="poll-row">
+                  <span>fortnite</span>
+                  <i style={{ "--w": "29%" }} />
+                </div>
+              </div>
+            </div>
+            <span className="stream-cap">lines from Dexter&apos;s demo</span>
+          </div>
+        }
+      >
+        <p>
+          I&apos;m a developer at Dexter AI, on Dexter Copilot itself: a voice-controlled AI cohost for streamers. Say a
+          sentence and it runs OBS, moderates chat, starts polls and giveaways, and designs your overlays.
+        </p>
+        <Link className="more" href="/work/copilot">
+          More about Copilot →
+        </Link>
+      </Scene>
+
+      <Scene
+        id="s-2026"
+        n={5}
+        year="bots"
+        kicker="2026 · Dexter AI"
+        title="Plus six Discord bots."
         visual={
           <div className="bots" aria-hidden="true">
             {bots.map((b, i) => (
@@ -219,8 +281,8 @@ export default function Story({ community }) {
         }
       >
         <p>
-          This year I rewrote the bots for the Dexter AI Discord in discord.js. There are six of them now, each with one
-          job, and the code is past 2,500 commits since May.
+          I also rewrote the bots for Dexter&apos;s Discord community in discord.js. There are six of them, each with
+          one job, and the code is past 2,500 commits since May.
         </p>
         {community ? (
           <p className="live-pill">
@@ -236,7 +298,9 @@ export default function Story({ community }) {
 
       <Scene
         id="s-lab"
+        n={6}
         year="lab"
+        flip
         kicker="2026 · at home"
         title="They run in my homelab."
         visual={
@@ -285,7 +349,53 @@ export default function Story({ community }) {
       </Scene>
 
       <Scene
+        id="s-models"
+        n={7}
+        year="GPU"
+        kicker="2026 · on my own machine"
+        title="Training my own models."
+        visual={
+          <div className="models" aria-hidden="true">
+            <div className="sticker gpu">
+              <div className="fans">
+                {[0, 1].map((n) => (
+                  <svg key={n} className="fan" viewBox="-20 -20 40 40">
+                    <circle r="18" />
+                    <path d="M0 0 C 6 -6, 4 -15, 0 -16 C -3 -10, -3 -4, 0 0 Z" />
+                    <path d="M0 0 C 6 -6, 4 -15, 0 -16 C -3 -10, -3 -4, 0 0 Z" transform="rotate(120)" />
+                    <path d="M0 0 C 6 -6, 4 -15, 0 -16 C -3 -10, -3 -4, 0 0 Z" transform="rotate(240)" />
+                    <circle className="hub" r="3.5" />
+                  </svg>
+                ))}
+              </div>
+              <span className="gpu-label">my GPU, busy</span>
+            </div>
+            <div className="sticker loss">
+              <svg viewBox="0 0 260 150">
+                <path className="axis" d="M30 10 V 125 H 250" />
+                <path className="curve" pathLength="1" d="M34 22 C 60 30, 70 70, 100 88 S 160 108, 190 113 S 230 117, 248 118" />
+                <text x="34" y="144">epochs</text>
+                <text x="6" y="16">loss</text>
+              </svg>
+              <span className="training">
+                training
+                <i />
+                <i />
+                <i />
+              </span>
+            </div>
+          </div>
+        }
+      >
+        <p>
+          I train and run models locally, on my own hardware, and I&apos;m learning everything that sits underneath
+          them, from the GPU to the network.
+        </p>
+      </Scene>
+
+      <Scene
         id="s-ai"
+        n={8}
         year="AI"
         flip
         kicker="2026 · on the side"
@@ -329,10 +439,38 @@ export default function Story({ community }) {
       </Scene>
 
       <Scene
+        id="s-freelance"
+        n={9}
+        year="NDA"
+        kicker="Along the way"
+        title="Freelance work I can't show you."
+        visual={
+          <div className="nda" aria-hidden="true">
+            {["client 01", "client 02", "client 03"].map((c, i) => (
+              <div key={c} className="sticker folder" style={{ "--d": `${0.1 + i * 0.15}s`, "--r": `${(i - 1) * 4}deg` }}>
+                <span className="folder-tab">{c}</span>
+                <i style={{ width: "86%" }} />
+                <i style={{ width: "64%" }} />
+                <i style={{ width: "74%" }} />
+              </div>
+            ))}
+            <span className="stamp">NDA</span>
+          </div>
+        }
+      >
+        <p>
+          I&apos;ve built several projects for clients too. They&apos;re all under NDA, so this is as much of them as
+          you get to see.
+        </p>
+      </Scene>
+
+      <Scene
         id="s-now"
+        n={10}
         year="now"
+        flip
         kicker="Now"
-        title="Learning what's underneath."
+        title="Learning networking, properly."
         visual={
           <div className="subnets mono" aria-hidden="true">
             <div className="net" style={{ "--d": "0.1s" }}>
@@ -365,13 +503,31 @@ export default function Story({ community }) {
         </p>
       </Scene>
 
-      <section className="story-end" id="s-next" data-scene aria-labelledby="s-next-h">
+      <section className="credits" id="s-next" data-scene aria-labelledby="s-next-h">
         <div className="wrap">
-          <p className="kicker">What&apos;s next</p>
-          <h2 id="s-next-h">I&apos;m looking for work.</h2>
+          <div className="roll" aria-label="Credits">
+            {[
+              ["starring", "Krishna Ravuri"],
+              ["featuring", "Spark · Warden · Sentinel · Steward · Clarity · Cadence"],
+              ["also starring", "Dexter Copilot · Shero · Friday · Iris"],
+              ["filmed on location in", "Chennai · Madurai · Coimbatore · Denton"],
+              ["special effects", "two Dell OptiPlex micro PCs and one busy GPU"],
+            ].map(([role, who], i) => (
+              <div key={role} className="credit" style={{ "--d": `${0.15 + i * 0.22}s` }}>
+                <span className="role">{role}</span>
+                <span className="who">{who}</span>
+              </div>
+            ))}
+            <p className="credit true" style={{ "--d": "1.4s" }}>
+              based on a true story
+            </p>
+          </div>
+
+          <h2 id="s-next-h" className="tbc">
+            To be continued<span className="dots">...</span>
+          </h2>
           <p className="end-lede">
-            Infrastructure, networking or dev tooling. If you&apos;re hiring for any of that, I&apos;d like to hear from
-            you.
+            The next chapter needs a team. I&apos;m looking for work in infrastructure, networking or dev tooling.
           </p>
           <div className="btns end-btns">
             <Link className="btn btn-gold" href="/resume">
@@ -388,7 +544,7 @@ export default function Story({ community }) {
               ["/blog", "Writing", "a few write-ups"],
               ["/about", "About", "the short bio"],
             ].map(([href, label, sub], i) => (
-              <Link key={href} href={href} className="sticker end-link" style={{ "--d": `${0.3 + i * 0.08}s` }}>
+              <Link key={href} href={href} className="sticker end-link" style={{ "--d": `${2 + i * 0.08}s` }}>
                 <b>{label}</b>
                 <span>{sub}</span>
               </Link>
