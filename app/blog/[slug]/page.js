@@ -27,17 +27,17 @@ export default async function Post({ params }) {
 
   return (
     <>
-      <header className="article-head wrap">
+      <header className="wrap narrow page-head">
         <Link href="/blog" className="back">
-          ← All writing
+          ← Writing
         </Link>
         <h1>{post.title}</h1>
         <p className="meta">
           <time dateTime={post.date}>{formatDate(post.date)}</time> · {post.minutes} min read · {site.name}
         </p>
       </header>
-      <div className="wrap">
-        <article className="sticker article" dangerouslySetInnerHTML={{ __html: post.html }} />
+      <div className="wrap narrow">
+        <article className="article" dangerouslySetInnerHTML={{ __html: post.html }} />
       </div>
     </>
   );

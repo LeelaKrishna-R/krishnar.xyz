@@ -9,13 +9,13 @@ export default function NotFound() {
         <div className="code" aria-hidden="true">
           404
         </div>
-        <h1>Nothing lives at this address</h1>
-        <p>The page may have moved when the site was rebuilt. Everything that exists is linked from the home page.</p>
-        <div className="cta">
+        <h1>Nothing here</h1>
+        <p>This page doesn&apos;t exist, or it moved when I rebuilt the site.</p>
+        <div className="btns">
           <Link className="btn btn-gold" href="/">
             Home
           </Link>
-          <Link className="btn" href="/projects">
+          <Link className="btn" href="/work">
             Work
           </Link>
         </div>

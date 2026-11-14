@@ -6,8 +6,9 @@ const nextConfig = {
   async redirects() {
     // Routes the old site had that no longer exist.
     return [
-      { source: "/github", destination: "/#github", permanent: true },
+      { source: "/github", destination: "/about", permanent: true },
       { source: "/forbidden", destination: "/", permanent: true },
+      { source: "/projects", destination: "/work", permanent: true },
     ];
   },
 };

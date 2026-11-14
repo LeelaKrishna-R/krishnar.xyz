@@ -1,0 +1,36 @@
+import Image from "next/image";
+import Link from "next/link";
+
+// A plain list of rows: name, year, one line. Used on the home page and /work.
+export function Rows({ children }) {
+  return <ul className="rows">{children}</ul>;
+}
+
+export function ProjectRow({ p, thumb = false }) {
+  return (
+    <li data-reveal>
+      <Link className={`row${thumb && p.media.img ? " thumb" : ""}`} href={`/work/${p.slug}`}>
+        {thumb && p.media.img ? (
+          <>
+            <span className={`row-img${p.media.contain ? " iris" : ""}`}>
+              <Image src={p.media.img} alt="" fill sizes="132px" />
+            </span>
+            <span className="row-text">
+              <span className="row-name">{p.name}</span>
+              <span className="row-line" style={{ display: "block" }}>
+                {p.line}
+              </span>
+            </span>
+            <span className="row-year">{p.year}</span>
+          </>
+        ) : (
+          <>
+            <span className="row-name">{p.name}</span>
+            <span className="row-year">{p.year}</span>
+            <span className="row-line">{p.line}</span>
+          </>
+        )}
+      </Link>
+    </li>
+  );
+}

@@ -26,4 +26,4 @@ I still use AI every day, and it does not do the hard part. It helps me move fas
 
 So that is where I am: an AI background, pointed at infrastructure and networking, learning the fundamentals properly.
 
-The projects are on the [Work](/projects) page.
+The projects are on the [Work](/work) page.

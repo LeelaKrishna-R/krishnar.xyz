@@ -60,7 +60,7 @@ export default async function Image() {
                 transform: "rotate(-2deg)",
               }}
             >
-              krishnar.xyz
+              Denton, TX
             </div>
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>

@@ -8,9 +8,9 @@ export default function ErrorPage({ reset }) {
         <div className="code" aria-hidden="true">
           500
         </div>
-        <h1>This page broke</h1>
-        <p>Something failed while it was loading. Trying again usually works.</p>
-        <div className="cta">
+        <h1>Something broke</h1>
+        <p>This page hit an error while loading. Trying again usually fixes it.</p>
+        <div className="btns">
           <button type="button" className="btn btn-gold" onClick={() => reset()}>
             Try again
           </button>

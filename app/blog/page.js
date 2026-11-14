@@ -1,44 +1,32 @@
 import Link from "next/link";
-import SectionHead from "../../components/SectionHead";
 import { getAllPosts, formatDate } from "../../lib/posts";
 
 export const metadata = {
   title: "Writing",
-  description: "Notes on building lazarus and net-triage, and on moving from AI into infrastructure.",
+  description: "Write-ups about things I built.",
 };
 
 export default async function BlogIndex() {
   const posts = await getAllPosts();
   return (
     <>
-      <header className="page-head wrap">
-        <SectionHead
-          as="h1"
-          path="~/writing"
-          before="Notes from the "
-          mark="build"
-          lede="What I learned building the tools on this site, written up after the fact."
-        />
+      <header className="wrap narrow page-head">
+        <h1>Writing</h1>
+        <p className="lede">Not much yet. Write-ups about things I built.</p>
       </header>
-      <section className="page-section">
-        <div className="wrap">
-          <div className="post-list">
-            {posts.map((p) => (
-              <Link key={p.slug} href={`/blog/${p.slug}`} className="sticker post-row" data-reveal>
-                <time dateTime={p.date}>
-                  {formatDate(p.date)}
-                  <br />
-                  {p.minutes} min read
-                </time>
-                <div>
-                  <h2>{p.title}</h2>
-                  <p>{p.excerpt}</p>
-                </div>
+      <div className="wrap narrow end">
+        <ul className="rows">
+          {posts.map((p) => (
+            <li key={p.slug} data-reveal>
+              <Link className="row" href={`/blog/${p.slug}`}>
+                <span className="row-name">{p.title}</span>
+                <span className="row-year">{formatDate(p.date)}</span>
+                <span className="row-line">{p.minutes} min read</span>
               </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+            </li>
+          ))}
+        </ul>
+      </div>
     </>
   );
 }

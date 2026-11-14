@@ -8,18 +8,19 @@ Live at [krishnar.xyz](https://krishnar.xyz).
 
 - [Next.js 15](https://nextjs.org/) (App Router) and React 19
 - Plain CSS in `app/globals.css`, with every colour as a token and a dark theme that only swaps the tokens
-- Fonts self-hosted through `next/font`: Bricolage Grotesque, Figtree, Shantell Sans, JetBrains Mono
+- Fonts in `app/fonts` (Bricolage Grotesque, Figtree, Shantell Sans, JetBrains Mono), loaded with `next/font/local`
 - [Resend](https://resend.com/) for the contact form
 - Deployed on [Vercel](https://vercel.com/), which builds every push to `main`
 
-No UI framework, no icon library, no animation library. The scroll effects are one small client component (`components/ScrollFx.jsx`).
+No UI framework, no icon library, no animation library.
 
 ## Pages
 
-- **Home**: intro, the four main projects and five small tools, the homelab, a live year of GitHub contributions, a timeline, recent posts, contact.
-- **Work** (`/projects`): every project with details.
-- **Homelab**: the machines, what runs on them, and a log of what broke and how it was fixed.
+- **Home**: a short intro, the main projects, what I am up to lately, recent posts.
+- **Work** (`/work`): everything, with a page per project at `/work/<slug>`.
+- **Homelab**: the two nodes, what runs on them, and what broke.
 - **Writing** (`/blog`): Markdown posts in `app/blog/posts/`.
+- **About**: bio, timeline, a year of GitHub contributions.
 - **Contact** and **Resume**.
 
 ## Live numbers
@@ -36,9 +37,9 @@ If a source is down, that number is left out instead of showing zero.
 | What | File |
 |---|---|
 | Name, email, links, nav | `lib/site.js` |
-| Projects and tools | `lib/projects.js` |
+| Projects (list rows and their pages) | `lib/projects.js` |
 | Timeline | `lib/timeline.js` |
-| Homelab machines, services, incident log | `lib/lab.js` |
+| Homelab machines, what runs, what broke | `lib/lab.js` |
 | Blog posts | `app/blog/posts/*.md` (frontmatter: `title`, `date`) |
 | Project screenshots | `public/work/` |
 
