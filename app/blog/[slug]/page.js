@@ -1,4 +1,5 @@
 import ReadPencil from "../../../components/ReadPencil";
+import PageHead from "../../../components/PageHead";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPost, formatDate } from "../../../lib/posts";
@@ -33,15 +34,15 @@ export default async function Post({ params }) {
   return (
     <>
       <ReadPencil />
-      <header className="wrap narrow page-head">
-        <Link href="/blog" className="back">
-          ← Writing
-        </Link>
-        <h1>{post.title}</h1>
-        <p className="meta">
-          <time dateTime={post.date}>{formatDate(post.date)}</time> · {post.minutes} min read · {site.name}
-        </p>
-      </header>
+      <PageHead
+        title={post.title}
+        back={{ href: "/blog", label: "Writing" }}
+        meta={
+          <>
+            <time dateTime={post.date}>{formatDate(post.date)}</time> · {post.minutes} min read · {site.name}
+          </>
+        }
+      />
       <div className="wrap narrow">
         <article className="article" dangerouslySetInnerHTML={{ __html: post.html }} />
         {newer || older ? (

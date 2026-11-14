@@ -4650,20 +4650,41 @@ body:has(.credits) .footer a:hover {
 
 .road-line path {
   fill: none;
-  stroke: var(--gold);
-  stroke-width: 4;
   stroke-linecap: round;
+}
+
+/* the road: a wide ink road with a dashed centre line, uncovered by a mask
+   that draws down the page as you scroll */
+.road-base {
+  stroke: var(--ink);
+  stroke-width: 12;
+  vector-effect: non-scaling-stroke;
+}
+
+.road-mid {
+  stroke: var(--card);
+  stroke-width: 2;
+  stroke-dasharray: 7 9;
+  vector-effect: non-scaling-stroke;
+}
+
+.road-reveal {
+  stroke: #fff;
+  stroke-width: 70;
   stroke-dasharray: 1;
   stroke-dashoffset: 0;
-  vector-effect: non-scaling-stroke;
+}
+
+.road {
+  view-timeline: --road block;
 }
 
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .road-line path {
+    .road-reveal {
       animation: road-draw linear both;
-      animation-timeline: view();
-      animation-range: entry 10% exit 40%;
+      animation-timeline: --road;
+      animation-range: entry 15% entry 100%;
     }
   }
 }
@@ -4932,15 +4953,319 @@ body:has(.credits) .footer a:hover {
   top: 0;
 }
 
-/* phones: title-card bursts sit over the title, inside the screen */
-@media (max-width: 600px) {
-  .cartoon-head .sfx {
-    left: 38% !important;
-    top: -122% !important;
-  }
-}
 
 /* safety net: nothing decorative may widen the page (clip keeps sticky working) */
 html {
   overflow-x: clip;
+}
+
+/* ================= direction pass d1 ================= */
+
+/* rail: the portrait sits on the lit year's dot; labels clear it */
+.rail a {
+  gap: 22px;
+}
+
+.rail-me {
+  top: -15.5px;
+}
+
+/* story bursts: pop, hold for a beat, then poof, so they never sit on the
+   joke they're for. Each is placed in empty space beside its gag. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .scene.in .sfx {
+    animation: boing-out 2.3s ease-in-out var(--d) both;
+  }
+}
+
+@keyframes boing-out {
+  0% {
+    opacity: 0;
+    scale: 0.2;
+  }
+  12% {
+    opacity: 1;
+    scale: 1.28 0.78;
+  }
+  18% {
+    scale: 0.88 1.12;
+  }
+  24% {
+    scale: 1.05 0.96;
+  }
+  30%,
+  76% {
+    opacity: 1;
+    scale: 1;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.45;
+  }
+}
+
+#s-2019 .sfx {
+  left: 0;
+  top: 6%;
+}
+
+#s-texas .sfx {
+  right: 2%;
+  top: 0;
+}
+
+#s-side .sfx {
+  left: 60%;
+  bottom: -2px;
+}
+
+@media (max-width: 860px) {
+  #s-2019 .sfx {
+    left: auto;
+    right: 2px;
+    top: -44px;
+  }
+  #s-texas .sfx {
+    right: 0;
+    top: -38px;
+  }
+  #s-side .sfx {
+    left: auto;
+    right: 2px;
+    bottom: 0;
+  }
+}
+
+/* scene titles pop with squash and stretch; body text keeps the soft rise */
+@media (prefers-reduced-motion: no-preference) {
+  .js .scene .scene-text > h2 {
+    transition: none;
+  }
+  .js .scene.in .scene-text > h2 {
+    animation: pop 0.65s var(--ease-out) 0.06s both;
+  }
+  .js .hero h1 {
+    animation: pop 0.7s var(--ease-out) 0.3s both;
+  }
+}
+
+/* Madurai to Texas: the map gets the whole width */
+#s-texas .scene-grid {
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+#s-texas .route {
+  width: min(100%, 860px);
+  display: block;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .pin-name {
+    font-size: 28px;
+  }
+  .pin-sub {
+    font-size: 22px;
+  }
+}
+
+/* Shero: little server icons instead of letters */
+.srv {
+  border-radius: 32%;
+  place-content: center;
+  gap: 4px;
+}
+
+.srv i {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 7px;
+  border-radius: 2px;
+  background: rgba(35, 28, 21, 0.78);
+}
+
+.srv i::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  top: 2px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #f6eedf;
+}
+
+/* inner title cards: the burst beside the title; on phones it moves to the
+   top right corner, above the title, so it never covers a letter */
+.cartoon-head .ph-title > .sfx {
+  left: calc(100% + 18px);
+  top: -18%;
+}
+
+.cartoon-head .meta {
+  margin-top: 14px;
+}
+
+.cartoon-head .back {
+  display: block;
+  width: fit-content;
+}
+
+@media (max-width: 600px) {
+  .cartoon-head.has-sfx {
+    position: relative;
+    padding-top: 78px;
+  }
+  .cartoon-head.has-sfx .ph-title {
+    display: block;
+  }
+  .cartoon-head .ph-title > .sfx {
+    left: auto;
+    right: 2px;
+    top: -64px;
+    --s: 0.7 !important;
+  }
+}
+
+/* project and post lists are sticker cards, like the story */
+.rows.cards {
+  border-top: 0;
+  display: grid;
+  gap: 16px;
+}
+
+.rows.cards > li {
+  border-bottom: 0;
+}
+
+.rows.cards .row {
+  margin: 0;
+  padding: 14px 16px;
+  background: var(--card);
+  border: 2px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: 3px 3px 0 var(--shadow);
+  transition:
+    transform 0.3s var(--ease-spring),
+    box-shadow 0.3s var(--ease-out);
+}
+
+.rows.cards > li:nth-child(odd) .row {
+  rotate: -0.5deg;
+}
+
+.rows.cards > li:nth-child(even) .row {
+  rotate: 0.6deg;
+}
+
+.rows.cards a.row:hover {
+  background: var(--card);
+  transform: translate(-2px, -3px);
+  box-shadow: 5px 6px 0 var(--shadow);
+}
+
+.rows.cards .row-img {
+  rotate: -2deg;
+}
+
+/* project pages: the screenshot is a taped-down sticker */
+.media {
+  position: relative;
+}
+
+.media > .tape {
+  z-index: 3;
+}
+
+.media .frame {
+  rotate: -0.6deg;
+  box-shadow: 4px 4px 0 var(--shadow);
+}
+
+/* contact form labels read like a form, not a terminal */
+.field span {
+  font: 700 15px/1.2 var(--f-body);
+  color: var(--ink);
+}
+
+/* page change: solid panels from the first frame, and quicker */
+@media (prefers-reduced-motion: no-preference) {
+  .wipe i {
+    animation-duration: 0.42s;
+  }
+  .wipe i:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .wipe i:nth-child(2) {
+    animation-delay: 0.05s;
+  }
+  .wipe i:nth-child(3) {
+    animation-delay: 0s;
+  }
+}
+
+/* phone progress bar and the post pencil ride just under the nav pill */
+.story-bar {
+  top: var(--under-nav, 70px);
+}
+
+.bar-rider {
+  top: -11px;
+}
+
+.read-pencil {
+  top: var(--under-nav, 70px);
+}
+
+/* the credits: the nav goes dark with them, and the black comes in with a
+   scalloped curtain edge (a hard edge reads in both themes) */
+.on-credits .nav {
+  --ink: #f0e7d6;
+  --muted: #b3a590;
+  --card: #1a1612;
+  --card-2: #231d17;
+  --line: #f0e7d6;
+  --gold-text: #f2b544;
+  --shadow: rgba(0, 0, 0, 0.6);
+  color: var(--ink);
+}
+
+.credits,
+:root[data-theme="dark"] .credits {
+  background: #0b0907;
+  padding-top: clamp(110px, 13vw, 170px);
+  overflow: visible;
+}
+
+:root[data-theme="dark"] .credits {
+  background:
+    radial-gradient(120% 70% at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.55)),
+    #050404;
+}
+
+.credits::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -17px;
+  height: 18px;
+  background: radial-gradient(circle at 50% 100%, #0b0907 0 13px, var(--gold) 13px 16px, transparent 16.5px) 0 0 / 34px 18px
+    repeat-x;
+  pointer-events: none;
+}
+
+:root[data-theme="dark"] .credits::before {
+  background-image: radial-gradient(circle at 50% 100%, #050404 0 13px, var(--gold) 13px 16px, transparent 16.5px);
+}
+
+
+.story-bar {
+  --under-nav: 82px;
+}
+
+.read-pencil {
+  --under-nav: 76px;
 }

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Term from "../../../components/Term";
+import PageHead from "../../../components/PageHead";
 import CopyButton from "../../../components/CopyButton";
 import { ArrowUpRight } from "../../../components/Icons";
 import { projects, getProject } from "../../../lib/projects";
@@ -27,21 +28,17 @@ export default async function ProjectPage({ params }) {
   if (!p) notFound();
 
   const i = projects.indexOf(p);
-  const prev = projects[(i - 1 + projects.length) % projects.length];
-  const next = projects[(i + 1) % projects.length];
+  const prev = projects[i - 1];
+  const next = projects[i + 1];
   const community = p.live === "discord" ? await getCommunity() : null;
 
   return (
-    <article className="wrap narrow end">
-      <header className="page-head">
-        <Link href="/work" className="back">
-          ← Work
-        </Link>
-        <h1>{p.name}</h1>
-        <p className="lede">{p.lede}</p>
-      </header>
+    <article className="end">
+      <PageHead title={p.name} lede={p.lede} back={{ href: "/work", label: "Work" }} />
 
+      <div className="wrap narrow">
       <div className="media">
+        {p.media.img ? <span className="tape" aria-hidden="true" /> : null}
         {p.media.img ? (
           <div className={`sticker frame${p.media.contain ? " iris" : ""}`}>
             <Image src={p.media.img} alt={p.media.alt} fill sizes="(max-width: 760px) 92vw, 680px" priority />
@@ -98,14 +95,21 @@ export default async function ProjectPage({ params }) {
       </div>
 
       <nav className="pager" aria-label="More projects">
-        <Link href={`/work/${prev.slug}`}>
-          <small>previous</small>← {prev.name}
-        </Link>
-        <Link href={`/work/${next.slug}`} style={{ textAlign: "right" }}>
-          <small>next</small>
-          {next.name} →
-        </Link>
+        {prev ? (
+          <Link href={`/work/${prev.slug}`}>
+            <small>previous</small>← {prev.name}
+          </Link>
+        ) : (
+          <span />
+        )}
+        {next ? (
+          <Link href={`/work/${next.slug}`} style={{ textAlign: "right" }}>
+            <small>next</small>
+            {next.name} →
+          </Link>
+        ) : null}
       </nav>
+      </div>
     </article>
   );
 }

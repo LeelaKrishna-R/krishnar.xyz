@@ -2,8 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 // A plain list of rows: name, year, one line. Used on the home page and /work.
-export function Rows({ children }) {
-  return <ul className="rows">{children}</ul>;
+export function Rows({ children, cards = false }) {
+  return <ul className={`rows${cards ? " cards" : ""}`}>{children}</ul>;
 }
 
 export function ProjectRow({ p, thumb = false }) {

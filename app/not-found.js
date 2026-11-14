@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Marker from "../components/Marker";
 
 export const metadata = { title: "Not found" };
 
@@ -9,7 +10,9 @@ export default function NotFound() {
         <div className="code" aria-hidden="true">
           404
         </div>
-        <h1>Nothing here</h1>
+        <h1>
+          <Marker>Nothing here</Marker>
+        </h1>
         <p>This page doesn&apos;t exist, or it moved when I rebuilt the site.</p>
         <div className="btns">
           <Link className="btn btn-gold" href="/">

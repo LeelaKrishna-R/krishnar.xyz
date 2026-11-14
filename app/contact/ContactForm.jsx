@@ -51,15 +51,15 @@ export default function ContactForm() {
     <form className="sticker form" onSubmit={onSubmit}>
       <input className="hp" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
       <label className="field">
-        <span>name</span>
+        <span>Your name</span>
         <input required name="name" autoComplete="name" maxLength={100} />
       </label>
       <label className="field">
-        <span>email</span>
+        <span>Your email</span>
         <input required type="email" name="email" autoComplete="email" maxLength={200} />
       </label>
       <label className="field">
-        <span>message</span>
+        <span>Message</span>
         <textarea required name="message" rows={6} maxLength={5000} />
       </label>
       {error ? (

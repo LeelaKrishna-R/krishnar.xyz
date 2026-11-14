@@ -15,6 +15,7 @@ export default function StoryRail({ chapters }) {
   const line = useRef(null);
   const me = useRef(null);
   const rider = useRef(null);
+  const links = useRef([]);
 
   useEffect(() => {
     const groups = chapters.map((c) => c.ids.map((id) => document.getElementById(id)).filter(Boolean));
@@ -34,10 +35,30 @@ export default function StoryRail({ chapters }) {
       setShown(first < vh * 0.7 && end > vh * 0.3);
       setActive(idx);
       const p = Math.max(0, Math.min(1, (mid - first) / (end - first || 1)));
-      if (fill.current) fill.current.style.transform = `scaleY(${p})`;
       if (bar.current) bar.current.style.transform = `scaleX(${p})`;
-      if (me.current && line.current) me.current.style.transform = `translateY(${p * line.current.clientHeight}px)`;
       if (rider.current) rider.current.style.transform = `translateX(${p * (window.innerWidth - 26)}px)`;
+      // On the rail the portrait walks from year dot to year dot: it sits on
+      // the lit year and moves to the next one as that year's scenes go by.
+      const dots = links.current.filter(Boolean).map((a) => a.offsetTop + a.offsetHeight / 2);
+      if (me.current && line.current && dots.length) {
+        let y = dots[0];
+        if (idx >= 0) {
+          const els = groups[idx];
+          const top = els[0].getBoundingClientRect().top;
+          const bottom = els[els.length - 1].getBoundingClientRect().bottom;
+          const local = Math.max(0, Math.min(1, (mid - top) / (bottom - top || 1)));
+          const from = dots[idx];
+          const to = dots[Math.min(idx + 1, dots.length - 1)];
+          y = from + (to - from) * local;
+        }
+        me.current.style.transform = `translateY(${y}px)`;
+        if (fill.current) {
+          const lineTop = line.current.offsetTop;
+          fill.current.style.transform = `scaleY(${Math.max(0, (y - lineTop) / (line.current.clientHeight || 1))})`;
+        }
+      }
+      const credits = document.getElementById("s-next");
+      document.documentElement.classList.toggle("on-credits", !!credits && credits.getBoundingClientRect().top < 72);
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -49,6 +70,7 @@ export default function StoryRail({ chapters }) {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      document.documentElement.classList.remove("on-credits");
     };
   }, [chapters]);
 
@@ -68,7 +90,11 @@ export default function StoryRail({ chapters }) {
           <Image src="/images/me.webp" alt="" width={34} height={34} />
         </span>
         {chapters.map((c, i) => (
-          <a key={c.label} href={`#${c.ids[0]}`} className={i === active ? "on" : i < active ? "past" : undefined}>
+          <a
+            key={c.label}
+            ref={(el) => (links.current[i] = el)}
+            href={`#${c.ids[0]}`}
+            className={i === active ? "on" : i < active ? "past" : undefined}>
             <span className="rail-dot" aria-hidden="true" />
             {c.label}
           </a>

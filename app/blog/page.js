@@ -4,22 +4,26 @@ import { getAllPosts, formatDate } from "../../lib/posts";
 
 export const metadata = {
   title: "Writing",
-  description: "Write-ups about things I built.",
+  description: "Short posts about why I made things, and how I check they work.",
 };
 
 export default async function BlogIndex() {
   const posts = await getAllPosts();
   return (
     <>
-      <PageHead title="Writing" lede="Write-ups about things I built." sfx={{ text: "SCRIBBLE", color: "#c9d7f2", rotate: -6, size: 1.15 }} />
+      <PageHead
+        title="Writing"
+        lede="Short posts about why I made things, and how I check they work."
+        sfx={{ text: "SCRITCH!", color: "#c9d7f2", rotate: -6 }}
+      />
       <div className="wrap narrow end">
-        <ul className="rows">
+        <ul className="rows cards">
           {posts.map((p) => (
             <li key={p.slug} data-reveal>
               <Link className="row" href={`/blog/${p.slug}`}>
                 <span className="row-name">{p.title}</span>
                 <span className="row-year">{formatDate(p.date)}</span>
-                <span className="row-line">{p.minutes} min read</span>
+                <span className="row-line">{p.excerpt}</span>
               </Link>
             </li>
           ))}

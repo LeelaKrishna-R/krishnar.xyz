@@ -59,6 +59,15 @@ export default function Nav() {
     };
   }, [open]);
 
+  // Close the menu (and give the page its scroll back) before the router
+  // moves, or the new page opens part way down.
+  const closeOnLink = (e) => {
+    if (e.target.closest("a")) {
+      document.documentElement.style.overflow = "";
+      setOpen(false);
+    }
+  };
+
   const toggleTheme = () => {
     const root = document.documentElement;
     const next = root.dataset.theme === "dark" ? "light" : "dark";
@@ -110,7 +119,7 @@ export default function Nav() {
         </div>
 
         {open ? <div className="menu-backdrop" onClick={() => setOpen(false)} aria-hidden="true" /> : null}
-        <nav id="mobile-menu" className="mobile-menu sticker" aria-label="Main" hidden={!open}>
+        <nav id="mobile-menu" className="mobile-menu sticker" aria-label="Main" hidden={!open} onClick={closeOnLink}>
           <Link href="/" aria-current={pathname === "/" ? "page" : undefined}>
             Home
           </Link>

@@ -43,7 +43,15 @@ export default async function AboutPage() {
           <h2>So far</h2>
           <div className="road">
             <svg className="road-line" viewBox="0 0 40 600" preserveAspectRatio="none" aria-hidden="true">
-              <path pathLength="1" d="M20 0 C 36 60, 4 120, 20 180 S 36 300, 20 360 S 4 480, 20 540 S 30 590, 20 600" />
+              <defs>
+                <mask id="road-mask" maskUnits="userSpaceOnUse" x="-20" y="-10" width="80" height="620">
+                  <path className="road-reveal" pathLength="1" d="M20 0 C 36 60, 4 120, 20 180 S 36 300, 20 360 S 4 480, 20 540 S 30 590, 20 600" />
+                </mask>
+              </defs>
+              <g mask="url(#road-mask)">
+                <path className="road-base" d="M20 0 C 36 60, 4 120, 20 180 S 36 300, 20 360 S 4 480, 20 540 S 30 590, 20 600" />
+                <path className="road-mid" d="M20 0 C 36 60, 4 120, 20 180 S 36 300, 20 360 S 4 480, 20 540 S 30 590, 20 600" />
+              </g>
             </svg>
             <ol className="road-stops">
               {timeline.map((t) => (

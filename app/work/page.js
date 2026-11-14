@@ -12,13 +12,13 @@ export default function WorkPage() {
     <>
       <PageHead
         title="Work"
-        lede="The bigger stuff first. Each one has its own page with more about it."
-        sfx={{ text: "BUILT!", color: "#f2c76b", rotate: -8 }}
+        lede="What I've worked on since 2019, biggest first."
+        sfx={{ text: "TA-DA!", color: "#f2c76b", rotate: -8 }}
       />
 
       <div className="wrap narrow end">
         <section className="block">
-          <Rows>
+          <Rows cards>
             {bigProjects.map((p) => (
               <ProjectRow key={p.slug} p={p} thumb />
             ))}
@@ -27,7 +27,7 @@ export default function WorkPage() {
 
         <section className="block" id="tools">
           <h2>Small tools</h2>
-          <Rows>
+          <Rows cards>
             {tools.map((p) => (
               <ProjectRow key={p.slug} p={p} />
             ))}

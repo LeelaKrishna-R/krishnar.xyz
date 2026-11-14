@@ -23,9 +23,9 @@ const bots = [
 
 // Fixed positions so the server cloud looks placed by hand, not random.
 const servers = [
-  [8, 22, "G"], [24, 8, "N"], [42, 16, "A"], [61, 6, "R"], [79, 20, "M"], [92, 8, "T"],
-  [6, 52, "S"], [94, 50, "L"],
-  [6, 84, "B"], [25, 90, "H"], [45, 86, "Z"], [64, 92, "C"], [82, 84, "F"],
+  [8, 22], [24, 8], [42, 16], [61, 6], [79, 20], [92, 8],
+  [6, 52], [94, 50],
+  [6, 84], [25, 90], [45, 86], [64, 92], [82, 84],
 ];
 
 // The rail shows real years; several scenes can share one.
@@ -37,14 +37,9 @@ export const chapters = [
   { label: "now", ids: ["s-now"] },
 ];
 
-function Scene({ id, n, year, flip, kicker, title, children, visual, sfx }) {
+function Scene({ id, flip, kicker, title, children, visual, sfx }) {
   return (
     <section className={`scene${flip ? " flip" : ""}`} id={id} data-scene aria-labelledby={`${id}-h`}>
-      {year ? (
-        <span className="scene-year" aria-hidden="true">
-          {year}
-        </span>
-      ) : null}
       <div className="wrap scene-grid">
         <div className="scene-text">
           <p className="kicker">{kicker}</p>
@@ -76,9 +71,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-2019"
-        sfx={{"text":"BEEP!","color":"#f2c76b","rotate":8,"delay":"1.05s","style":{"right":"-18px","top":"36%"}}}
-        n={1}
-        year="2019"
+        sfx={{ text: "BEEP!", color: "#f2c76b", rotate: -8, delay: "1.05s" }}
         kicker="2019 · Chennai"
         title="It started with Discord bots."
         visual={
@@ -125,17 +118,15 @@ export default function Story({ community }) {
 
       <Scene
         id="s-2021"
-        sfx={{"text":"WHOA!","color":"#bfe0c8","rotate":-10,"delay":"1.3s","style":{"left":"-8%","top":"-16%"}}}
-        n={2}
-        year="2021"
         flip
         kicker="2021"
         title="Then came Shero."
         visual={
           <div className="servers" aria-hidden="true">
-            {servers.map(([x, y, l], i) => (
+            {servers.map(([x, y], i) => (
               <span key={i} className="srv" style={{ left: `${x}%`, top: `${y}%`, "--d": `${0.1 + i * 0.07}s` }}>
-                {l}
+                <i />
+                <i />
               </span>
             ))}
             <div className="sticker srv-count">
@@ -159,8 +150,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-texas"
-        sfx={{"text":"WHOOSH!","color":"#c9d7f2","rotate":-6,"delay":"0.9s","size":1.1,"style":{"left":"2%","top":"4%"}}}
-        n={3}
+        sfx={{ text: "WHOOSH!", color: "#c9d7f2", rotate: -6, delay: "0.75s", size: 1.1 }}
         kicker="2021 → 2025"
         title="Madurai to Texas."
         visual={
@@ -215,9 +205,6 @@ export default function Story({ community }) {
 
       <Scene
         id="s-dexter"
-        sfx={{"text":"DING!","color":"#f4b8a4","rotate":10,"delay":"1.75s","style":{"right":"-22px","top":"24%"}}}
-        n={4}
-        year="2026"
         flip
         kicker="2026 · at Dexter AI"
         title="I work on Dexter Copilot."
@@ -292,9 +279,6 @@ export default function Story({ community }) {
 
       <Scene
         id="s-home"
-        sfx={{"text":"WHIRRR","color":"#f2c76b","rotate":-9,"delay":"0.9s","style":{"left":"-34px","top":"38%"}}}
-        n={5}
-        year="home"
         kicker="2026 · at home"
         title="A homelab and a busy GPU."
         visual={
@@ -335,7 +319,7 @@ export default function Story({ community }) {
                     </svg>
                   ))}
                 </div>
-                <span className="gpu-label">my GPU, busy</span>
+                <span className="gpu-label">my GPU</span>
               </div>
               <div className="sticker loss">
                 <svg viewBox="0 0 260 150">
@@ -366,9 +350,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-side"
-        sfx={{"text":"THUD!","color":"#f4b8a4","rotate":7,"delay":"2.05s","style":{"left":"34%","bottom":"-18px"}}}
-        n={6}
-        year="side"
+        sfx={{ text: "THUD!", color: "#f4b8a4", rotate: 7, delay: "1.75s" }}
         flip
         kicker="2026 · on the side"
         title="Friday, Iris, and work I can't show you."
@@ -422,9 +404,6 @@ export default function Story({ community }) {
 
       <Scene
         id="s-now"
-        sfx={{"text":"AHA!","color":"#bfe0c8","rotate":9,"delay":"1.6s","style":{"right":"-14px","top":"-14%"}}}
-        n={7}
-        year="now"
         kicker="Now"
         title="Learning networking, properly."
         visual={
@@ -468,7 +447,7 @@ export default function Story({ community }) {
               ["featuring", "Spark · Warden · Sentinel · Steward · Clarity · Cadence"],
               ["also starring", "Shero · Friday · Iris"],
               ["filmed on location in", "Chennai · Madurai · Coimbatore · Denton"],
-              ["special effects", "two Dell OptiPlex micro PCs and one busy GPU"],
+              ["special effects", "two Dell OptiPlex micro PCs and a GPU at home"],
             ].map(([role, who], i) => (
               <div key={role} className="credit" style={{ "--d": `${0.15 + i * 0.2}s` }}>
                 <span className="role">{role}</span>
@@ -491,7 +470,7 @@ export default function Story({ community }) {
               My resume
             </Link>
             <a className="btn" href={`mailto:${site.email}`}>
-              {site.email}
+              Email me
             </a>
           </div>
           <div className="end-links">
