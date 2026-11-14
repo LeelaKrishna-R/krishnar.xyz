@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import CountUp from "../CountUp";
+import { Scribble } from "../Icons";
 import StoryRail from "./StoryRail";
 import { site } from "../../lib/site";
 
@@ -320,6 +321,9 @@ export default function Story({ community }) {
                 </div>
               ))}
             </div>
+            <span className="note net-note">
+              64 addresses each <Scribble />
+            </span>
           </div>
         }
       >

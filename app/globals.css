@@ -2092,7 +2092,7 @@ a.row:hover .row-img {
   font-weight: 600;
 }
 
-.net-row:last-child .net {
+.net-row:last-of-type .net {
   background: color-mix(in srgb, var(--gold) 28%, var(--card));
   font-size: 13px;
 }
@@ -2386,4 +2386,74 @@ a.row:hover .row-img {
   .route-km {
     font-size: 26px;
   }
+}
+
+/* terminal lines: commands type out, output follows */
+.t-line {
+  display: block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .term[data-scene] .t-line {
+    opacity: 0;
+  }
+  .js .term[data-scene].in .t-line {
+    animation: line-in 0.25s var(--ease-out) var(--d) both;
+  }
+  .js .term[data-scene].in .t-typed {
+    animation: type var(--t) steps(var(--n), end) var(--d) both;
+  }
+}
+
+@keyframes line-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes type {
+  from {
+    opacity: 1;
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* the subnet note */
+.net-note {
+  display: block;
+  margin-top: 4px;
+  text-align: right;
+}
+
+.net-note svg {
+  rotate: -100deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .scene .net-note {
+    opacity: 0;
+    transition: opacity 0.5s 1.8s;
+  }
+  .js .scene.in .net-note {
+    opacity: 1;
+  }
+}
+
+/* hide the scroll hint once the visitor has started scrolling */
+.scroll-hint {
+  transition: opacity 0.3s;
+}
+
+.is-scrolled .scroll-hint {
+  opacity: 0;
+  pointer-events: none;
 }

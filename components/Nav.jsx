@@ -25,7 +25,11 @@ export default function Nav() {
   const placed = useRef(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => {
+      const y = window.scrollY > 40;
+      setScrolled(y);
+      document.documentElement.classList.toggle("is-scrolled", y);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);

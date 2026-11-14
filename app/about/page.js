@@ -41,8 +41,8 @@ export default async function AboutPage() {
           <dl className="timeline">
             {timeline.map((t) => (
               <div key={t.when} style={{ display: "contents" }}>
-                <dt>{t.when}</dt>
-                <dd>{t.text}</dd>
+                <dt data-reveal>{t.when}</dt>
+                <dd data-reveal>{t.text}</dd>
               </div>
             ))}
           </dl>
