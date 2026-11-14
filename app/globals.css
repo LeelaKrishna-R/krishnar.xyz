@@ -4527,3 +4527,420 @@ body:has(.credits) .footer a:hover {
     animation-delay: 1.75s;
   }
 }
+
+/* ================= directing the whole site ================= */
+
+/* the protagonist on the year rail */
+.rail-me {
+  position: absolute;
+  left: -10px;
+  top: -10px;
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--line);
+  box-shadow: 2px 2px 0 var(--shadow);
+  background: var(--card-2);
+  z-index: 2;
+  will-change: transform;
+}
+
+.rail-me img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rail a {
+  padding-left: 30px;
+}
+
+.rail-dot {
+  margin-left: -30px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rail-me img {
+    animation: av-bob 2.6s ease-in-out infinite;
+  }
+}
+
+/* and riding the progress bar on phones */
+.bar-rider {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #231c15;
+  background: #f6eedf;
+  box-shadow: 1px 2px 0 rgba(35, 28, 21, 0.5);
+  will-change: transform;
+}
+
+.bar-rider img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.story-bar {
+  height: 4px;
+}
+
+/* page change: three panels swipe across */
+.wipe {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .wipe {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+  }
+  .wipe i {
+    position: absolute;
+    inset: -10% -20%;
+    transform-origin: 100% 50%;
+    animation: wipe-off 0.55s cubic-bezier(0.7, 0, 0.3, 1) both;
+  }
+  .wipe i:nth-child(1) {
+    background: #231c15;
+    animation-delay: 0.16s;
+  }
+  .wipe i:nth-child(2) {
+    background: #d9603f;
+    animation-delay: 0.08s;
+  }
+  .wipe i:nth-child(3) {
+    background: #e9a934;
+  }
+}
+
+@keyframes wipe-off {
+  from {
+    transform: skewX(-12deg) scaleX(1);
+  }
+  to {
+    transform: skewX(-12deg) scaleX(0);
+  }
+}
+
+/* about: the timeline as a road */
+.road {
+  position: relative;
+  padding-left: 56px;
+}
+
+.road-line {
+  position: absolute;
+  left: 4px;
+  top: 6px;
+  bottom: 6px;
+  width: 40px;
+  height: calc(100% - 12px);
+  overflow: visible;
+}
+
+.road-line path {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  vector-effect: non-scaling-stroke;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .road-line path {
+      animation: road-draw linear both;
+      animation-timeline: view();
+      animation-range: entry 10% exit 40%;
+    }
+  }
+}
+
+@keyframes road-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.road-stops {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 18px;
+}
+
+.road-stops li {
+  position: relative;
+  padding: 12px 16px 14px;
+  background: var(--card);
+  border: 2px solid var(--line);
+  border-radius: var(--r-card);
+  box-shadow: 3px 3px 0 var(--shadow);
+  transition: transform 0.35s var(--ease-spring);
+}
+
+.road-stops li:nth-child(odd) {
+  rotate: -0.6deg;
+}
+
+.road-stops li:nth-child(even) {
+  rotate: 0.7deg;
+}
+
+.road-stops li:hover {
+  transform: translateX(6px) rotate(-1deg);
+}
+
+.road-stops b {
+  font: 700 13.5px/1.4 var(--f-mono);
+  color: var(--gold-text);
+}
+
+.road-stops p {
+  margin-top: 2px;
+}
+
+.road-pin {
+  position: absolute;
+  left: -46px;
+  top: 16px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50% 50% 50% 0;
+  rotate: -45deg;
+  background: var(--coral);
+  border: 2px solid var(--line);
+  box-shadow: 1px 1px 0 var(--shadow);
+}
+
+.road-stops li:last-child .road-pin {
+  background: var(--green);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .road-stops li.in .road-pin {
+    animation: pin-drop 0.55s cubic-bezier(0.3, 1.6, 0.5, 1) 0.15s both;
+  }
+}
+
+@keyframes pin-drop {
+  from {
+    opacity: 0;
+    translate: 0 -24px;
+    scale: 0.4;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+/* writing: the reading pencil */
+.read-pencil {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 16px;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.read-pencil i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 6px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--ink);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  opacity: 0.85;
+}
+
+.read-pencil svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 34px;
+  height: 14px;
+  transform-origin: 100% 50%;
+  will-change: transform;
+}
+
+.p-body {
+  fill: #e9a934;
+  stroke: #231c15;
+  stroke-width: 1.2;
+}
+
+.p-tip {
+  fill: #f3dcb3;
+  stroke: #231c15;
+  stroke-width: 1.2;
+}
+
+.p-lead {
+  fill: #231c15;
+}
+
+.p-eraser {
+  fill: #f08a6b;
+  stroke: #231c15;
+  stroke-width: 1.2;
+}
+
+/* homelab: the machines power on */
+@media (prefers-reduced-motion: no-preference) {
+  .js .rack .node {
+    animation: pop 0.6s var(--ease-out) calc(0.2s + var(--n, 0) * 0.25s) both;
+  }
+  .js .rack .leds i {
+    animation: power-on 0.6s steps(1, end) calc(0.7s + var(--n, 0) * 0.25s) both;
+  }
+  .js .rack .leds i + i {
+    animation:
+      power-on 0.6s steps(1, end) calc(0.85s + var(--n, 0) * 0.25s) both,
+      blink 1.6s steps(2, jump-none) calc(1.6s + var(--n, 0) * 0.25s) infinite;
+  }
+  .js .rack .guest {
+    animation: pop 0.45s var(--ease-out) calc(1s + var(--n, 0) * 0.25s + var(--g, 0) * 0.07s) both;
+  }
+}
+
+@keyframes power-on {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.2;
+  }
+  60%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* resume: open to work */
+.resume .page-head {
+  position: relative;
+}
+
+.open-stamp {
+  position: absolute;
+  right: 0;
+  top: clamp(36px, 6vw, 72px);
+  bottom: auto;
+  font-size: clamp(22px, 3vw, 30px);
+  padding: 4px 12px;
+  border-width: 4px;
+  text-transform: uppercase;
+  color: #2f7a4a;
+  border-color: #2f7a4a;
+  background: rgba(191, 224, 200, 0.9);
+  rotate: 8deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .open-stamp {
+    animation: stamp 0.35s cubic-bezier(0.5, 0, 0.75, 0) 0.6s both;
+  }
+}
+
+@media (max-width: 600px) {
+  .open-stamp {
+    position: static;
+    display: inline-block;
+    margin-top: 14px;
+    rotate: -4deg;
+  }
+}
+
+@media print {
+  .open-stamp,
+  .read-pencil,
+  .wipe {
+    display: none !important;
+  }
+}
+
+/* 404: a lost little number */
+@media (prefers-reduced-motion: no-preference) {
+  .js .lost .code {
+    animation:
+      boing 0.7s cubic-bezier(0.3, 1.6, 0.5, 1) 0.1s both,
+      lost-wobble 3s ease-in-out 1s infinite;
+  }
+}
+
+@keyframes lost-wobble {
+  25% {
+    transform: rotate(-4deg) translateY(-6px);
+  }
+  75% {
+    transform: rotate(4deg) translateY(4px);
+  }
+}
+
+.rail a {
+  padding-left: 0;
+}
+
+.rail-dot {
+  margin-left: 0;
+}
+
+.open-stamp {
+  top: clamp(4px, 1vw, 12px);
+}
+
+/* a bigger pencil with a gold line that reads in both themes */
+.read-pencil {
+  height: 20px;
+}
+.read-pencil i {
+  top: 7px;
+  height: 4px;
+  background: var(--gold);
+  opacity: 1;
+  box-shadow: 0 1px 0 rgba(35, 28, 21, 0.4);
+}
+.read-pencil svg {
+  width: 46px;
+  height: 19px;
+  top: 0;
+}
+
+/* phones: title-card bursts sit over the title, inside the screen */
+@media (max-width: 600px) {
+  .cartoon-head .sfx {
+    left: 38% !important;
+    top: -122% !important;
+  }
+}
+
+/* safety net: nothing decorative may widen the page (clip keeps sticky working) */
+html {
+  overflow-x: clip;
+}

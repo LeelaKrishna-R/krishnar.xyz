@@ -29,7 +29,7 @@ export default function HomelabPage() {
               <i />
             </div>
             {nodes.map((n) => (
-              <div key={n.name} className="sticker node">
+              <div key={n.name} className="sticker node" style={{ "--n": nodes.indexOf(n) }}>
                 {n.note ? <span className="note node-note">{n.note}</span> : null}
                 <h2 className="node-name">
                   <span className="leds" aria-hidden="true">
@@ -40,8 +40,8 @@ export default function HomelabPage() {
                 </h2>
                 <p className="spec">{n.spec}</p>
                 <div className="guests">
-                  {n.guests.map((g) => (
-                    <span key={g.label} className={`guest${g.vm ? " vm" : ""}`}>
+                  {n.guests.map((g, gi) => (
+                    <span key={g.label} className={`guest${g.vm ? " vm" : ""}`} style={{ "--g": gi }}>
                       {g.label}
                     </span>
                   ))}

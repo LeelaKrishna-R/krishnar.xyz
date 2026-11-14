@@ -6,7 +6,7 @@ import { Scribble } from "../Icons";
 import Sfx from "../Sfx";
 import { site } from "../../lib/site";
 
-// The home page story, cut like a short film: seven scenes, grouped by
+// The home page story, told like a cartoon short: seven scenes, grouped by
 // place, then the credits. A scene gets .in when its content scrolls into
 // view (components/ScrollFx.jsx) and its CSS animations play. Every line is
 // a fact from the resume, the repos, the live sites or Krishna himself; the
@@ -47,13 +47,7 @@ function Scene({ id, n, year, flip, kicker, title, children, visual, sfx }) {
       ) : null}
       <div className="wrap scene-grid">
         <div className="scene-text">
-          <p className="kicker">
-            <span className="slate" aria-hidden="true">
-              <span className="slate-top" />
-              scene {String(n).padStart(2, "0")}
-            </span>
-            {kicker}
-          </p>
+          <p className="kicker">{kicker}</p>
           <h2 id={`${id}-h`}>{title}</h2>
           {children}
         </div>

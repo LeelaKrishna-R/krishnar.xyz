@@ -1,3 +1,4 @@
+import ReadPencil from "../../../components/ReadPencil";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPost, formatDate } from "../../../lib/posts";
@@ -31,6 +32,7 @@ export default async function Post({ params }) {
 
   return (
     <>
+      <ReadPencil />
       <header className="wrap narrow page-head">
         <Link href="/blog" className="back">
           ← Writing

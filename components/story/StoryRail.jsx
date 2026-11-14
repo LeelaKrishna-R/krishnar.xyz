@@ -1,7 +1,10 @@
 "use client";
 // The year rail on the left of the story (wide screens) and a thin progress
-// bar at the top (narrow screens). Each rail entry is a real year and can
-// cover several scenes. Hidden, and out of the tab order, over the hero.
+// bar at the top (narrow screens). The story's protagonist, a tiny version of
+// the portrait, travels down the rail (or along the bar) as you scroll. Each
+// rail entry is a real year and can cover several scenes. Hidden, and out of
+// the tab order, over the hero.
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 export default function StoryRail({ chapters }) {
@@ -9,6 +12,9 @@ export default function StoryRail({ chapters }) {
   const [shown, setShown] = useState(false);
   const fill = useRef(null);
   const bar = useRef(null);
+  const line = useRef(null);
+  const me = useRef(null);
+  const rider = useRef(null);
 
   useEffect(() => {
     const groups = chapters.map((c) => c.ids.map((id) => document.getElementById(id)).filter(Boolean));
@@ -30,6 +36,8 @@ export default function StoryRail({ chapters }) {
       const p = Math.max(0, Math.min(1, (mid - first) / (end - first || 1)));
       if (fill.current) fill.current.style.transform = `scaleY(${p})`;
       if (bar.current) bar.current.style.transform = `scaleX(${p})`;
+      if (me.current && line.current) me.current.style.transform = `translateY(${p * line.current.clientHeight}px)`;
+      if (rider.current) rider.current.style.transform = `translateX(${p * (window.innerWidth - 26)}px)`;
     };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(update);
@@ -48,10 +56,16 @@ export default function StoryRail({ chapters }) {
     <>
       <div className={`story-bar${shown ? " shown" : ""}`} aria-hidden="true">
         <i ref={bar} />
+        <span className="bar-rider" ref={rider}>
+          <Image src="/images/me.webp" alt="" width={26} height={26} />
+        </span>
       </div>
       <nav className={`rail${shown ? " shown" : ""}`} aria-label="Chapters" aria-hidden={!shown} inert={!shown}>
-        <span className="rail-line" aria-hidden="true">
+        <span className="rail-line" aria-hidden="true" ref={line}>
           <i ref={fill} />
+        </span>
+        <span className="rail-me" aria-hidden="true" ref={me}>
+          <Image src="/images/me.webp" alt="" width={34} height={34} />
         </span>
         {chapters.map((c, i) => (
           <a key={c.label} href={`#${c.ids[0]}`} className={i === active ? "on" : i < active ? "past" : undefined}>

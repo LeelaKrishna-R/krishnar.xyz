@@ -1,6 +1,5 @@
 import Link from "next/link";
 import PrintButton from "../../components/PrintButton";
-import Sfx from "../../components/Sfx";
 import { summary, experience, projects, education, skills } from "../../lib/resume";
 import { links, site } from "../../lib/site";
 
@@ -47,7 +46,6 @@ export default function ResumePage() {
       <header className="page-head">
         <h1 className="ph-title">
           Krishna Ravuri
-          <Sfx text="HIRE ME?" color="#bfe0c8" rotate={8} delay="0.5s" style={{ left: "calc(100% + 16px)", top: "-22%" }} />
         </h1>
         <p className="lede">
           Denton, Texas ·{" "}
@@ -63,6 +61,9 @@ export default function ResumePage() {
             LinkedIn
           </a>
         </p>
+        <span className="stamp open-stamp" aria-hidden="true">
+          open to work
+        </span>
         <p className="resume-sum">{summary}</p>
         <div className="btns resume-btns">
           <a className="btn btn-gold" href="/resume/Krishna-Ravuri-Resume.pdf" download>
