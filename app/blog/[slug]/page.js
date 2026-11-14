@@ -24,6 +24,10 @@ export default async function Post({ params }) {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();
+  const all = await getAllPosts();
+  const i = all.findIndex((p) => p.slug === slug);
+  const newer = all[i - 1];
+  const older = all[i + 1];
 
   return (
     <>
@@ -38,6 +42,23 @@ export default async function Post({ params }) {
       </header>
       <div className="wrap narrow">
         <article className="article" dangerouslySetInnerHTML={{ __html: post.html }} />
+        {newer || older ? (
+          <nav className="pager end" aria-label="More posts">
+            {older ? (
+              <Link href={`/blog/${older.slug}`}>
+                <small>older</small>← {older.title}
+              </Link>
+            ) : (
+              <span />
+            )}
+            {newer ? (
+              <Link href={`/blog/${newer.slug}`} style={{ textAlign: "right" }}>
+                <small>newer</small>
+                {newer.title} →
+              </Link>
+            ) : null}
+          </nav>
+        ) : null}
       </div>
     </>
   );

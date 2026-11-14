@@ -12,7 +12,7 @@ export default async function BlogIndex() {
     <>
       <header className="wrap narrow page-head">
         <h1>Writing</h1>
-        <p className="lede">Not much yet. Write-ups about things I built.</p>
+        <p className="lede">Write-ups about things I built.</p>
       </header>
       <div className="wrap narrow end">
         <ul className="rows">

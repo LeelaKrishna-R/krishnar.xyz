@@ -1,52 +1,55 @@
 import Image from "next/image";
 import Link from "next/link";
 import CountUp from "../CountUp";
-import { Scribble } from "../Icons";
 import StoryRail from "./StoryRail";
+import { Scribble } from "../Icons";
 import { site } from "../../lib/site";
 
-// The home page story: one scene per chapter. Each scene gets .in when it
-// scrolls into view (components/ScrollFx.jsx) and its CSS animations play.
-// Text is kept to a line or two per scene.
+// The home page story: one scene per chapter. A scene gets .in when its
+// content scrolls into view (components/ScrollFx.jsx) and its CSS
+// animations play. Every line here is a fact from the resume, the repos or
+// the live sites; the only opinion ("subnetting drills are boring") is from
+// my own blog post.
 
 const bots = [
-  { name: "Spark", job: "levels, games, economy", c: "#e9a934" },
-  { name: "Warden", job: "moderation", c: "#d9603f" },
-  { name: "Sentinel", job: "automod and logs", c: "#5b8c6a" },
-  { name: "Steward", job: "tickets and modmail", c: "#3f7fa3" },
-  { name: "Clarity", job: "music", c: "#a37ad9" },
-  { name: "Cadence", job: "music", c: "#c9708f" },
+  { name: "Spark", job: "levels, games, the economy", img: "spark" },
+  { name: "Warden", job: "moderation", img: "warden" },
+  { name: "Sentinel", job: "automod, verification, logs", img: "sentinel" },
+  { name: "Steward", job: "tickets and modmail", img: "steward" },
+  { name: "Clarity", job: "music", img: "clarity" },
+  { name: "Cadence", job: "more music", img: "cadence" },
 ];
 
-// Fixed positions so the server cloud looks hand-placed, not random each load.
+// Fixed positions so the server cloud looks placed by hand, not random.
 const servers = [
-  [8, 22, "G"], [24, 8, "N"], [42, 18, "A"], [61, 6, "R"], [79, 20, "M"], [92, 8, "T"],
-  [14, 52, "S"], [33, 44, "K"], [52, 48, "P"], [71, 42, "D"], [88, 50, "L"],
-  [6, 82, "B"], [25, 76, "H"], [45, 84, "Z"], [64, 74, "C"], [82, 84, "F"],
+  [8, 22, "G"], [24, 8, "N"], [42, 16, "A"], [61, 6, "R"], [79, 20, "M"], [92, 8, "T"],
+  [6, 52, "S"], [94, 50, "L"],
+  [6, 84, "B"], [25, 90, "H"], [45, 86, "Z"], [64, 92, "C"], [82, 84, "F"],
 ];
 
 const notes = [
-  { when: "Oct 27", what: "disk full at 2:47 am", c: "#f6dc7c", r: "-6deg" },
+  { when: "Oct 27", what: "disk full at 2:47 am", c: "#f6dc7c", r: "-6deg" },
   { when: "Nov 10", what: "7-minute power cut, no UPS", c: "#f4b8a4", r: "4deg" },
-  { when: "Nov 12", what: "node2 stuck at 800 MHz", c: "#bfe0c8", r: "-3deg" },
+  { when: "Nov 12", what: "node2 stuck at 800 MHz", c: "#bfe0c8", r: "-3deg" },
 ];
 
+// The rail shows real years; several scenes can share one.
 export const chapters = [
-  { id: "s-2019", label: "2019" },
-  { id: "s-2021", label: "2021" },
-  { id: "s-texas", label: "2025" },
-  { id: "s-2026", label: "2026" },
-  { id: "s-lab", label: "lab" },
-  { id: "s-ai", label: "AI" },
-  { id: "s-now", label: "now" },
+  { label: "2019", ids: ["s-2019"] },
+  { label: "2021", ids: ["s-2021"] },
+  { label: "2025", ids: ["s-texas"] },
+  { label: "2026", ids: ["s-2026", "s-lab", "s-ai"] },
+  { label: "now", ids: ["s-now", "s-next"] },
 ];
 
 function Scene({ id, year, flip, kicker, title, children, visual }) {
   return (
     <section className={`scene${flip ? " flip" : ""}`} id={id} data-scene aria-labelledby={`${id}-h`}>
-      <span className="scene-year" aria-hidden="true">
-        {year}
-      </span>
+      {year ? (
+        <span className="scene-year" aria-hidden="true">
+          {year}
+        </span>
+      ) : null}
       <div className="wrap scene-grid">
         <div className="scene-text">
           <p className="kicker">{kicker}</p>
@@ -105,7 +108,10 @@ export default function Story({ community }) {
           </div>
         }
       >
-        <p>I had a summer job as a system engineer and started making Discord bots. I haven&apos;t stopped since.</p>
+        <p>
+          I was studying engineering in Madurai and spent that summer at a job in Chennai. That&apos;s when I made my
+          first Discord bot, and I&apos;ve been making them ever since.
+        </p>
       </Scene>
 
       <Scene
@@ -130,7 +136,11 @@ export default function Story({ community }) {
           </div>
         }
       >
-        <p>A Discord bot I started that April. It&apos;s in more than 13,000 servers now.</p>
+        <p>
+          I started Shero that April, in Node.js with MongoDB and Redis behind it. It began as a way for servers to
+          advertise each other. These days it checks servers for risky permissions, and it&apos;s in more than 13,000
+          of them.
+        </p>
         <Link className="more" href="/work/shero">
           More about Shero →
         </Link>
@@ -138,45 +148,56 @@ export default function Story({ community }) {
 
       <Scene
         id="s-texas"
-        year="2025"
         kicker="2021 → 2025"
-        title="India to Texas."
+        title="Madurai to Texas."
         visual={
-          <svg className="route" viewBox="0 0 600 320" role="img" aria-label="A route from Madurai, India to Denton, Texas">
+          <svg className="route" viewBox="0 0 640 340" role="img" aria-label="A route from Madurai to Coimbatore, then to Denton, Texas">
             <defs>
               <mask id="route-mask">
-                <path className="route-draw" pathLength="1" d="M520 230 C 400 40, 200 40, 90 120" />
+                <path className="route-draw" pathLength="1" d="M560 250 L512 222 C 420 40, 220 40, 96 132" />
               </mask>
             </defs>
-            <path className="route-line" d="M520 230 C 400 40, 200 40, 90 120" mask="url(#route-mask)" />
+            <path className="route-line" d="M560 250 L512 222 C 420 40, 220 40, 96 132" mask="url(#route-mask)" />
+            <text x="318" y="58" textAnchor="middle" className="route-km">
+              about 9,400 miles
+            </text>
             <g className="pin pin-a">
-              <circle cx="520" cy="230" r="9" />
-              <text x="520" y="262" textAnchor="middle" className="pin-name">
-                Madurai, India
+              <circle cx="560" cy="250" r="9" />
+              <text x="560" y="282" textAnchor="middle" className="pin-name">
+                Madurai
               </text>
-              <text x="520" y="284" textAnchor="middle" className="pin-sub">
+              <text x="560" y="303" textAnchor="middle" className="pin-sub">
                 B.E., 2021
               </text>
             </g>
+            <g className="pin pin-c">
+              <circle cx="512" cy="222" r="7" />
+              <text x="478" y="200" textAnchor="end" className="pin-name">
+                Coimbatore
+              </text>
+              <text x="478" y="220" textAnchor="end" className="pin-sub">
+                internship, 2023
+              </text>
+            </g>
             <g className="pin pin-b">
-              <circle cx="90" cy="120" r="9" />
-              <text x="90" y="152" textAnchor="middle" className="pin-name">
+              <circle cx="96" cy="132" r="9" />
+              <text x="96" y="164" textAnchor="middle" className="pin-name">
                 Denton, Texas
               </text>
-              <text x="90" y="174" textAnchor="middle" className="pin-sub">
+              <text x="96" y="185" textAnchor="middle" className="pin-sub">
                 M.S. in AI, 2025
               </text>
             </g>
-            <text x="305" y="52" textAnchor="middle" className="route-km">
-              about 9,400 miles
-            </text>
             <g className="plane">
-              <path d="M-12 0 L10 0 M2 -8 L10 0 L2 8 M-8 -5 L-4 0 L-8 5" />
+              <path d="M-14 0 L14 0 M4 -11 L-2 0 L4 11 M-11 -5 L-8 0 L-11 5" />
             </g>
           </svg>
         }
       >
-        <p>An engineering degree at Kalasalingam University, then a master&apos;s in AI at UNT in Denton.</p>
+        <p>
+          I finished my engineering degree in 2021 and did an internship at Caliber Embed in Coimbatore in 2023. Then I
+          moved to Denton for a master&apos;s in AI at UNT, about 9,400 miles from Madurai.
+        </p>
       </Scene>
 
       <Scene
@@ -189,9 +210,7 @@ export default function Story({ community }) {
           <div className="bots" aria-hidden="true">
             {bots.map((b, i) => (
               <div key={b.name} className="sticker bot" style={{ "--d": `${0.1 + i * 0.12}s` }}>
-                <span className="bot-av" style={{ background: b.c }}>
-                  {b.name[0]}
-                </span>
+                <Image className="bot-av" src={`/work/bots/${b.img}.webp`} alt="" width={56} height={56} />
                 <b>{b.name}</b>
                 <span>{b.job}</span>
               </div>
@@ -199,12 +218,15 @@ export default function Story({ community }) {
           </div>
         }
       >
-        <p>This year I rewrote the bots for the Dexter AI community. Each one has its own job.</p>
+        <p>
+          This year I rewrote the bots for the Dexter AI Discord in discord.js. There are six of them now, each with one
+          job, and the code is past 2,500 commits since May.
+        </p>
         {community ? (
-          <p className="live">
+          <p className="live-pill">
             <span className="dot-live" aria-hidden="true" />
             {community.members.toLocaleString("en-US")} members
-            {community.online ? `, ${community.online.toLocaleString("en-US")} online right now` : ""}
+            {community.online ? ` · ${community.online.toLocaleString("en-US")} online` : ""}
           </p>
         ) : null}
         <Link className="more" href="/work/dexter">
@@ -215,7 +237,7 @@ export default function Story({ community }) {
       <Scene
         id="s-lab"
         year="lab"
-        kicker="At home"
+        kicker="2026 · at home"
         title="They run in my homelab."
         visual={
           <div className="lab" aria-hidden="true">
@@ -253,9 +275,12 @@ export default function Story({ community }) {
           </div>
         }
       >
-        <p>Two little Dell PCs running Proxmox. Things break, so I keep notes.</p>
+        <p>
+          Two little Dell PCs running Proxmox. Things break, and I write down what broke. One night a disk filled up at
+          2:47 am and everything on it went read-only.
+        </p>
         <Link className="more" href="/homelab#broke">
-          See what broke →
+          See what else broke →
         </Link>
       </Scene>
 
@@ -263,7 +288,7 @@ export default function Story({ community }) {
         id="s-ai"
         year="AI"
         flip
-        kicker="On the side"
+        kicker="2026 · on the side"
         title="Friday and Iris."
         visual={
           <div className="sticker desk" aria-hidden="true">
@@ -273,19 +298,26 @@ export default function Story({ community }) {
               <i />
             </div>
             <div className="brief">
-              <b>Friday · morning brief</b>
-              <span className="bar" style={{ "--w": "82%", "--d": "0.4s" }} />
-              <span className="bar" style={{ "--w": "64%", "--d": "0.6s" }} />
-              <span className="bar" style={{ "--w": "73%", "--d": "0.8s" }} />
+              <small>Friday · demo brief</small>
+              <b>Good morning, Boss</b>
+              <span className="brief-line" style={{ "--d": "0.5s" }}>
+                3 things need your decision
+              </span>
+              <span className="brief-line" style={{ "--d": "0.75s" }}>
+                2 on your calendar
+              </span>
             </div>
-            <div className="iris">
+            <div className="desk-iris">
               <span className="bubble">task done!</span>
               <Image src="/work/iris-wave.webp" alt="" width={120} height={183} unoptimized />
             </div>
           </div>
         }
       >
-        <p>Friday is an AI that looks after my day. Iris gives AI agents a face on the Mac desktop.</p>
+        <p>
+          Friday is an AI I built for myself. She reads my mail and sends me a brief every morning and evening. Iris
+          gives AI agents a face: a little character on the Mac desktop who talks for them.
+        </p>
         <p className="more-row">
           <Link className="more" href="/work/friday">
             Friday →
@@ -327,31 +359,41 @@ export default function Story({ community }) {
           </div>
         }
       >
-        <p>I&apos;m studying for the CCNA. Subnets, switching, routing.</p>
+        <p>
+          I&apos;m studying for the CCNA, because I want to understand the network under everything I run. Subnetting
+          drills are boring, but everything else sits on top of them.
+        </p>
       </Scene>
 
-      <section className="story-end" data-scene>
+      <section className="story-end" id="s-next" data-scene aria-labelledby="s-next-h">
         <div className="wrap">
-          <h2>That&apos;s the story so far.</h2>
+          <p className="kicker">What&apos;s next</p>
+          <h2 id="s-next-h">I&apos;m looking for work.</h2>
+          <p className="end-lede">
+            Infrastructure, networking or dev tooling. If you&apos;re hiring for any of that, I&apos;d like to hear from
+            you.
+          </p>
+          <div className="btns end-btns">
+            <Link className="btn btn-gold" href="/resume">
+              My resume
+            </Link>
+            <a className="btn" href={`mailto:${site.email}`}>
+              {site.email}
+            </a>
+          </div>
           <div className="end-links">
             {[
               ["/work", "Work", "everything I've made"],
               ["/homelab", "Homelab", "the machines and what broke"],
               ["/blog", "Writing", "a few write-ups"],
-              ["/about", "About", "the boring version"],
+              ["/about", "About", "the short bio"],
             ].map(([href, label, sub], i) => (
-              <Link key={href} href={href} className="sticker end-link" style={{ "--d": `${i * 0.08}s` }}>
+              <Link key={href} href={href} className="sticker end-link" style={{ "--d": `${0.3 + i * 0.08}s` }}>
                 <b>{label}</b>
                 <span>{sub}</span>
               </Link>
             ))}
           </div>
-          <p className="end-mail">
-            Or just email me:{" "}
-            <a className="inline" href={`mailto:${site.email}`}>
-              {site.email}
-            </a>
-          </p>
         </div>
       </section>
     </div>

@@ -27,20 +27,26 @@ export default function ScrollFx() {
     );
     els.forEach((el) => io.observe(el));
 
-    // Story scenes play their animations once they are a third on screen.
+    // Story scenes play once their content (not the whole tall section) is on
+    // screen, so a phone never shows a blank band where the next scene is.
     const scenes = Array.from(document.querySelectorAll("[data-scene]:not(.in)"));
+    const owner = new Map();
     const so = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
-            e.target.classList.add("in");
+            owner.get(e.target).classList.add("in");
             so.unobserve(e.target);
           }
         }
       },
-      { threshold: 0.3 },
+      { rootMargin: "0px 0px -12% 0px", threshold: 0 },
     );
-    scenes.forEach((el) => so.observe(el));
+    scenes.forEach((el) => {
+      const target = el.querySelector(":scope > .wrap") || el;
+      owner.set(target, el);
+      so.observe(target);
+    });
     return () => {
       io.disconnect();
       so.disconnect();

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Term from "../../../components/Term";
+import CopyButton from "../../../components/CopyButton";
 import { ArrowUpRight } from "../../../components/Icons";
 import { projects, getProject } from "../../../lib/projects";
 import { getCommunity } from "../../../lib/live";
@@ -58,7 +59,10 @@ export default async function ProjectPage({ params }) {
 
       {p.try ? (
         <section className="try">
-          <h2>Try it</h2>
+          <div className="try-head">
+            <h2>Try it</h2>
+            <CopyButton text={p.try.map((l) => l.replace(/\s+#.*$/, "")).join("\n")} />
+          </div>
           <Term lines={p.try.map((l) => ["", "$ " + l])} label={`How to run ${p.name}`} />
         </section>
       ) : null}

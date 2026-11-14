@@ -19,8 +19,8 @@ export default async function Home() {
               Hi, I&apos;m <Marker>Krishna</Marker>.
             </h1>
             <p className="lede">
-              I make Discord bots and small dev tools, and I&apos;m building Friday, a personal AI. Below is the short
-              version of how I got here.
+              I make Discord bots and small dev tools, and I&apos;m building Friday, a personal AI. Here&apos;s how I
+              got here.
             </p>
             <div className="btns">
               <a className="btn btn-gold" href="#s-2019">
@@ -46,7 +46,7 @@ export default async function Home() {
                 />
               </div>
               <figcaption>
-                <b>Leelakrishna Ravuri</b>
+                <b>Krishna Ravuri</b>
                 <span>Denton, TX</span>
               </figcaption>
             </figure>
@@ -55,7 +55,7 @@ export default async function Home() {
             </span>
           </div>
         </div>
-        <a className="scroll-hint" href="#s-2019" aria-label="Scroll to the story">
+        <a className="scroll-hint" href="#s-2019" tabIndex={-1} aria-hidden="true">
           <span>scroll</span>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 4v15M6 13l6 6 6-6" />

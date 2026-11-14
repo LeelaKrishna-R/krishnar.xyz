@@ -41,7 +41,14 @@ export default function Nav() {
     if (!open) return;
     const onKey = (e) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    // Keep the page still behind the open menu.
+    const root = document.documentElement;
+    const prev = root.style.overflow;
+    root.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      root.style.overflow = prev;
+    };
   }, [open]);
 
   // Move the pill under the active link. Transitions only switch on (the
@@ -124,6 +131,7 @@ export default function Nav() {
           </div>
         </div>
 
+        {open ? <div className="menu-backdrop" onClick={() => setOpen(false)} aria-hidden="true" /> : null}
         <nav id="mobile-menu" className="mobile-menu sticker" aria-label="Main" hidden={!open}>
           <Link href="/" aria-current={pathname === "/" ? "page" : undefined}>
             Home
