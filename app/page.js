@@ -21,7 +21,7 @@ export default async function Home() {
               Hi, I&apos;m <Marker>Krishna</Marker>.
             </h1>
             <p className="lede">
-              I build AI for streamers at Dexter, train models on my own machine, and run the homelab my bots live on.
+              I work on AI for streamers at Dexter, train models on my own machine, and run the homelab my bots live on.
               Here&apos;s how I got here.
             </p>
             <ul className="badges" aria-label="Quick facts">

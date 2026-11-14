@@ -33,7 +33,7 @@ export const chapters = [
   { label: "2021", ids: ["s-2021"] },
   { label: "2025", ids: ["s-texas"] },
   { label: "2026", ids: ["s-dexter", "s-home", "s-side"] },
-  { label: "now", ids: ["s-now", "s-next"] },
+  { label: "now", ids: ["s-now"] },
 ];
 
 function Scene({ id, n, year, flip, kicker, title, children, visual }) {

@@ -4156,3 +4156,23 @@ a.row:hover .row-img {
 .stamp {
   background: rgba(242, 214, 138, 0.92);
 }
+
+/* the film ends in black: the home page footer joins the credits */
+body:has(.credits) .footer {
+  background: #0b0907;
+  border-top-color: #0b0907;
+  color: #f0e7d6;
+}
+
+:root[data-theme="dark"] body:has(.credits) .footer {
+  background: #050404;
+  border-top-color: #050404;
+}
+
+body:has(.credits) .footer small {
+  color: #b3a590;
+}
+
+body:has(.credits) .footer a:hover {
+  color: #f2b544;
+}
