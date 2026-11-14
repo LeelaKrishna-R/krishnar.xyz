@@ -29,9 +29,8 @@ export default async function Home() {
                 ["dev @ Dexter AI", "#f2c76b"],
                 ["Shero: 13,000+ servers", "#bfe0c8"],
                 ["training local models", "#f4b8a4"],
-                ["CCNA in progress", "#c9d7f2"],
               ].map(([t, c], i) => (
-                <li key={t} className="badge" style={{ background: c, "--d": `${0.5 + i * 0.12}s`, "--r": `${[-3, 2, -2, 3][i]}deg` }}>
+                <li key={t} className="badge" style={{ background: c, "--d": `${0.5 + i * 0.12}s`, "--r": `${[-3, 2, -2][i]}deg` }}>
                   {t}
                 </li>
               ))}

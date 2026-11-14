@@ -43,8 +43,8 @@ export const viewport = {
 // Runs before first paint: picks the saved or system theme and marks that
 // scripts work, which turns on the scroll-in animations. If the app's own
 // script never starts, the animations switch back off after 3 s so nothing
-// stays hidden.
-const boot = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";d.dataset.theme=t}catch(e){d.dataset.theme="light"}d.classList.add("js");setTimeout(function(){if(!window.__fx)d.classList.remove("js")},3000)})();`;
+// stays hidden. The opening sequence plays once per visit (no-intro after).
+const boot = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";d.dataset.theme=t}catch(e){d.dataset.theme="light"}d.classList.add("js");try{if(sessionStorage.getItem("intro"))d.classList.add("no-intro");else{sessionStorage.setItem("intro","1");setTimeout(function(){d.classList.add("no-intro")},2600)}}catch(e){}setTimeout(function(){if(!window.__fx)d.classList.remove("js")},3000)})();`;
 
 export default function RootLayout({ children }) {
   return (

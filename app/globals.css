@@ -3817,3 +3817,338 @@ a.row:hover .row-img {
 .page-in:has(.letterbox) {
   animation: none;
 }
+
+/* ================= the recut (round 7) ================= */
+
+/* cold open: the title is already in frame behind the bars; buttons by ~1s */
+@media (prefers-reduced-motion: no-preference) {
+  .js .letterbox {
+    animation: curtain 0.7s cubic-bezier(0.7, 0, 0.2, 1) 0.05s both;
+  }
+  .js .hero h1 {
+    animation: rise 0.6s var(--ease-out) 0s both;
+  }
+  .js .hero .marker path {
+    animation-delay: 0.45s;
+  }
+  .js .hero .marker .thin {
+    animation-delay: 0.8s;
+  }
+  .js .hero .lede {
+    animation: rise 0.5s var(--ease-out) 0.25s both;
+  }
+  .js .hero .badge {
+    animation-delay: calc(var(--d) - 0.1s);
+  }
+  .js .hero .btns {
+    animation: rise 0.5s var(--ease-out) 0.55s both;
+  }
+  .js .hero .id-card {
+    animation: prop-drop 0.8s var(--ease-spring) 0.2s both;
+  }
+  .js .hero .id-note {
+    animation: rise 0.4s var(--ease-out) 1.1s both;
+  }
+}
+
+/* once per visit: after the first viewing, Home starts on the finished frame */
+.no-intro .letterbox {
+  display: none !important;
+}
+
+.no-intro .hero *,
+.no-intro .hero .marker path {
+  animation: none !important;
+}
+
+.no-intro .hero .badge {
+  opacity: 1;
+}
+
+/* nav: hover draws only the thin line; the full mark is the current page */
+.nav-link:hover:not([aria-current="page"]) .nav-ink path:not(.thin),
+.nav-link:focus-visible:not([aria-current="page"]) .nav-ink path:not(.thin) {
+  stroke-dashoffset: 1;
+  opacity: 0;
+}
+
+/* slates: bigger, and the clapper visibly snaps shut */
+.slate {
+  padding: 9px 10px 4px;
+  font-size: 12px;
+  border-radius: 5px;
+}
+
+.slate::before {
+  display: none;
+}
+
+.slate-top {
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  top: -8px;
+  height: 8px;
+  border-radius: 3px;
+  background: repeating-linear-gradient(-55deg, #231c15 0 6px, #f0e7d6 6px 11px);
+  border: 1.5px solid #231c15;
+  transform-origin: 2px 100%;
+}
+
+:root[data-theme="dark"] .slate-top {
+  background: repeating-linear-gradient(-55deg, #f0e7d6 0 6px, #231c15 6px 11px);
+  border-color: #f0e7d6;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .scene .slate-top {
+    transform: rotate(-32deg);
+  }
+  .js .scene.in .slate-top {
+    animation: clap 0.5s cubic-bezier(0.6, 0, 0.9, 0.5) 0.3s both;
+  }
+  .js .scene.in .slate {
+    animation: clack 0.25s ease-out 0.62s;
+  }
+}
+
+@keyframes clap {
+  from {
+    transform: rotate(-32deg);
+  }
+  70% {
+    transform: rotate(3deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes clack {
+  40% {
+    translate: 0 2px;
+  }
+}
+
+/* the old per-scene thread is gone */
+.thread {
+  display: none;
+}
+
+/* Dexter: the stream and its cast */
+.dexter-shot {
+  display: grid;
+  gap: 18px;
+  width: min(100%, 480px);
+}
+
+.live-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #b23f22;
+}
+
+.rec {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .scene.in .live-tag {
+    animation: none;
+  }
+  .js .scene.in .rec {
+    animation: rec 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes rec {
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+
+.mic {
+  height: auto;
+}
+
+.mic-ico {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #231c15;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.mic-ico rect {
+  fill: #231c15;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .scene.in .mic {
+    animation: mic-pulse 1s ease-in-out infinite;
+  }
+}
+
+@keyframes mic-pulse {
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+.cast {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.cast-note {
+  font-size: 16px;
+}
+
+.cast-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cast-member {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  transition: transform 0.35s var(--ease-spring);
+}
+
+.cast-member img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  box-shadow: 2px 2px 0 var(--shadow);
+}
+
+.cast-member small {
+  font: 600 11.5px/1 var(--f-mono);
+  color: var(--muted);
+}
+
+.cast-member:hover {
+  transform: translateY(-5px) rotate(-6deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .scene .cast-member {
+    opacity: 0;
+  }
+  .js .scene.in .cast-member {
+    animation: pop 0.5s var(--ease-spring) var(--d) both;
+  }
+  .js .scene.in .cast-member img {
+    animation: av-bob 3.2s ease-in-out infinite;
+    animation-delay: calc(var(--d) + 0.7s);
+  }
+}
+
+/* home: the lab and the GPU */
+.home-shot {
+  display: grid;
+  gap: 26px;
+  width: min(100%, 540px);
+}
+
+.models {
+  width: 100%;
+}
+
+/* side: the desk, with a shut NDA folder leaning on it */
+.side-shot {
+  position: relative;
+  width: min(100%, 520px);
+  padding-bottom: 70px;
+}
+
+.side-shot .desk {
+  width: 100%;
+}
+
+.side-shot .folder {
+  position: absolute;
+  left: -18px;
+  bottom: 0;
+  top: auto;
+  width: 54%;
+  rotate: -5deg;
+  z-index: 3;
+}
+
+.side-shot .folder i {
+  background: rgba(35, 28, 21, 0.62);
+  height: 9px;
+}
+
+.side-shot .stamp {
+  right: -14px;
+  bottom: 6px;
+  font-size: 34px;
+  padding: 1px 10px;
+  border-width: 4px;
+}
+
+@media (max-width: 600px) {
+  .side-shot .folder {
+    left: 0;
+  }
+}
+
+/* credits: a fade to black, a roll, then the hold */
+.credits {
+  background: linear-gradient(to bottom, var(--paper) 0, #0b0907 220px, #0b0907 100%);
+  padding-top: clamp(200px, 22vw, 280px);
+}
+
+:root[data-theme="dark"] .credits {
+  background:
+    radial-gradient(120% 70% at 50% 40%, transparent 55%, rgba(0, 0, 0, 0.55)),
+    linear-gradient(to bottom, var(--paper) 0, #050404 260px, #050404 100%);
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .roll {
+      animation: roll linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 60%;
+    }
+  }
+}
+
+@keyframes roll {
+  from {
+    transform: translateY(160px);
+  }
+  to {
+    transform: translateY(-40px);
+  }
+}
+
+/* NDA stamp: darker ink so it reads on the manila folder */
+.stamp {
+  color: #9e3219;
+  border-color: #9e3219;
+}
+
+@keyframes stamp {
+  from {
+    opacity: 0;
+    scale: 2.4;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
