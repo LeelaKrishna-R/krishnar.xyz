@@ -26,7 +26,25 @@ export default function ScrollFx() {
       { rootMargin: "0px 0px -5% 0px" },
     );
     els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+
+    // Story scenes play their animations once they are a third on screen.
+    const scenes = Array.from(document.querySelectorAll("[data-scene]:not(.in)"));
+    const so = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("in");
+            so.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.3 },
+    );
+    scenes.forEach((el) => so.observe(el));
+    return () => {
+      io.disconnect();
+      so.disconnect();
+    };
   }, [pathname]);
 
   return null;

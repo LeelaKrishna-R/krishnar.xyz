@@ -1,17 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import Marker from "../components/Marker";
-import { Rows, ProjectRow } from "../components/Rows";
+import Story from "../components/story/Story";
 import { Scribble } from "../components/Icons";
-import { bigProjects, tools } from "../lib/projects";
-import { getAllPosts, formatDate } from "../lib/posts";
 import { getCommunity } from "../lib/live";
-import { site } from "../lib/site";
 
 export const revalidate = 600;
 
 export default async function Home() {
-  const [community, posts] = await Promise.all([getCommunity(), getAllPosts()]);
+  const community = await getCommunity();
 
   return (
     <>
@@ -22,17 +19,16 @@ export default async function Home() {
               Hi, I&apos;m <Marker>Krishna</Marker>.
             </h1>
             <p className="lede">
-              I make Discord bots and small dev tools, and I&apos;m building Friday, an AI that looks after my day. The
-              bots run on two little Dell PCs in my homelab.
+              I make Discord bots and small dev tools, and I&apos;m building Friday, a personal AI. Below is the short
+              version of how I got here.
             </p>
-            <p className="lede muted">Right now I&apos;m also studying for the CCNA.</p>
             <div className="btns">
-              <Link className="btn btn-gold" href="/work">
-                See my work
-              </Link>
-              <a className="btn" href={`mailto:${site.email}`}>
-                Email me
+              <a className="btn btn-gold" href="#s-2019">
+                Start the story ↓
               </a>
+              <Link className="btn" href="/work">
+                Skip to my work
+              </Link>
             </div>
           </div>
 
@@ -59,75 +55,15 @@ export default async function Home() {
             </span>
           </div>
         </div>
+        <a className="scroll-hint" href="#s-2019" aria-label="Scroll to the story">
+          <span>scroll</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 4v15M6 13l6 6 6-6" />
+          </svg>
+        </a>
       </section>
 
-      <div className="wrap home-grid">
-        <section>
-          <div className="label">
-            <span>Things I&apos;ve made</span>
-            <Link href="/work">all of it</Link>
-          </div>
-          <Rows>
-            {bigProjects.map((p) => (
-              <ProjectRow key={p.slug} p={p} />
-            ))}
-            <li data-reveal>
-              <Link className="row" href="/work#tools">
-                <span className="row-name">+ {tools.length} small tools</span>
-                <span className="row-year">→</span>
-                <span className="row-line">{tools.map((t) => t.name).join(", ")}</span>
-              </Link>
-            </li>
-          </Rows>
-        </section>
-
-        <div>
-          <section>
-            <div className="label">
-              <span>Lately</span>
-              <span>Nov 2026</span>
-            </div>
-            <ul className="lately">
-              {community ? (
-                <li>
-                  <span className="dot-live" aria-hidden="true" />
-                  Looking after the Dexter AI Discord. {community.members.toLocaleString("en-US")} members,{" "}
-                  {community.online ? `${community.online.toLocaleString("en-US")} online right now.` : ""}
-                </li>
-              ) : (
-                <li>Looking after the bots for the Dexter AI Discord.</li>
-              )}
-              <li>
-                Fixing the homelab. Last thing to break was a{" "}
-                <Link className="inline" href="/homelab#broke">
-                  dodgy power adapter
-                </Link>
-                .
-              </li>
-              <li>Studying subnetting for the CCNA.</li>
-            </ul>
-          </section>
-
-          <section>
-            <div className="label">
-              <span>Writing</span>
-              <Link href="/blog">all posts</Link>
-            </div>
-            <ul className="lately">
-              {posts.slice(0, 3).map((p) => (
-                <li key={p.slug}>
-                  <Link className="post-link" href={`/blog/${p.slug}`}>
-                    {p.title}
-                  </Link>
-                  <div className="row-year" style={{ marginTop: 4 }}>
-                    {formatDate(p.date)}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
-      </div>
+      <Story community={community} />
     </>
   );
 }
