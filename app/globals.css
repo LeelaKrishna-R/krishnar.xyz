@@ -2884,3 +2884,11 @@ a.row:hover .row-img {
   font-size: 15px;
   color: var(--muted);
 }
+
+/* printed resume: show where the contact links go */
+@media print {
+  .resume .lede a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+  }
+}

@@ -61,18 +61,18 @@ export default async function ProjectPage({ params }) {
         <section className="try">
           <div className="try-head">
             <h2>Try it</h2>
-            <CopyButton text={p.try.map((l) => l.replace(/\s+#.*$/, "")).join("\n")} />
+            <CopyButton text={p.try.filter((l) => !l.startsWith("#")).join("\n")} />
           </div>
-          <Term lines={p.try.map((l) => ["", "$ " + l])} label={`How to run ${p.name}`} />
+          <Term lines={p.try.map((l) => (l.startsWith("#") ? ["dim", l] : ["", "$ " + l]))} label={`How to run ${p.name}`} />
         </section>
       ) : null}
 
       <div className="facts">
         {community ? (
-          <p className="live-line">
+          <p className="live-pill" style={{ margin: 0 }}>
             <span className="dot-live" aria-hidden="true" />
             {community.members.toLocaleString("en-US")} members
-            {community.online ? `, ${community.online.toLocaleString("en-US")} online right now` : ""}
+            {community.online ? ` · ${community.online.toLocaleString("en-US")} online` : ""}
           </p>
         ) : null}
         <div className="chips">
