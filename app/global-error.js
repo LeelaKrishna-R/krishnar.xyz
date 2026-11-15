@@ -18,7 +18,7 @@ export default function GlobalError({ reset }) {
       >
         <div>
           <h1 style={{ fontSize: 36, margin: 0 }}>The site failed to load</h1>
-          <p style={{ color: "#64574a" }}>Try again, or email email@krishnar.xyz if it keeps happening.</p>
+          <p style={{ color: "#64574a" }}>Try again, or email hello@ravuri.dev if it keeps happening.</p>
           <button
             type="button"
             onClick={() => reset()}
