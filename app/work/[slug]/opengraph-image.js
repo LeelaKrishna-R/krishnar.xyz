@@ -3,7 +3,7 @@ import { projects, getProject } from "../../../lib/projects";
 
 export const size = ogSize;
 export const contentType = "image/png";
-export const alt = "A project by Krishna Ravuri";
+export const alt = "A project by Leelakrishna Ravuri";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -12,5 +12,5 @@ export function generateStaticParams() {
 export default async function Image({ params }) {
   const { slug } = await params;
   const p = getProject(slug);
-  return ogImage({ label: "Krishna Ravuri · work", title: p?.name ?? "Work", line: p?.line ?? "" });
+  return ogImage({ label: "ravuri.dev · work", title: p?.name ?? "Work", line: p?.line ?? "", me: { pose: "cheer", face: "happy" } });
 }

@@ -4,6 +4,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import ScrollFx from "../components/ScrollFx";
 import { site } from "../lib/site";
+import { homeTitle } from "../lib/meta";
 
 // The font files live in the repo (latin subsets from Google Fonts, SIL OFL).
 // next/font/google downloads them during the build instead, and Google
@@ -17,18 +18,22 @@ const mono = localFont({ src: "./fonts/jetbrains-mono.woff2", weight: "500 700",
 export const metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name}: Dexter Copilot, Discord bots and a homelab`,
+    default: homeTitle,
     template: `%s · ${site.name}`,
   },
   description: site.description,
+  applicationName: site.name,
+  authors: [{ name: site.name, url: site.url }],
+  creator: site.name,
   openGraph: {
     type: "website",
-    url: site.url,
+    url: "/",
     siteName: site.name,
-    title: site.name,
+    locale: "en_US",
+    title: homeTitle,
     description: site.description,
   },
-  twitter: { card: "summary_large_image", title: site.name, description: site.description },
+  twitter: { card: "summary_large_image", title: homeTitle, description: site.description },
 };
 
 export const viewport = {

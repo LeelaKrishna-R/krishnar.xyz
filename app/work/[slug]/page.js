@@ -7,6 +7,7 @@ import CopyButton from "../../../components/CopyButton";
 import { ArrowUpRight } from "../../../components/Icons";
 import { projects, getProject } from "../../../lib/projects";
 import { getCommunity } from "../../../lib/live";
+import { meta } from "../../../lib/meta";
 
 export const revalidate = 600;
 export const dynamicParams = false;
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const p = getProject(slug);
   if (!p) return {};
-  return { title: p.name, description: p.lede, openGraph: { title: p.name, description: p.lede } };
+  return meta({ title: p.name, description: p.lede, path: `/work/${p.slug}` });
 }
 
 export default async function ProjectPage({ params }) {

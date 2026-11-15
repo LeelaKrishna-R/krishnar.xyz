@@ -4,13 +4,15 @@ import Calendar from "../../components/Calendar";
 import { timeline } from "../../lib/timeline";
 import { getGithub } from "../../lib/live";
 import { links, site } from "../../lib/site";
+import { meta } from "../../lib/meta";
 
 export const revalidate = 3600;
 
-export const metadata = {
+export const metadata = meta({
   title: "About",
-  description: "A bit about Krishna: where I'm from, what I studied, and what I'm working on.",
-};
+  description: "Who Krishna is: from Madurai to an M.S. in AI at UNT, now working on Dexter Copilot and studying for the CCNA.",
+  path: "/about",
+});
 
 export default async function AboutPage() {
   const gh = await getGithub();

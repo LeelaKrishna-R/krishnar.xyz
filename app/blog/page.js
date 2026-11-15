@@ -1,11 +1,13 @@
 import PageHead from "../../components/PageHead";
 import Link from "next/link";
 import { getAllPosts, formatDate } from "../../lib/posts";
+import { meta } from "../../lib/meta";
 
-export const metadata = {
+export const metadata = meta({
   title: "Writing",
   description: "Short posts about why I made things, and how I check they work.",
-};
+  path: "/blog",
+});
 
 export default async function BlogIndex() {
   const posts = await getAllPosts();

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPost, formatDate } from "../../../lib/posts";
 import { site } from "../../../lib/site";
+import { meta } from "../../../lib/meta";
 
 export const dynamicParams = false;
 
@@ -15,11 +16,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return {};
-  return {
-    title: post.title,
-    description: post.excerpt,
-    openGraph: { type: "article", title: post.title, description: post.excerpt, publishedTime: post.date },
-  };
+  return meta({ title: post.title, description: post.excerpt, path: `/blog/${slug}`, type: "article", publishedTime: post.date });
 }
 
 export default async function Post({ params }) {

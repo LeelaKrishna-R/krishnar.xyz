@@ -1,11 +1,13 @@
 import PageHead from "../../components/PageHead";
 import ContactForm from "./ContactForm";
 import { site } from "../../lib/site";
+import { meta } from "../../lib/meta";
 
-export const metadata = {
+export const metadata = meta({
   title: "Contact",
-  description: "Email Krishna, or send him a message from the form.",
-};
+  description: "Email hello@ravuri.dev, or send Krishna a message from the form.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

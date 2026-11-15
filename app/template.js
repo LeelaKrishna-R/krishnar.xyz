@@ -1,8 +1,8 @@
 "use client";
 // Re-mounts on every navigation. On the first load it only fades in; when
-// you move between pages, three colour panels swipe off the new page like a
-// cartoon scene change. The panels sit outside the faded wrapper so they're
-// solid from the first frame. The flag lives in the browser only, so the
+// you move between pages, a stage curtain opens on the new page (two velvet
+// halves gather to the sides under a scalloped pelmet). It sits outside the
+// faded wrapper so it's solid from the first frame. The flag lives in the browser only, so the
 // server never renders a wipe.
 import { useState } from "react";
 
@@ -18,10 +18,10 @@ export default function Template({ children }) {
   return (
     <>
       {wipe ? (
-        <div className="wipe" aria-hidden="true">
-          <i />
-          <i />
-          <i />
+        <div className="curtain" aria-hidden="true">
+          <i className="c-l" />
+          <i className="c-r" />
+          <b />
         </div>
       ) : null}
       <div className={`page-in${wipe ? " wiped" : ""}`}>{children}</div>

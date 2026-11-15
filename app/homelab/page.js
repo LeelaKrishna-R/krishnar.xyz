@@ -1,11 +1,13 @@
 import PageHead from "../../components/PageHead";
 import Link from "next/link";
 import { nodes, running, incidents } from "../../lib/lab";
+import { meta } from "../../lib/meta";
 
-export const metadata = {
+export const metadata = meta({
   title: "Homelab",
   description: "Two small Dell PCs running Proxmox at home, what runs on them, and what broke.",
-};
+  path: "/homelab",
+});
 
 export default function HomelabPage() {
   return (

@@ -1,12 +1,13 @@
 import PrintButton from "../../components/PrintButton";
 import { person, summary, experience, projects, certifications, education, skills, pdfPath } from "../../lib/resume";
 import { links, site } from "../../lib/site";
+import { meta } from "../../lib/meta";
 
-export const metadata = {
+export const metadata = meta({
   title: "Resume",
-  description:
-    "Leelakrishna Ravuri's resume: Dexter Copilot, Discord bots, a Proxmox homelab, an M.S. in AI from UNT, studying for the CCNA.",
-};
+  description: "Leelakrishna Ravuri's resume: Dexter Copilot, Discord bots, a Proxmox homelab, an M.S. in AI from UNT, studying for the CCNA.",
+  path: "/resume",
+});
 
 function Item({ org, place, role, when, points = [] }) {
   return (

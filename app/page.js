@@ -5,8 +5,11 @@ import Story from "../components/story/Story";
 import Chibi from "../components/Chibi";
 import { Scribble } from "../components/Icons";
 import { getCommunity } from "../lib/live";
+import { meta } from "../lib/meta";
 
 export const revalidate = 600;
+
+export const metadata = meta({ path: "/" });
 
 export default async function Home() {
   const community = await getCommunity();

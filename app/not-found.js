@@ -1,8 +1,14 @@
 import Link from "next/link";
 import Marker from "../components/Marker";
 import Chibi from "../components/Chibi";
+import { meta } from "../lib/meta";
 
-export const metadata = { title: "Not found" };
+export const metadata = meta({
+  title: "Not found",
+  description: "This page doesn't exist, or it moved when the site was rebuilt.",
+  path: null,
+  noindex: true,
+});
 
 export default function NotFound() {
   return (

@@ -1,11 +1,13 @@
 import PageHead from "../../components/PageHead";
 import { Rows, ProjectRow } from "../../components/Rows";
 import { bigProjects, tools, older } from "../../lib/projects";
+import { meta } from "../../lib/meta";
 
-export const metadata = {
+export const metadata = meta({
   title: "Work",
-  description: "Discord bots, a personal AI, a desktop character for AI agents, and some small tools.",
-};
+  description: "Dexter Copilot, the Dexter AI bots, Friday, Iris, Shero and a few small tools for homelabs and AI agents, biggest first.",
+  path: "/work",
+});
 
 export default function WorkPage() {
   return (
