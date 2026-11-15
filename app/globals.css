@@ -6351,3 +6351,41 @@ html {
     transform: translateY(-8px) rotate(8deg);
   }
 }
+
+/* resume page: title line, role/date row and plain lists (same data as the PDF) */
+.r-title {
+  margin-top: 6px;
+  font: 700 18px/1.3 var(--f-display);
+}
+
+.resume .r-sub {
+  margin-top: 2px;
+}
+
+.resume .r-sub span:first-child {
+  font: 500 16px/1.45 var(--f-body);
+  color: var(--ink);
+}
+
+.resume .r-sub .r-when {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.r-list {
+  margin: 0;
+  padding-left: 1.2em;
+  color: var(--muted);
+}
+
+.r-list li + li {
+  margin-top: 6px;
+}
+
+.r-list li::marker {
+  color: var(--coral);
+}
+
+.r-list b {
+  color: var(--ink);
+}

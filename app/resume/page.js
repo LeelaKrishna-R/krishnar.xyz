@@ -1,34 +1,24 @@
-import Link from "next/link";
 import PrintButton from "../../components/PrintButton";
-import { summary, experience, projects, education, skills } from "../../lib/resume";
+import { person, summary, experience, projects, certifications, education, skills, pdfPath } from "../../lib/resume";
 import { links, site } from "../../lib/site";
 
 export const metadata = {
   title: "Resume",
-  description: "Krishna Ravuri's resume: Discord bots, homelab, an M.S. in AI from UNT, studying for the CCNA.",
+  description:
+    "Leelakrishna Ravuri's resume: Dexter Copilot, Discord bots, a Proxmox homelab, an M.S. in AI from UNT, studying for the CCNA.",
 };
 
-function Defs({ rows }) {
-  return (
-    <dl className="defs">
-      {rows.map(([k, v]) => (
-        <div key={k} style={{ display: "contents" }}>
-          <dt>{k}</dt>
-          <dd>{v}</dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
-
-function Item({ what, when, where, points = [] }) {
+function Item({ org, place, role, when, points = [] }) {
   return (
     <div className="r-item">
       <div className="r-head">
-        <b>{what}</b>
-        <span>{when}</span>
+        <b>{org}</b>
+        <span>{place}</span>
       </div>
-      <div className="r-where">{where}</div>
+      <div className="r-head r-sub">
+        <span>{role}</span>
+        <span className="r-when">{when}</span>
+      </div>
       {points.length ? (
         <ul>
           {points.map((p) => (
@@ -44,11 +34,10 @@ export default function ResumePage() {
   return (
     <article className="wrap narrow end resume cartoon-head">
       <header className="page-head">
-        <h1 className="ph-title">
-          Krishna Ravuri
-        </h1>
+        <h1 className="ph-title">{person.name}</h1>
+        <p className="r-title">{person.title}</p>
         <p className="lede">
-          Denton, Texas ·{" "}
+          {person.place} ·{" "}
           <a className="inline" href={`mailto:${site.email}`}>
             {site.email}
           </a>{" "}
@@ -64,9 +53,8 @@ export default function ResumePage() {
         <span className="stamp open-stamp" aria-hidden="true">
           open to work
         </span>
-        <p className="resume-sum">{summary}</p>
         <div className="btns resume-btns">
-          <a className="btn btn-gold" href="/resume/Krishna-Ravuri-Resume.pdf" download>
+          <a className="btn btn-gold" href={pdfPath} download>
             Download PDF
           </a>
           <a className="btn" href="/resume.txt">
@@ -77,36 +65,55 @@ export default function ResumePage() {
       </header>
 
       <section className="r-block">
-        <h2>Experience</h2>
+        <h2>Summary</h2>
+        <p className="resume-sum">{summary}</p>
+      </section>
+
+      <section className="r-block">
+        <h2>Skills</h2>
+        <dl className="defs">
+          {skills.map(([k, v]) => (
+            <div key={k} style={{ display: "contents" }}>
+              <dt>{k}</dt>
+              <dd>{v}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      <section className="r-block">
+        <h2>Work experience</h2>
         {experience.map((e) => (
-          <Item key={e.what} {...e} />
+          <Item key={e.org} {...e} />
         ))}
       </section>
 
       <section className="r-block">
         <h2>Projects</h2>
-        <Defs rows={projects} />
-        <p className="r-more">
-          More on the{" "}
-          <Link className="inline" href="/work">
-            work page
-          </Link>
-          .
-        </p>
+        <ul className="r-list">
+          {projects.map((p) => (
+            <li key={p.name}>
+              <b>{p.name}</b> ({p.tech}): {p.text}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="r-block">
+        <h2>Certifications</h2>
+        <ul className="r-list">
+          {certifications.map((c) => (
+            <li key={c}>{c}</li>
+          ))}
+        </ul>
       </section>
 
       <section className="r-block">
         <h2>Education</h2>
         {education.map((e) => (
-          <Item key={e.what} {...e} points={[e.note]} />
+          <Item key={e.school} org={e.school} place={e.place} role={e.degree} when={e.when} />
         ))}
       </section>
-
-      <section className="r-block">
-        <h2>Skills</h2>
-        <Defs rows={skills} />
-      </section>
-
     </article>
   );
 }
