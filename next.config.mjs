@@ -1,7 +1,50 @@
 /** @type {import('next').NextConfig} */
+// Security headers on every response (2026-11-15 audit). The pages are
+// prerendered, so inline scripts (Next's flight data, the theme boot script,
+// JSON-LD) can't carry nonces: script-src keeps 'unsafe-inline' but nothing
+// from other origins can load. frame-ancestors/X-Frame-Options stop the site
+// being framed (clickjacking). Preview deployments also allow the Vercel
+// toolbar.
+const prod = process.env.VERCEL_ENV === "production";
+const dev = process.env.NODE_ENV === "development";
+const csp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""}${prod ? "" : " https://vercel.live"}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self'",
+  `connect-src 'self'${prod ? "" : " https://vercel.live wss://ws-us3.pusher.com"}`,
+  `frame-src ${prod ? "'none'" : "https://vercel.live"}`,
+  "media-src 'self'",
+  "worker-src 'self' blob:",
+  "manifest-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "upgrade-insecure-requests",
+].join("; ");
+
+const securityHeaders = [
+  { key: "Content-Security-Policy", value: csp },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()" },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+];
+
 const nextConfig = {
+  poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
+  },
+  async headers() {
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      { source: "/api/:path*", headers: [{ key: "Cache-Control", value: "no-store" }] },
+    ];
   },
   async redirects() {
     return [

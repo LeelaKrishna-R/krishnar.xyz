@@ -1,11 +1,16 @@
 "use client";
-// Posts to /api/contact (Resend). The hidden "website" field is a honeypot.
-import { useState } from "react";
+// Posts to /api/contact (Resend). The hidden "website" field is a honeypot, and
+// "dt" (ms since the form appeared) lets the server drop instant bot submits.
+import { useEffect, useRef, useState } from "react";
 import { Check } from "../../components/Icons";
 
 export default function ContactForm() {
   const [state, setState] = useState("idle"); // idle | sending | sent
   const [error, setError] = useState("");
+  const shownAt = useRef(0);
+  useEffect(() => {
+    shownAt.current = Date.now();
+  }, []);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -14,6 +19,7 @@ export default function ContactForm() {
     const form = e.currentTarget;
     const fd = new FormData(form);
     const payload = Object.fromEntries(["name", "email", "message", "website"].map((k) => [k, fd.get(k) || ""]));
+    payload.dt = shownAt.current ? Date.now() - shownAt.current : 0;
     setState("sending");
     try {
       const res = await fetch("/api/contact", {
