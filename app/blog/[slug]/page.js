@@ -1,4 +1,5 @@
 import ReadPencil from "../../../components/ReadPencil";
+import Chibi from "../../../components/Chibi";
 import PageHead from "../../../components/PageHead";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -42,6 +43,10 @@ export default async function Post({ params }) {
       />
       <div className="wrap narrow">
         <article className="article" dangerouslySetInnerHTML={{ __html: post.html }} />
+        <div className="post-end" data-reveal aria-hidden="true">
+          <Chibi pose="cheer" face="happy" />
+          <span className="note">thanks for reading!</span>
+        </div>
         {newer || older ? (
           <nav className="pager end" aria-label="More posts">
             {older ? (

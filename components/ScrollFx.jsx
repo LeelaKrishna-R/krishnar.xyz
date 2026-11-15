@@ -7,6 +7,42 @@ import { useEffect } from "react";
 export default function ScrollFx() {
   const pathname = usePathname();
 
+  // The cartoon me reacts: a click gets a hop, a spin or a wiggle (in turn),
+  // switching the theme makes every visible one jump, and the contact form
+  // fires "chibi:throw" when a message goes out. Each reaction is a class
+  // that replaces his loop for under a second.
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const kinds = ["ch-r-hop", "ch-r-spin", "ch-r-wiggle"];
+    let n = 0;
+    const react = (el, kind) => {
+      el.classList.remove(...kinds, "ch-r-surprise", "ch-r-throw");
+      void el.getBoundingClientRect();
+      el.classList.add(kind);
+      clearTimeout(el.__react);
+      el.__react = setTimeout(() => el.classList.remove(kind), 1100);
+    };
+    const visible = () =>
+      Array.from(document.querySelectorAll(".chibi")).filter((c) => {
+        const r = c.getBoundingClientRect();
+        return r.bottom > 0 && r.top < window.innerHeight && r.width > 0;
+      });
+    const onClick = (e) => {
+      const c = e.target.closest && e.target.closest(".chibi");
+      if (c) react(c, kinds[n++ % kinds.length]);
+    };
+    const onThrow = () => document.querySelectorAll(".ph-chibi").forEach((c) => react(c, "ch-r-throw"));
+    const mo = new MutationObserver(() => visible().forEach((c) => react(c, "ch-r-surprise")));
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    document.addEventListener("click", onClick);
+    window.addEventListener("chibi:throw", onThrow);
+    return () => {
+      mo.disconnect();
+      document.removeEventListener("click", onClick);
+      window.removeEventListener("chibi:throw", onThrow);
+    };
+  }, []);
+
   // The cartoon me's eyes follow the pointer: each chibi gets --lx/--ly (-1..1)
   // pointing from its face toward the cursor. Reads first, then writes, once a
   // frame at most; nothing happens on touch screens or with reduced motion.

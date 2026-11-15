@@ -1,3 +1,4 @@
+import HowItWorks from "../../components/HowItWorks";
 import PageHead from "../../components/PageHead";
 import Link from "next/link";
 import { nodes, running, incidents } from "../../lib/lab";
@@ -70,6 +71,7 @@ export default function HomelabPage() {
               </div>
             ))}
           </dl>
+          <HowItWorks slug="homelab" />
         </section>
 
         <section id="broke">

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Term from "../../../components/Term";
+import HowItWorks from "../../../components/HowItWorks";
 import PageHead from "../../../components/PageHead";
 import CopyButton from "../../../components/CopyButton";
 import { ArrowUpRight } from "../../../components/Icons";
@@ -48,6 +49,8 @@ export default async function ProjectPage({ params }) {
           <Term lines={p.media.term} label={`Example output from ${p.name}`} />
         )}
       </div>
+
+      <HowItWorks slug={p.slug} />
 
       <div className="prose">
         {p.body.map((para) => (

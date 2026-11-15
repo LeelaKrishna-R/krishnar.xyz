@@ -25,6 +25,7 @@ export default function ContactForm() {
       if (!res.ok || !data.ok) throw new Error(data.error || "That didn't go through. Please email me instead.");
       form.reset();
       setState("sent");
+      window.dispatchEvent(new Event("chibi:throw"));
     } catch (err) {
       setError(err.message);
       setState("idle");

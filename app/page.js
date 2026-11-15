@@ -5,6 +5,7 @@ import Story from "../components/story/Story";
 import Chibi from "../components/Chibi";
 import { Scribble } from "../components/Icons";
 import { getCommunity } from "../lib/live";
+import { site } from "../lib/site";
 import { meta } from "../lib/meta";
 
 export const revalidate = 600;
@@ -91,6 +92,42 @@ export default async function Home() {
             <path d="M12 4v15M6 13l6 6 6-6" />
           </svg>
         </a>
+      </section>
+
+      <section className="tldr" aria-labelledby="tldr-h">
+        <div className="wrap">
+          <div className="sticker tldr-card" data-reveal>
+            <h2 id="tldr-h" className="note tldr-note">
+              the 30-second version
+            </h2>
+            <dl className="tldr-list">
+              <div>
+                <dt>Looking for</dt>
+                <dd>Infrastructure, networking or dev tooling roles</dd>
+              </div>
+              <div>
+                <dt>Now</dt>
+                <dd>Volunteer developer on Dexter Copilot, an AI cohost for streamers</dd>
+              </div>
+              <div>
+                <dt>Proof</dt>
+                <dd>Shero runs in 13,000+ servers. My homelab has monitoring and monthly restore drills. net-triage gets 16/16 real Cisco cases right.</dd>
+              </div>
+              <div>
+                <dt>Education</dt>
+                <dd>M.S. in Artificial Intelligence, UNT. Studying for the CCNA.</dd>
+              </div>
+            </dl>
+            <div className="btns tldr-btns">
+              <Link className="btn btn-gold" href="/resume">
+                Resume
+              </Link>
+              <a className="btn" href={`mailto:${site.email}`}>
+                {site.email}
+              </a>
+            </div>
+          </div>
+        </div>
       </section>
 
       <Story community={community} />
