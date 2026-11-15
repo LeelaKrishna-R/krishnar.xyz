@@ -8027,3 +8027,37 @@ html {
 .dot-live.warn::after {
   background: var(--gold);
 }
+
+/* nav mark: chibi head on a gold sticker (components/Mark.jsx) */
+.mark-tile {
+  display: inline-grid;
+  place-items: end center;
+  overflow: hidden;
+  background: var(--gold);
+  border: 2.5px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+
+.mark-tile .chibi {
+  width: 92%;
+  height: auto;
+  margin-bottom: -2px;
+}
+
+/* the full name fits on one line next to the menu buttons on small phones */
+@media (max-width: 380px) {
+  .brand {
+    gap: 8px;
+    font-size: 15px;
+  }
+
+  .brand-name {
+    white-space: nowrap;
+  }
+
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+  }
+}

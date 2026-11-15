@@ -84,7 +84,7 @@ export default function Nav() {
           <Link href="/" className="brand">
             <Mark className="brand-mark" />
             <span className="brand-name">
-              Krishna<span> Ravuri</span>
+              Leelakrishna<span> Ravuri</span>
             </span>
             <svg className="brand-squiggle" viewBox="0 0 100 8" preserveAspectRatio="none" aria-hidden="true">
               <path pathLength="1" d="M1 5c8-5 14 4 22 0s14-5 22 0 14 4 22 0 14-5 22 0 7 2 10 0" />
