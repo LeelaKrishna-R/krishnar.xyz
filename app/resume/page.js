@@ -1,5 +1,5 @@
 import PrintButton from "../../components/PrintButton";
-import { person, summary, experience, projects, certifications, education, skills, pdfPath } from "../../lib/resume";
+import { person, summary, experience, projects, certifications, education, skills, pdfPath, docxPath } from "../../lib/resume";
 import { links, site } from "../../lib/site";
 import { meta } from "../../lib/meta";
 
@@ -57,6 +57,9 @@ export default function ResumePage() {
         <div className="btns resume-btns">
           <a className="btn btn-gold" href={pdfPath} download>
             Download PDF
+          </a>
+          <a className="btn" href={docxPath} download>
+            Word
           </a>
           <a className="btn" href="/resume.txt">
             Plain text

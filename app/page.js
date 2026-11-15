@@ -7,6 +7,7 @@ import { Scribble } from "../components/Icons";
 import { getCommunity } from "../lib/live";
 import { site } from "../lib/site";
 import { meta } from "../lib/meta";
+import { JsonLd, profilePage } from "../lib/jsonld";
 
 export const revalidate = 600;
 
@@ -17,6 +18,7 @@ export default async function Home() {
 
   return (
     <>
+      <JsonLd data={profilePage()} />
       <div className="letterbox top" aria-hidden="true" />
       <div className="letterbox bottom" aria-hidden="true" />
       <section className="hero">
@@ -40,7 +42,7 @@ export default async function Home() {
             </p>
             <ul className="badges" aria-label="Quick facts">
               {[
-                ["dev @ Dexter AI", "#f2c76b"],
+                ["volunteer dev @ Dexter AI", "#f2c76b"],
                 ["Shero: 13,000+ servers", "#bfe0c8"],
                 ["training local models", "#f4b8a4"],
               ].map(([t, c], i) => (

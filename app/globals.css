@@ -23,6 +23,7 @@
   --coral: #d9603f;
   --green: #2f8a52;
   --green-text: #1d6537;
+  --coral-text: #a8371c;
   --on-accent: #231c15;
 
   --r-card: 16px 14px 18px 13px / 14px 17px 13px 16px;
@@ -59,6 +60,7 @@
   --coral: #f08a6b;
   --green: #6fcf8f;
   --green-text: #7ad69a;
+  --coral-text: #f08a6b;
   color-scheme: dark;
 }
 
@@ -6755,11 +6757,15 @@ html {
 }
 
 .hh-row em.bad {
-  color: var(--coral);
+  color: var(--coral-text);
 }
 
 .hh-row em.ok {
   color: var(--green-text);
+}
+
+.hh-row em.med {
+  color: var(--gold-text);
 }
 
 @media (max-width: 640px) {
@@ -7861,4 +7867,163 @@ html {
   .tldr-list div {
     grid-template-columns: 1fr;
   }
+}
+
+/* ---------- project pages: recorded terminal clip + case study ---------- */
+.demo {
+  margin: 0;
+}
+
+/* the clips are ~920px wide terminals: on wide screens they step out of the
+   680px column to near their real size; on phones they scroll sideways at a
+   readable size instead of shrinking to 5px text */
+@media (min-width: 1000px) {
+  .demo {
+    width: min(940px, calc(100vw - 64px));
+    margin-left: 50%;
+    translate: -50% 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .demo-scroll {
+    overflow-x: auto;
+    margin: 0 -16px;
+    padding: 4px 16px 10px;
+    scrollbar-width: thin;
+  }
+
+  .demo-scroll .demo-clip {
+    width: 720px;
+    max-width: none;
+    rotate: none;
+  }
+}
+
+.demo-clip {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 2px solid var(--line);
+  box-shadow: 4px 4px 0 var(--shadow);
+  rotate: -0.4deg;
+  background: #1d1712;
+}
+
+.demo-note {
+  display: block;
+  margin-top: 10px;
+  text-align: right;
+}
+
+.case section + section {
+  margin-top: 22px;
+}
+
+.case h2 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+/* ---------- the hidden surprise (components/Party.jsx) ---------- */
+.party {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.party-note {
+  position: absolute;
+  left: 50%;
+  top: 22%;
+  margin: 0;
+  padding: 10px 18px;
+  font: 700 22px/1.2 var(--f-hand);
+  color: var(--ink);
+  translate: -50% 0;
+  rotate: -3deg;
+  box-shadow: 4px 4px 0 var(--shadow);
+  animation: party-note 5.2s ease both;
+}
+
+.party-confetti i,
+.party-runner {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .party-confetti i {
+    display: block;
+    position: absolute;
+    top: -20px;
+    left: var(--x);
+    width: 9px;
+    height: 14px;
+    border-radius: 2px;
+    rotate: var(--r);
+    animation: party-fall var(--t) cubic-bezier(0.3, 0.2, 0.6, 1) var(--d) both;
+  }
+
+  .party-runner {
+    display: block;
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    width: 110px;
+    animation: party-run 4.6s linear 0.3s both;
+  }
+
+  .party-runner .chibi {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@keyframes party-note {
+  0% {
+    opacity: 0;
+    scale: 0.6;
+  }
+  10%,
+  85% {
+    opacity: 1;
+    scale: 1;
+  }
+  100% {
+    opacity: 0;
+    scale: 1;
+  }
+}
+
+@keyframes party-fall {
+  0% {
+    transform: translateY(0) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(540deg);
+    opacity: 0.8;
+  }
+}
+
+@keyframes party-run {
+  from {
+    transform: translateX(-130px);
+  }
+  to {
+    transform: translateX(calc(100vw + 20px));
+  }
+}
+
+/* homelab page: live health pill (components/LabStatus.jsx) */
+.lab-pill {
+  margin-top: 14px;
+}
+
+.dot-live.warn,
+.dot-live.warn::after {
+  background: var(--gold);
 }

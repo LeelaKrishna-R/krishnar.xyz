@@ -1,8 +1,10 @@
 import "./globals.css";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import ScrollFx from "../components/ScrollFx";
+import Party from "../components/Party";
 import { site } from "../lib/site";
 import { homeTitle } from "../lib/meta";
 
@@ -34,6 +36,9 @@ export const metadata = {
     description: site.description,
   },
   twitter: { card: "summary_large_image", title: homeTitle, description: site.description },
+  // Google Search Console's HTML-tag check, only when the token is set in
+  // Vercel (the DNS check in Cloudflare needs nothing here).
+  ...(process.env.GOOGLE_SITE_VERIFICATION ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } } : {}),
 };
 
 export const viewport = {
@@ -70,6 +75,9 @@ export default function RootLayout({ children }) {
         <main id="main">{children}</main>
         <Footer />
         <ScrollFx />
+        <Party />
+        {/* Vercel Web Analytics: page views only, no cookies, nothing personal */}
+        <Analytics />
       </body>
     </html>
   );

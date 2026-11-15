@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { getAllPosts, getPost, formatDate } from "../../../lib/posts";
 import { site } from "../../../lib/site";
 import { meta } from "../../../lib/meta";
+import { JsonLd, blogPosting } from "../../../lib/jsonld";
 
 export const dynamicParams = false;
 
@@ -31,6 +32,7 @@ export default async function Post({ params }) {
 
   return (
     <>
+      <JsonLd data={blogPosting(post, slug)} />
       <ReadPencil />
       <PageHead
         title={post.title}

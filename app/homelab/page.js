@@ -3,6 +3,10 @@ import PageHead from "../../components/PageHead";
 import Link from "next/link";
 import { nodes, running, incidents } from "../../lib/lab";
 import { meta } from "../../lib/meta";
+import { getLab } from "../../lib/live";
+import LabStatus from "../../components/LabStatus";
+
+export const revalidate = 60;
 
 export const metadata = meta({
   title: "Homelab",
@@ -10,7 +14,8 @@ export const metadata = meta({
   path: "/homelab",
 });
 
-export default function HomelabPage() {
+export default async function HomelabPage() {
+  const lab = await getLab();
   return (
     <>
       <PageHead
@@ -23,8 +28,9 @@ export default function HomelabPage() {
           <Link className="inline" href="/work/dexter">
             Dexter bots
           </Link>
-          , my DNS, monitoring and backups, and a pile of apps.
+          , my DNS, monitoring and backups, and the few apps I actually use.
         </p>
+        <LabStatus lab={lab} />
       </PageHead>
 
       <div className="wrap narrow end">

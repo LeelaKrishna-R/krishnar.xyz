@@ -32,11 +32,14 @@ export default function ScrollFx() {
       if (c) react(c, kinds[n++ % kinds.length]);
     };
     const onThrow = () => document.querySelectorAll(".ph-chibi").forEach((c) => react(c, "ch-r-throw"));
+    const onParty = () => visible().forEach((c) => react(c, "ch-r-spin"));
     const mo = new MutationObserver(() => visible().forEach((c) => react(c, "ch-r-surprise")));
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     document.addEventListener("click", onClick);
     window.addEventListener("chibi:throw", onThrow);
+    window.addEventListener("chibi:party", onParty);
     return () => {
+      window.removeEventListener("chibi:party", onParty);
       mo.disconnect();
       document.removeEventListener("click", onClick);
       window.removeEventListener("chibi:throw", onThrow);

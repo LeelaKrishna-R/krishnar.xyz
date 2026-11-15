@@ -4,8 +4,16 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
   },
   async redirects() {
-    // Routes the old site had that no longer exist.
     return [
+      // The site moved to ravuri.dev; the old domain sends every path there
+      // so search engines see one site, not two copies.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "(www\\.)?krishnar\\.xyz" }],
+        destination: "https://www.ravuri.dev/:path*",
+        permanent: true,
+      },
+      // Routes the old site had that no longer exist.
       { source: "/github", destination: "/about", permanent: true },
       { source: "/forbidden", destination: "/", permanent: true },
       { source: "/projects", destination: "/work", permanent: true },

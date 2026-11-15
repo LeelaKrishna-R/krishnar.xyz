@@ -262,7 +262,7 @@ export default function Story({ community }) {
         }
       >
         <p>
-          I&apos;m a developer at Dexter AI. Copilot is a cohost for streamers that you just talk to: say the word and it
+          I&apos;m a volunteer developer at Dexter AI. Copilot is a cohost for streamers that you just talk to: say the word and it
           switches OBS scenes, keeps chat in line, starts a poll or a giveaway, or designs your overlay.
         </p>
         <p>I also rewrote the six bots that run its Discord server. Meet the cast.</p>

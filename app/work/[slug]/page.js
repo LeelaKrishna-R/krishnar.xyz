@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -12,6 +14,14 @@ import { meta } from "../../../lib/meta";
 
 export const revalidate = 600;
 export const dynamicParams = false;
+
+// The recorded terminal clips are SVGs in public/demos; their own width and
+// height keep the page from jumping while they load.
+function demoSize(src) {
+  const svg = readFileSync(join(process.cwd(), "public", src), "utf8");
+  const [, w, h] = svg.match(/viewBox="0 0 (\d+) (\d+)"/);
+  return { width: Number(w), height: Number(h) };
+}
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -41,7 +51,14 @@ export default async function ProjectPage({ params }) {
       <div className="wrap narrow">
       <div className="media">
         {p.media.img ? <span className="tape" aria-hidden="true" /> : null}
-        {p.media.img ? (
+        {p.demo ? (
+          <figure className="demo">
+            <div className="demo-scroll">
+              <img className="demo-clip" src={p.demo.src} alt={p.demo.alt} {...demoSize(p.demo.src)} />
+            </div>
+            <figcaption className="note demo-note">{p.demo.caption}</figcaption>
+          </figure>
+        ) : p.media.img ? (
           <div className={`sticker frame${p.media.contain ? " iris" : ""}`}>
             <Image src={p.media.img} alt={p.media.alt} fill sizes="(max-width: 760px) 92vw, 680px" priority />
           </div>
@@ -50,13 +67,24 @@ export default async function ProjectPage({ params }) {
         )}
       </div>
 
-      <HowItWorks slug={p.slug} />
+      {p.story ? (
+        <div className="prose case">
+          {p.story.map(([h, text]) => (
+            <section key={h}>
+              <h2>{h}</h2>
+              <p>{text}</p>
+            </section>
+          ))}
+        </div>
+      ) : (
+        <div className="prose">
+          {p.body.map((para) => (
+            <p key={para.slice(0, 24)}>{para}</p>
+          ))}
+        </div>
+      )}
 
-      <div className="prose">
-        {p.body.map((para) => (
-          <p key={para.slice(0, 24)}>{para}</p>
-        ))}
-      </div>
+      <HowItWorks slug={p.slug} />
 
       {p.try ? (
         <section className="try">

@@ -182,11 +182,11 @@ function HomelabHarden() {
     ["root login over SSH", "HIGH"],
     ["password logins over SSH", "HIGH"],
     ["firewall", "HIGH"],
-    ["automatic updates", "ok"],
+    ["automatic updates", "MED"],
   ];
   return (
     <Flow
-      label="homelab-harden checks a Linux server one item at a time and flags root login and password logins over SSH, without changing anything"
+      label="homelab-harden checks a Linux server one item at a time and flags root login and password logins over SSH, no firewall and no automatic updates, without changing anything"
       steps={
         <>
           <div className="sticker diag-card hh-list">
@@ -194,7 +194,7 @@ function HomelabHarden() {
             {rows.map(([what, res], i) => (
               <div key={what} className={`hh-row r${i + 1}`}>
                 <span>{what}</span>
-                <em className={res === "ok" ? "ok" : "bad"}>{res === "ok" ? "✓ ok" : "✗ " + res}</em>
+                <em className={res === "ok" ? "ok" : res === "MED" ? "med" : "bad"}>{res === "ok" ? "✓ ok" : "✗ " + res}</em>
               </div>
             ))}
           </div>
@@ -213,7 +213,7 @@ function HomelabHarden() {
 function Homelab() {
   return (
     <Flow
-      label="Every night the VMs and containers on both nodes are backed up to Proxmox Backup Server on the NAS, a two-day copy goes to node2, and once a month a script restores a couple of containers to prove the backups work"
+      label="Gatus checks both nodes every minute; every night each VM and container is backed up to Proxmox Backup Server; once a month a script restores two containers, boots them and checks they are healthy"
       loop={9}
       steps={
         <>
@@ -229,15 +229,15 @@ function Homelab() {
                 <path d="M0 12 H22 L27 4 L32 20 L37 12 H60 H82 L87 4 L92 20 L97 12 H120" />
               </svg>
             </span>
-            <small>Gatus · 46 checks a minute</small>
+            <small>Gatus · 18 checks a minute</small>
           </div>
           <span className="diag-arrow hl-pipe" aria-hidden="true">
             <i />
             <b className="hl-packet" />
           </span>
           <div className="sticker diag-card diag-mid hl-nas">
-            <b>NAS</b>
-            <span>Proxmox Backup Server</span>
+            <b>Backup Server</b>
+            <span>7 days + 4 weeks kept</span>
             <span className="hl-prog" aria-hidden="true">
               <i />
             </span>
@@ -248,9 +248,9 @@ function Homelab() {
             <b className="hl-packet" />
           </span>
           <div className="sticker diag-card hl-out">
-            <small>node2</small>
-            <b>2-day copy</b>
-            <span className="hl-drill">restore drill ✓</span>
+            <small>once a month</small>
+            <b>restore drill</b>
+            <span className="hl-drill">restored · booted · healthy ✓</span>
           </div>
         </>
       }

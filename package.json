@@ -9,6 +9,7 @@
     "fmt": "prettier --write \"{app,components,lib}/**/*.{js,jsx,css}\""
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "gray-matter": "^4.0.3",
     "next": "15.5.29",
     "react": "19.1.10",
@@ -21,6 +22,7 @@
     "unified": "^11.0.5"
   },
   "devDependencies": {
+    "docx": "^9.15.4",
     "prettier": "^3.6.2"
   },
   "overrides": {
