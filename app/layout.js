@@ -17,7 +17,7 @@ const mono = localFont({ src: "./fonts/jetbrains-mono.woff2", weight: "500 700",
 export const metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name}: Discord bots, a personal AI, and a homelab`,
+    default: `${site.name}: Dexter Copilot, Discord bots and a homelab`,
     template: `%s · ${site.name}`,
   },
   description: site.description,

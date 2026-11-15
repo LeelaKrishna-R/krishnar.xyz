@@ -1,10 +1,11 @@
 "use client";
 // The year rail on the left of the story (wide screens) and a thin progress
-// bar at the top (narrow screens). The story's protagonist, a tiny version of
-// the portrait, travels down the rail (or along the bar) as you scroll. Each
+// bar at the top (narrow screens). The story's protagonist, the little cartoon
+// me (components/Chibi.jsx), walks down the rail (or rides the bar) as you
+// scroll; his legs only move while the page does. Each
 // rail entry is a real year and can cover several scenes. Hidden, and out of
 // the tab order, over the hero.
-import Image from "next/image";
+import Chibi from "../Chibi";
 import { useEffect, useRef, useState } from "react";
 
 export default function StoryRail({ chapters }) {
@@ -22,6 +23,8 @@ export default function StoryRail({ chapters }) {
     const all = groups.flat();
     if (!all.length) return;
     let frame = 0;
+    let stop = 0;
+    let lastY = null;
     const update = () => {
       frame = 0;
       const vh = window.innerHeight;
@@ -52,6 +55,12 @@ export default function StoryRail({ chapters }) {
           y = from + (to - from) * local;
         }
         me.current.style.transform = `translateY(${y}px)`;
+        if (lastY !== null && Math.abs(y - lastY) > 0.5) {
+          me.current.classList.add("moving");
+          clearTimeout(stop);
+          stop = setTimeout(() => me.current && me.current.classList.remove("moving"), 200);
+        }
+        lastY = y;
         if (fill.current) {
           const lineTop = line.current.offsetTop;
           fill.current.style.transform = `scaleY(${Math.max(0, (y - lineTop) / (line.current.clientHeight || 1))})`;
@@ -68,6 +77,7 @@ export default function StoryRail({ chapters }) {
     window.addEventListener("resize", onScroll);
     return () => {
       cancelAnimationFrame(frame);
+      clearTimeout(stop);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       document.documentElement.classList.remove("on-credits");
@@ -79,7 +89,7 @@ export default function StoryRail({ chapters }) {
       <div className={`story-bar${shown ? " shown" : ""}`} aria-hidden="true">
         <i ref={bar} />
         <span className="bar-rider" ref={rider}>
-          <Image src="/images/me.webp" alt="" width={26} height={26} />
+          <Chibi head />
         </span>
       </div>
       <nav className={`rail${shown ? " shown" : ""}`} aria-label="Chapters" aria-hidden={!shown} inert={!shown}>
@@ -87,7 +97,7 @@ export default function StoryRail({ chapters }) {
           <i ref={fill} />
         </span>
         <span className="rail-me" aria-hidden="true" ref={me}>
-          <Image src="/images/me.webp" alt="" width={34} height={34} />
+          <Chibi pose="walk" />
         </span>
         {chapters.map((c, i) => (
           <a

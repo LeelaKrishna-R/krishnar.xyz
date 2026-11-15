@@ -14,6 +14,7 @@ export default function WorkPage() {
         title="Work"
         lede="What I've worked on since 2019, biggest first."
         sfx={{ text: "TA-DA!", color: "#f2c76b", rotate: -8 }}
+        me={{ pose: "cheer", face: "happy" }}
       />
 
       <div className="wrap narrow end">

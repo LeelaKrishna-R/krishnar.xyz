@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { links, site } from "../lib/site";
+import Chibi from "./Chibi";
 
 export default function Footer() {
   return (
     <footer className="footer">
+      <span className="footer-peek" data-reveal aria-hidden="true">
+        <Chibi head face="happy" />
+      </span>
       <div className="wrap footer-row">
         <nav aria-label="Footer">
           <a href={`mailto:${site.email}`}>Email</a>

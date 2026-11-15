@@ -1,16 +1,19 @@
 import Link from "next/link";
 import Marker from "./Marker";
 import Sfx from "./Sfx";
+import Chibi from "./Chibi";
 
 // The title card on every inner page: the title with the hand-drawn
 // highlighter (it draws itself in on load), an optional comic burst beside
-// it, and an optional "← back" link above. A long title only gets the
+// it, the little cartoon me acting out the page (me = Chibi props), and an
+// optional "← back" link above. A long title only gets the
 // highlighter on its last word, so it can still wrap on a phone.
-export default function PageHead({ title, lede, sfx, back, meta, children }) {
+export default function PageHead({ title, lede, sfx, back, meta, me, children }) {
   const words = title.split(" ");
   const short = title.length <= 18 || words.length === 1;
   return (
-    <header className={`wrap narrow page-head cartoon-head${sfx ? " has-sfx" : ""}`}>
+    <header className={`wrap narrow page-head cartoon-head${sfx ? " has-sfx" : ""}${me ? " has-me" : ""}`}>
+      {me ? <Chibi className="ph-chibi" {...me} /> : null}
       {back ? (
         <Link href={back.href} className="back">
           ← {back.label}

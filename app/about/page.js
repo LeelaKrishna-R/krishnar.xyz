@@ -16,7 +16,7 @@ export default async function AboutPage() {
   const gh = await getGithub();
   return (
     <>
-      <PageHead title="About" sfx={{ text: "HELLO!", color: "#f4b8a4", rotate: 8 }} />
+      <PageHead title="About" sfx={{ text: "HELLO!", color: "#f4b8a4", rotate: 8 }} me={{ pose: "wave", face: "grin" }} />
 
       <div className="wrap narrow end">
         <section className="block prose">

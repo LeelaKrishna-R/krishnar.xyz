@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Marker from "../components/Marker";
 import Story from "../components/story/Story";
+import Chibi from "../components/Chibi";
 import { Scribble } from "../components/Icons";
 import { getCommunity } from "../lib/live";
 
@@ -30,8 +31,8 @@ export default async function Home() {
               </svg>
             </h1>
             <p className="lede">
-              I work on AI for streamers at Dexter, train models on my own machine, and run the homelab my bots live on.
-              Here&apos;s how I got here.
+              I work on Dexter Copilot, an AI that cohosts live streams. At home I train my own models and run the two
+              little servers my bots live on. It all started with one Discord bot in 2019.
             </p>
             <ul className="badges" aria-label="Quick facts">
               {[
@@ -57,9 +58,6 @@ export default async function Home() {
           <div className="id-wrap">
             <figure className="sticker id-card" style={{ margin: 0 }}>
               <span className="tape" aria-hidden="true" />
-              <span className="hero-hi" aria-hidden="true">
-                hi!
-              </span>
               <div className="id-photo">
                 <Image
                   src="/images/me.webp"
@@ -75,6 +73,10 @@ export default async function Home() {
                 <span>Denton, TX</span>
               </figcaption>
             </figure>
+            <div className="hero-me" aria-hidden="true">
+              <span className="hero-hi">hi!</span>
+              <Chibi pose="wave" face="grin" />
+            </div>
             <span className="note id-note">
               me, Ghibli-style <Scribble />
             </span>

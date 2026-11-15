@@ -10,7 +10,11 @@ export const metadata = {
 export default function HomelabPage() {
   return (
     <>
-      <PageHead title="Homelab" sfx={{ text: "BEEP BOOP", color: "#bfe0c8", rotate: 7, size: 1.15 }}>
+      <PageHead
+        title="Homelab"
+        sfx={{ text: "BEEP BOOP", color: "#bfe0c8", rotate: 7, size: 1.15 }}
+        me={{ pose: "wave", prop: "wrench", face: "grin" }}
+      >
         <p className="lede">
           Two Dell OptiPlex micro PCs running Proxmox. They host the{" "}
           <Link className="inline" href="/work/dexter">

@@ -4,6 +4,7 @@ import CountUp from "../CountUp";
 import StoryRail from "./StoryRail";
 import { Scribble } from "../Icons";
 import Sfx from "../Sfx";
+import Chibi from "../Chibi";
 import { site } from "../../lib/site";
 
 // The home page story, told like a cartoon short: seven scenes, grouped by
@@ -37,7 +38,7 @@ export const chapters = [
   { label: "now", ids: ["s-now"] },
 ];
 
-function Scene({ id, flip, kicker, title, children, visual, sfx }) {
+function Scene({ id, flip, kicker, title, children, visual, sfx, me }) {
   return (
     <section className={`scene${flip ? " flip" : ""}`} id={id} data-scene aria-labelledby={`${id}-h`}>
       <div className="wrap scene-grid">
@@ -49,6 +50,7 @@ function Scene({ id, flip, kicker, title, children, visual, sfx }) {
         <div className="scene-visual">
           {visual}
           {sfx ? <Sfx {...sfx} /> : null}
+          {me ? <Chibi className="scene-chibi" {...me} /> : null}
         </div>
       </div>
     </section>
@@ -72,8 +74,9 @@ export default function Story({ community }) {
       <Scene
         id="s-2019"
         sfx={{ text: "BEEP!", color: "#f2c76b", rotate: -8, delay: "1.05s" }}
+        me={{ pose: "type", prop: "laptop" }}
         kicker="2019 · Chennai"
-        title="It started with Discord bots."
+        title="It started with one Discord bot."
         visual={
           <div className="sticker chat" aria-hidden="true">
             <div className="chat-head">
@@ -111,16 +114,17 @@ export default function Story({ community }) {
         }
       >
         <p>
-          I was studying engineering in Madurai and spent that summer at a job in Chennai. That&apos;s when I made my
-          first Discord bot, and I&apos;ve been making them ever since.
+          I was an engineering student in Madurai with a summer job in Chennai, and I wrote my first Discord bot on the
+          side. The first time it answered me in chat, that was it. I&apos;ve been making bots ever since.
         </p>
       </Scene>
 
       <Scene
         id="s-2021"
         flip
+        me={{ pose: "cheer", face: "happy" }}
         kicker="2021"
-        title="Then came Shero."
+        title="Then Shero happened."
         visual={
           <div className="servers" aria-hidden="true">
             {servers.map(([x, y], i) => (
@@ -139,9 +143,9 @@ export default function Story({ community }) {
         }
       >
         <p>
-          I started Shero that April, in Node.js with MongoDB and Redis behind it. It began as a way for servers to
-          advertise each other. These days it checks servers for risky permissions, and it&apos;s in more than 13,000
-          of them.
+          I started Shero that April as a way for servers to advertise each other. It grew into something more useful:
+          now it watches servers for risky permissions and warns the staff before anyone can abuse them. More than
+          13,000 servers use it.
         </p>
         <Link className="more" href="/work/shero">
           More about Shero →
@@ -151,8 +155,9 @@ export default function Story({ community }) {
       <Scene
         id="s-texas"
         sfx={{ text: "WHOOSH!", color: "#c9d7f2", rotate: -6, delay: "0.75s", size: 1.1 }}
+        me={{ pose: "walk", prop: "suitcase" }}
         kicker="2021 → 2025"
-        title="Madurai to Texas."
+        title="Madurai to Texas, the long way."
         visual={
           <svg className="route" viewBox="0 0 640 340" role="img" aria-label="A route from Madurai to Coimbatore, then to Denton, Texas">
             <defs>
@@ -198,14 +203,15 @@ export default function Story({ community }) {
         }
       >
         <p>
-          I finished my engineering degree in 2021 and did an internship at Caliber Embed in Coimbatore in 2023. Then I
-          moved to Denton for a master&apos;s in AI at UNT, about 9,400 miles from Madurai.
+          Engineering degree done in 2021, an internship at Caliber Embed in Coimbatore in 2023, then one very long
+          flight to Denton for a master&apos;s in AI at UNT.
         </p>
       </Scene>
 
       <Scene
         id="s-dexter"
         flip
+        me={{ pose: "stand", prop: "headset", face: "grin" }}
         kicker="2026 · at Dexter AI"
         title="I work on Dexter Copilot."
         visual={
@@ -256,10 +262,10 @@ export default function Story({ community }) {
         }
       >
         <p>
-          I&apos;m a developer at Dexter AI, on Dexter Copilot: a voice-controlled AI cohost for streamers. Say a
-          sentence and it runs OBS, moderates chat, starts polls and giveaways, and designs your overlays.
+          I&apos;m a developer at Dexter AI. Copilot is a cohost for streamers that you just talk to: say the word and it
+          switches OBS scenes, keeps chat in line, starts a poll or a giveaway, or designs your overlay.
         </p>
-        <p>I also rewrote the six bots that run its Discord community.</p>
+        <p>I also rewrote the six bots that run its Discord server. Meet the cast.</p>
         {community ? (
           <p className="live-pill">
             <span className="dot-live" aria-hidden="true" />
@@ -279,6 +285,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-home"
+        me={{ pose: "wave", prop: "wrench", face: "grin" }}
         kicker="2026 · at home"
         title="A homelab and a busy GPU."
         visual={
@@ -341,7 +348,7 @@ export default function Story({ community }) {
       >
         <p>
           Two little Dell PCs running Proxmox keep my bots up, and a GPU at home trains and runs my own models. Things
-          break, and I write down what broke. One night a disk filled up at 2:47 am and everything on it went read-only.
+          break. I write every one down, like the night a disk filled up at 2:47 am and everything on it went read-only.
         </p>
         <Link className="more" href="/homelab">
           The homelab, and what broke →
@@ -351,6 +358,7 @@ export default function Story({ community }) {
       <Scene
         id="s-side"
         sfx={{ text: "THUD!", color: "#f4b8a4", rotate: 7, delay: "1.75s" }}
+        me={{ pose: "shh", face: "shh" }}
         flip
         kicker="2026 · on the side"
         title="Friday, Iris, and work I can't show you."
@@ -404,6 +412,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-now"
+        me={{ pose: "hold", prop: "book" }}
         kicker="Now"
         title="Learning networking, properly."
         visual={
@@ -459,6 +468,7 @@ export default function Story({ community }) {
             </p>
           </div>
 
+          <Chibi className="credits-chibi" pose="wave" face="grin" />
           <h2 id="s-next-h" className="tbc">
             To be continued<span className="dots">...</span>
           </h2>
@@ -477,8 +487,8 @@ export default function Story({ community }) {
             {[
               ["/work", "Work", "everything I've made"],
               ["/homelab", "Homelab", "the machines and what broke"],
-              ["/blog", "Writing", "a few write-ups"],
-              ["/about", "About", "the short bio"],
+              ["/blog", "Writing", "why I made things, and how I test them"],
+              ["/about", "About", "the short version of me"],
             ].map(([href, label, sub], i) => (
               <Link key={href} href={href} className="sticker end-link" style={{ "--d": `${2 + i * 0.08}s` }}>
                 <b>{label}</b>
