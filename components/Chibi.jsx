@@ -1,28 +1,58 @@
 // A little cartoon me: messy hair, big glasses, beard, the gold dot, the cream
 // shirt and the thin chain from the portrait. Drawn by hand in SVG so it stays
-// sharp, weighs nothing and can move: it blinks, breathes, and each pose has
-// its own small loop (waving, typing, walking...). Loops are transform-only
-// and pause off-screen with the rest of the story (.scene:not(.on)).
+// sharp, weighs nothing and can act: arms bend at the elbow, he blinks (now and
+// then twice), his eyes follow the pointer (ScrollFx sets --lx/--ly), and each
+// pose has its own loop with squash and stretch. Loops are transform-only and
+// pause off-screen with the rest of the story (.scene:not(.on)).
 //
-//   pose: stand | wave | cheer | hold | type | shh | think | point | walk | bow
-//   prop: laptop | suitcase | headset | mug | book | pencil | plane | map | paper | wrench
-//   face: smile | grin | o | shh | happy
+//   pose: stand | wave | cheer | hold | type | raise | point | walk | zip
+//   prop: laptop | suitcase | headset | book | pencil | plane | map | paper | wrench
+//   face: smile | grin | o | happy | talk | zip
 //   head: true draws only the head (for small avatars)
 
-// Arm angles in degrees, 0 = hanging straight down, from each shoulder.
-// The left arm is the one on the viewer's left.
+// Each arm is [shoulder, elbow] in degrees: 0 hangs straight down, positive
+// swings toward the viewer's left. The elbow angle is relative to the upper arm.
 const ARMS = {
-  stand: [16, -16],
-  wave: [16, -150],
-  cheer: [150, -150],
-  hold: [-38, 38],
-  type: [-34, 34],
-  shh: [16, 151],
-  think: [16, 122],
-  point: [16, -88],
-  walk: [10, -10],
-  bow: [-20, 20],
+  stand: [
+    [12, 4],
+    [-12, -4],
+  ],
+  zip: [
+    [10, 2],
+    [-10, -2],
+  ],
+  wave: [
+    [12, 4],
+    [-110, -50],
+  ],
+  cheer: [
+    [105, 40],
+    [-105, -40],
+  ],
+  hold: [
+    [8, -20],
+    [-8, 20],
+  ],
+  type: [
+    [-4, -62],
+    [4, 62],
+  ],
+  raise: [
+    [12, 4],
+    [-70, -90],
+  ],
+  point: [
+    [12, 4],
+    [-82, -8],
+  ],
+  walk: [
+    [8, 2],
+    [-8, -2],
+  ],
 };
+
+const UPPER = 12;
+const HAND = 15;
 
 const INK = "#2a1f18";
 const SKIN = "#c2855a";
@@ -35,23 +65,42 @@ const SHIRT_SH = "#dccfb6";
 const PANTS = "#5b4a3e";
 const GOLD = "#f0b429";
 
-function Arm({ x, angle, anim, finger, children }) {
+const rad = (d) => (d * Math.PI) / 180;
+
+// Upper arm and forearm, each its own group so CSS can move the shoulder and
+// the elbow separately. A strip of sleeve drawn back over the elbow hides the
+// seam where the two outlines meet.
+function Arm({ side, x, angles: [a1, a2], grip, children }) {
+  const px = Math.sin(rad(-a2)) * 4.5;
+  const py = -Math.cos(rad(-a2)) * 4.5;
   return (
-    <g transform={`translate(${x} 101) rotate(${angle})`}>
-      <g className={`ch-arm${anim ? ` ch-${anim}` : ""}`}>
-        <path d="M0 0 V20" stroke={INK} strokeWidth="11.5" strokeLinecap="round" fill="none" />
-        <path d="M0 0 V20" stroke={SHIRT} strokeWidth="8" strokeLinecap="round" fill="none" />
-        <path d="M-4.2 18.5 H4.2" stroke={SHIRT_SH} strokeWidth="1.6" strokeLinecap="round" />
-        {finger ? (
-          <>
-            <path d="M0 26 V32" stroke={INK} strokeWidth="5.4" strokeLinecap="round" />
-            <path d="M0 26 V32" stroke={SKIN} strokeWidth="2.8" strokeLinecap="round" />
-          </>
-        ) : null}
-        <circle cx="0" cy="24" r="5.2" fill={SKIN} stroke={INK} strokeWidth="1.8" />
-        {finger ? <path d="M0 26 V32" stroke={SKIN} strokeWidth="2.8" strokeLinecap="round" /> : null}
-        {children}
+    <g className={`arm-${side}`} transform={`translate(${x} 101) rotate(${a1})`}>
+      <g className="ch-up">
+        <path d={`M0 0 V${UPPER}`} stroke={INK} strokeWidth="11.5" strokeLinecap="round" />
+        <path d={`M0 0 V${UPPER}`} stroke={SHIRT} strokeWidth="8" strokeLinecap="round" />
+        <g transform={`translate(0 ${UPPER}) rotate(${a2})`}>
+          <g className="ch-fore">
+            <path d="M0 0 V11" stroke={INK} strokeWidth="11.5" strokeLinecap="round" />
+            <path d={`M0 0 L${px.toFixed(2)} ${py.toFixed(2)}`} stroke={SHIRT} strokeWidth="8" strokeLinecap="round" />
+            <path d="M0 0 V11" stroke={SHIRT} strokeWidth="8" strokeLinecap="round" />
+            <path d="M-4.2 10 H4.2" stroke={SHIRT_SH} strokeWidth="1.6" strokeLinecap="round" />
+            {grip}
+            <circle cx="0" cy={HAND} r="5.2" fill={SKIN} stroke={INK} strokeWidth="1.8" />
+            {children}
+          </g>
+        </g>
       </g>
+    </g>
+  );
+}
+
+function Eye({ cx, closed }) {
+  if (closed) return <path d={`M${cx - 4.5} 59.5 Q${cx} 54 ${cx + 4.5} 59.5`} stroke={INK} strokeWidth="2.6" strokeLinecap="round" fill="none" />;
+  return (
+    <g className="ch-look">
+      <ellipse cx={cx} cy="58" rx="4.6" ry="5.6" fill="#261a13" />
+      <circle cx={cx + 1.7} cy="55.6" r="1.8" fill="#fff" />
+      <circle cx={cx - 1.3} cy="60.3" r="0.8" fill="#fff" />
     </g>
   );
 }
@@ -60,23 +109,10 @@ function Face({ face }) {
   const happy = face === "happy" || face === "grin";
   return (
     <g className="ch-face">
-      {/* eyes (blink together) */}
+      {/* eyes: blink together; the pupils inside follow the pointer */}
       <g className="ch-eyes">
-        {happy ? (
-          <>
-            <path d="M38.5 59.5 Q43 54 47.5 59.5" stroke={INK} strokeWidth="2.6" strokeLinecap="round" fill="none" />
-            <path d="M72.5 59.5 Q77 54 81.5 59.5" stroke={INK} strokeWidth="2.6" strokeLinecap="round" fill="none" />
-          </>
-        ) : (
-          <>
-            <ellipse cx="43" cy="58" rx="4.6" ry="5.6" fill="#261a13" />
-            <ellipse cx="77" cy="58" rx="4.6" ry="5.6" fill="#261a13" />
-            <circle cx="44.7" cy="55.6" r="1.8" fill="#fff" />
-            <circle cx="78.7" cy="55.6" r="1.8" fill="#fff" />
-            <circle cx="41.7" cy="60.3" r="0.8" fill="#fff" />
-            <circle cx="75.7" cy="60.3" r="0.8" fill="#fff" />
-          </>
-        )}
+        <Eye cx={43} closed={happy || face === "zip"} />
+        <Eye cx={77} closed={happy} />
       </g>
       {/* glasses */}
       <g fill="rgba(255,255,255,0.16)" stroke="#17110d" strokeWidth="3">
@@ -86,16 +122,27 @@ function Face({ face }) {
       <path d="M55.5 55.5 Q60 52.5 64.5 55.5 M29.5 54 L24.5 53 M90.5 54 L95.5 53" stroke="#17110d" strokeWidth="2.6" fill="none" strokeLinecap="round" />
       <path d="M33 52 L37 50.5 M68 52 L72 50.5" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" opacity="0.75" />
       {/* brows */}
-      <path d="M33.5 46 Q42 41.5 50.5 44.5 M69.5 44.5 Q78 41.5 86.5 46" stroke={HAIR} strokeWidth="3.4" strokeLinecap="round" fill="none" />
+      <g className="ch-brows">
+        <path d="M33.5 46 Q42 41.5 50.5 44.5 M69.5 44.5 Q78 41.5 86.5 46" stroke={HAIR} strokeWidth="3.4" strokeLinecap="round" fill="none" />
+      </g>
       {/* nose */}
       <path d="M59 64.5 Q61.5 67.5 63.5 65" stroke={SKIN_SH} strokeWidth="1.8" strokeLinecap="round" fill="none" />
       {/* mouth sits on the beard */}
       {face === "grin" ? (
         <path d="M52.5 80.5 Q60 92 67.5 80.5 Z" fill="#7a3328" stroke={INK} strokeWidth="1.4" strokeLinejoin="round" />
       ) : face === "o" ? (
-        <ellipse cx="60" cy="83" rx="3.4" ry="4" fill="#7a3328" stroke={INK} strokeWidth="1.4" />
-      ) : face === "shh" ? (
-        <ellipse cx="60" cy="82.5" rx="2.6" ry="2.2" fill="#c98466" stroke={INK} strokeWidth="1.2" />
+        <ellipse className="ch-o" cx="60" cy="83" rx="3.4" ry="4" fill="#7a3328" stroke={INK} strokeWidth="1.4" />
+      ) : face === "talk" ? (
+        <ellipse className="ch-talk" cx="60" cy="83" rx="5" ry="4.2" fill="#7a3328" stroke={INK} strokeWidth="1.4" />
+      ) : face === "zip" ? (
+        <g className="ch-zip">
+          <path d="M51 82.5 H69" stroke="#c9ccd1" strokeWidth="3.6" strokeLinecap="round" />
+          <path d="M53 81 v3 M56 81 v3 M59 81 v3 M62 81 v3 M65 81 v3" stroke={INK} strokeWidth="0.9" />
+          <g className="ch-zip-tab">
+            <rect x="67.5" y="82" width="4" height="7" rx="1.6" fill="#e9a934" stroke={INK} strokeWidth="1.2" />
+          </g>
+          <path className="ch-sweat" d="M88 34 Q91 39 88.5 41.5 Q85.5 41 86 37.5 Z" fill="#bfe3f2" stroke={INK} strokeWidth="1" />
+        </g>
       ) : (
         <path d="M53 81 Q60 87.5 67 81" stroke="#d39274" strokeWidth="2.4" strokeLinecap="round" fill="none" />
       )}
@@ -150,6 +197,10 @@ function Head({ face, headset }) {
           <rect x="93.5" y="52" width="11" height="18" rx="5" fill="#e9a934" stroke={INK} strokeWidth="2" />
           <path d="M21 68 C 24 84, 34 88, 46 86" stroke={INK} strokeWidth="2.6" fill="none" strokeLinecap="round" />
           <circle cx="47" cy="86" r="3.6" fill="#3a2c22" stroke={INK} strokeWidth="1.6" />
+          <g className="ch-waves" stroke="#e9a934" strokeWidth="2" fill="none" strokeLinecap="round">
+            <path d="M14 82 Q10 88 14 94" />
+            <path d="M8 79 Q2 88 8 97" />
+          </g>
         </g>
       ) : null}
     </g>
@@ -190,45 +241,72 @@ function Body({ walk }) {
   );
 }
 
-// Things he can hold. Hand-held props are drawn in the arm's own frame
-// (hand at 0,24) so they move with the arm.
-function HandProp({ prop }) {
+// Things he can hold, drawn in the forearm's own frame (the hand is at 0,13 and
+// the arm points along +y), so they move with the arm. "Grip" props go under
+// the hand so the fist closes over them.
+function GripProp({ prop }) {
   if (prop === "pencil")
     return (
-      <g transform="translate(0 24) rotate(200)">
-        <path d="M-3 -4 H3 V22 H-3 Z" fill="#f2c76b" stroke={INK} strokeWidth="1.6" />
-        <path d="M-3 22 L0 30 L3 22 Z" fill="#f1d9b5" stroke={INK} strokeWidth="1.4" strokeLinejoin="round" />
-        <path d="M-1 27 L0 30 L1 27 Z" fill={INK} />
-        <path d="M-3 -4 H3 V-9 H-3 Z" fill="#f4a3a3" stroke={INK} strokeWidth="1.6" />
+      <g transform={`translate(0 ${HAND}) rotate(22)`}>
+        <path d="M-3 -10 H3 V16 H-3 Z" fill="#f2c76b" stroke={INK} strokeWidth="1.6" />
+        <path d="M-3 16 L0 24 L3 16 Z" fill="#f1d9b5" stroke={INK} strokeWidth="1.4" strokeLinejoin="round" />
+        <path d="M-1 21 L0 24 L1 21 Z" fill={INK} />
+        <path d="M-3 -10 H3 V-15 H-3 Z" fill="#f4a3a3" stroke={INK} strokeWidth="1.6" />
       </g>
     );
   if (prop === "wrench")
     return (
-      <g transform="translate(0 24) rotate(180)">
-        <path d="M-2.6 0 V20" stroke={INK} strokeWidth="7.5" strokeLinecap="round" />
-        <path d="M-2.6 0 V20" stroke="#c9ccd1" strokeWidth="4.5" strokeLinecap="round" />
-        <path d="M-2.6 21 m-7 0 a7 7 0 1 0 14 0 l-4 0 l0 -4 l-6 0 l0 4 Z" fill="#c9ccd1" stroke={INK} strokeWidth="1.8" strokeLinejoin="round" />
-      </g>
-    );
-  if (prop === "plane")
-    return (
-      <g transform="translate(4 18) rotate(80)">
-        <path d="M0 -6 L28 0 L0 6 L5 0 Z" fill="#fffaf0" stroke={INK} strokeWidth="1.8" strokeLinejoin="round" />
-        <path d="M5 0 L28 0" stroke={INK} strokeWidth="1.2" />
+      <g transform={`translate(0 ${HAND}) rotate(18)`}>
+        <path d="M0 -6 V17" stroke={INK} strokeWidth="7.5" strokeLinecap="round" />
+        <path d="M0 -6 V17" stroke="#c9ccd1" strokeWidth="4.5" strokeLinecap="round" />
+        <path d="M0 18 m-7 0 a7 7 0 1 0 14 0 l-4 0 l0 4 l-6 0 l0 -4 Z" fill="#c9ccd1" stroke={INK} strokeWidth="1.8" strokeLinejoin="round" transform="rotate(180 0 22)" />
+        <g className="ch-sparks" fill="#f2c76b" stroke={INK} strokeWidth="0.9" strokeLinejoin="round">
+          <path d="M9 30 l1.6 3.4 3.4 1.6 -3.4 1.6 -1.6 3.4 -1.6 -3.4 -3.4 -1.6 3.4 -1.6 Z" />
+          <path d="M-11 26 l1.2 2.6 2.6 1.2 -2.6 1.2 -1.2 2.6 -1.2 -2.6 -2.6 -1.2 2.6 -1.2 Z" />
+        </g>
       </g>
     );
   if (prop === "suitcase")
     return (
-      <g transform="translate(0 24) rotate(-16)" className="ch-suitcase">
-        <path d="M-6 3 V-1 Q-6 -3 -4 -3 H4 Q6 -3 6 -1 V3" stroke={INK} strokeWidth="2.4" fill="none" />
-        <rect x="-15" y="3" width="30" height="24" rx="4" fill="#d9603f" stroke={INK} strokeWidth="2" />
-        <path d="M-8 3 V27 M8 3 V27" stroke="#f2c76b" strokeWidth="2.6" />
-        <circle cx="-9" cy="29.5" r="2.4" fill={INK} />
-        <circle cx="9" cy="29.5" r="2.4" fill={INK} />
+      <g className="ch-case">
+        <g transform={`translate(0 ${HAND}) rotate(-8)`}>
+          <path d="M-6 3 V-1 Q-6 -3 -4 -3 H4 Q6 -3 6 -1 V3" stroke={INK} strokeWidth="2.4" fill="none" />
+          <rect x="-15" y="3" width="30" height="24" rx="4" fill="#d9603f" stroke={INK} strokeWidth="2" />
+          <path d="M-8 3 V27 M8 3 V27" stroke="#f2c76b" strokeWidth="2.6" />
+          <circle cx="-9" cy="29.5" r="2.4" fill={INK} />
+          <circle cx="9" cy="29.5" r="2.4" fill={INK} />
+        </g>
       </g>
     );
   return null;
 }
+
+function HeldProp({ prop }) {
+  if (prop === "plane")
+    return (
+      <g transform={`translate(-2 ${HAND - 2}) rotate(84)`}>
+        <path d="M0 -6 L28 0 L0 6 L5 0 Z" fill="#fffaf0" stroke={INK} strokeWidth="1.8" strokeLinejoin="round" />
+        <path d="M5 0 L28 0" stroke={INK} strokeWidth="1.2" />
+      </g>
+    );
+  return null;
+}
+
+// Where the hands sit on props held in front with both hands.
+const GRIPS = {
+  book: [
+    [35, 121],
+    [85, 121],
+  ],
+  map: [
+    [31, 119],
+    [89, 119],
+  ],
+  paper: [
+    [45, 121],
+    [75, 119],
+  ],
+};
 
 // Props held in front with both hands (pose hold / type).
 function FrontProp({ prop }) {
@@ -241,24 +319,16 @@ function FrontProp({ prop }) {
         <path d="M57.5 120 L60.5 123 L57.5 126 M61.5 126 H64" stroke={INK} strokeWidth="1.4" fill="none" strokeLinecap="round" />
       </g>
     );
-  if (prop === "mug")
-    return (
-      <g>
-        <g className="ch-steam" stroke="#b3a590" strokeWidth="2" fill="none" strokeLinecap="round">
-          <path d="M55 105 Q52 100 55 96 Q58 92 55 88" />
-          <path d="M63 105 Q60 100 63 96 Q66 92 63 88" />
-        </g>
-        <path d="M71 112 Q78 112 78 118 Q78 124 71 124" stroke={INK} strokeWidth="2.2" fill="none" />
-        <path d="M49 108 H71 V126 Q71 131 66 131 H54 Q49 131 49 126 Z" fill="#e9a934" stroke={INK} strokeWidth="2" strokeLinejoin="round" />
-        <path d="M53 116 h14" stroke="#fffaf0" strokeWidth="2" strokeLinecap="round" />
-      </g>
-    );
   if (prop === "book")
     return (
       <g>
         <path d="M33 108 L60 112 L87 108 V132 L60 136 L33 132 Z" fill="#fffaf0" stroke={INK} strokeWidth="2" strokeLinejoin="round" />
-        <path d="M60 112 V136" stroke={INK} strokeWidth="1.6" />
         <path d="M38 115 L54 117.5 M38 120 L54 122.5 M38 125 L50 127 M66 117.5 L82 115 M66 122.5 L82 120 M66 127 L78 125" stroke="#b3a590" strokeWidth="1.4" strokeLinecap="round" />
+        <g className="ch-page">
+          <path d="M60 112 L85 108.5 V131.5 L60 135.5 Z" fill="#fffaf0" stroke={INK} strokeWidth="1.6" strokeLinejoin="round" />
+          <path d="M66 118 L80 116 M66 123 L80 121" stroke="#d6c7ad" strokeWidth="1.3" strokeLinecap="round" />
+        </g>
+        <path d="M60 112 V136" stroke={INK} strokeWidth="1.6" />
       </g>
     );
   if (prop === "map")
@@ -281,11 +351,20 @@ function FrontProp({ prop }) {
   return null;
 }
 
+function Confetti() {
+  return (
+    <g className="ch-confetti" strokeWidth="1" stroke={INK}>
+      <rect x="14" y="20" width="5" height="8" rx="1" fill="#f2c76b" />
+      <rect x="101" y="26" width="5" height="8" rx="1" fill="#f4b8a4" />
+      <circle cx="30" cy="2" r="3" fill="#bfe0c8" />
+      <circle cx="92" cy="0" r="3" fill="#c9d7f2" />
+    </g>
+  );
+}
+
 export default function Chibi({ pose = "stand", prop, face = "smile", head = false, className = "", style, title }) {
   const [la, ra] = ARMS[pose] || ARMS.stand;
-  const front = prop === "laptop" || prop === "mug" || prop === "book" || prop === "map" || prop === "paper";
-  const rightProp = prop === "pencil" || prop === "wrench" || prop === "plane";
-  const leftProp = prop === "suitcase";
+  const front = prop === "laptop" || prop === "book" || prop === "map" || prop === "paper";
   const a11y = title ? { role: "img", "aria-label": title } : { "aria-hidden": true };
   if (head)
     return (
@@ -293,32 +372,42 @@ export default function Chibi({ pose = "stand", prop, face = "smile", head = fal
         <Head face={face} />
       </svg>
     );
-  const rAnim = { wave: "wave", type: "type-r", cheer: "cheer-r", point: "point", walk: "swing-r", shh: null, think: null }[pose];
-  const lAnim = { type: "type-l", cheer: "cheer-l", walk: "swing-l" }[pose];
+  const left = (
+    <Arm side="l" x={42.5} angles={la} grip={prop === "suitcase" ? <GripProp prop={prop} /> : null} />
+  );
+  const right = (
+    <Arm side="r" x={77.5} angles={ra} grip={prop === "pencil" || prop === "wrench" ? <GripProp prop={prop} /> : null}>
+      {prop === "plane" ? <HeldProp prop={prop} /> : null}
+    </Arm>
+  );
+  const hands = GRIPS[prop] || [];
   return (
-    <svg className={`chibi pose-${pose} ${className}`} viewBox="8 -4 104 168" style={style} {...a11y}>
+    <svg
+      className={`chibi pose-${pose}${prop ? ` prop-${prop}` : ""} ${className}`}
+      viewBox="8 -4 104 168"
+      style={style}
+      {...a11y}
+    >
       <ellipse className="ch-shadow" cx="60" cy="158" rx="28" ry="4.5" fill="rgba(35,28,21,0.18)" />
       <g className="ch-all">
         <Body walk={pose === "walk"} />
-        {front ? null : (
-          <>
-            <Arm x={42.5} angle={la} anim={lAnim}>
-              {leftProp ? <HandProp prop={prop} /> : null}
-            </Arm>
-          </>
-        )}
+        {front ? null : left}
         <Head face={face} headset={prop === "headset"} />
         {front ? (
           <>
-            <Arm x={42.5} angle={la} anim={lAnim} />
-            <Arm x={77.5} angle={ra} anim={rAnim} />
-            <FrontProp prop={prop} />
+            {left}
+            {right}
+            <g className="ch-front">
+              <FrontProp prop={prop} />
+              {hands.map(([hx, hy], i) => (
+                <circle key={i} cx={hx.toFixed(1)} cy={hy.toFixed(1)} r="5.2" fill={SKIN} stroke={INK} strokeWidth="1.8" />
+              ))}
+            </g>
           </>
         ) : (
-          <Arm x={77.5} angle={ra} anim={rAnim} finger={pose === "shh" || (pose === "point" && !prop)}>
-            {rightProp ? <HandProp prop={prop} /> : null}
-          </Arm>
+          right
         )}
+        {pose === "cheer" ? <Confetti /> : null}
       </g>
     </svg>
   );

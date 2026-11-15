@@ -211,7 +211,7 @@ export default function Story({ community }) {
       <Scene
         id="s-dexter"
         flip
-        me={{ pose: "stand", prop: "headset", face: "grin" }}
+        me={{ pose: "wave", prop: "headset", face: "talk" }}
         kicker="2026 · at Dexter AI"
         title="I work on Dexter Copilot."
         visual={
@@ -285,7 +285,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-home"
-        me={{ pose: "wave", prop: "wrench", face: "grin" }}
+        me={{ pose: "raise", prop: "wrench", face: "grin" }}
         kicker="2026 · at home"
         title="A homelab and a busy GPU."
         visual={
@@ -358,7 +358,7 @@ export default function Story({ community }) {
       <Scene
         id="s-side"
         sfx={{ text: "THUD!", color: "#f4b8a4", rotate: 7, delay: "1.75s" }}
-        me={{ pose: "shh", face: "shh" }}
+        me={{ pose: "zip", face: "zip" }}
         flip
         kicker="2026 · on the side"
         title="Friday, Iris, and work I can't show you."

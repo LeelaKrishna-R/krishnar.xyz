@@ -5565,40 +5565,152 @@ html {
   translate: 0 0;
 }
 
-/* moving parts: transform and opacity only; paused off-screen in the story */
+/* off screen, or on the hidden rail, he holds still */
+.js .chibi.ch-off *,
+.js .rail:not(.shown) .chibi * {
+  animation-play-state: paused !important;
+}
+
+/* ---- how he moves: transform and opacity only; the story pauses these
+   off-screen (.scene:not(.on)). Origins are in the SVG's own units; arm
+   groups turn on their own joint (0 0 is the shoulder or the elbow). ---- */
+.chibi .ch-all {
+  transform-origin: 60px 158px;
+}
+.chibi .ch-head {
+  transform-origin: 60px 92px;
+}
+.chibi .ch-eyes {
+  transform-origin: 60px 58px;
+}
+.chibi .ch-case {
+  transform-origin: 0 13px;
+}
+.chibi .ch-page {
+  transform-origin: 60px 122px;
+}
+.chibi .ch-front {
+  transform-origin: 60px 122px;
+}
+.chibi .ch-talk,
+.chibi .ch-o {
+  transform-origin: 60px 83px;
+}
+.chibi .ch-zip-tab {
+  transform-origin: 69.5px 82.5px;
+}
+.chibi .ch-waves path,
+.chibi .ch-sparks path,
+.chibi .ch-confetti > * {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.chibi .ch-waves path,
+.chibi .ch-sparks path,
+.chibi .ch-confetti > *,
+.chibi .ch-sweat {
+  opacity: 0;
+}
+
+.scene-chibi,
+.hero-me,
+.ph-chibi,
+.lost-chibi,
+.credits-chibi {
+  transform-origin: 50% 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chibi .ch-waves path,
+  .chibi .ch-sparks path,
+  .chibi .ch-sweat {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  /* everyone: breathing, a slow head tilt, blinks (sometimes twice), and
+     eyes that follow the pointer */
   .js .chibi .ch-all {
-    animation: ch-breathe 2.8s ease-in-out infinite;
+    animation: ch-breathe 3s ease-in-out infinite;
   }
   .js .chibi .ch-head {
-    transform-origin: 60px 92px;
-    animation: ch-tilt 5.4s ease-in-out infinite;
+    animation: ch-tilt 6s ease-in-out infinite;
   }
   .js .chibi .ch-eyes {
-    transform-origin: 60px 58px;
-    animation: ch-blink 4.8s linear infinite;
+    animation: ch-blink 5.2s linear infinite;
   }
-  .js .chibi .ch-wave {
-    animation: ch-wave 1.2s ease-in-out infinite;
+  .js .chibi .ch-look {
+    transform: translate(calc(var(--lx, 0) * 1.9px), calc(var(--ly, 0) * 1.5px));
+    transition: transform 0.35s var(--ease-out);
   }
-  .js .chibi .ch-type-l {
-    animation: ch-type 0.3s ease-in-out infinite alternate;
+
+  /* wave: the forearm waves from the elbow, the body sways into it */
+  .js .pose-wave .arm-r .ch-fore {
+    animation: ch-wave 0.42s ease-in-out infinite alternate;
   }
-  .js .chibi .ch-type-r {
-    animation: ch-type 0.3s ease-in-out -0.15s infinite alternate;
+  .js .pose-wave .arm-r .ch-up {
+    animation: ch-wave-up 1.68s ease-in-out infinite;
   }
+  .js .pose-wave .ch-all {
+    animation: ch-sway 1.68s ease-in-out infinite;
+  }
+  .js .pose-wave .ch-head {
+    animation: ch-lean 1.68s ease-in-out infinite;
+  }
+
+  /* talking into the headset */
+  .js .chibi .ch-talk {
+    animation: ch-talk 0.9s linear infinite;
+  }
+  .js .chibi .ch-waves path {
+    animation: ch-wave-ring 1.2s ease-out infinite;
+  }
+  .js .chibi .ch-waves path + path {
+    animation-delay: 0.3s;
+  }
+
+  /* cheer: crouch, jump, land, with squash and stretch; arms pump */
   .js .pose-cheer .ch-all {
-    animation: ch-hop 0.75s ease-in-out infinite alternate;
+    animation: ch-jump 0.9s ease-in-out infinite;
   }
-  .js .chibi .ch-cheer-l {
-    animation: ch-cheer-l 0.75s ease-in-out infinite alternate;
+  .js .pose-cheer .arm-l .ch-up {
+    animation: ch-pump-l 0.9s ease-in-out infinite;
   }
-  .js .chibi .ch-cheer-r {
-    animation: ch-cheer-r 0.75s ease-in-out infinite alternate;
+  .js .pose-cheer .arm-r .ch-up {
+    animation: ch-pump-r 0.9s ease-in-out infinite;
   }
-  .js .chibi .ch-point {
-    animation: ch-poke 1.8s ease-in-out infinite;
+  .js .pose-cheer .ch-head {
+    animation: ch-head-lag 0.9s ease-in-out infinite;
   }
+  .js .chibi .ch-confetti > * {
+    animation: ch-confetti 1.8s ease-out infinite;
+  }
+  .js .chibi .ch-confetti > :nth-child(2) {
+    animation-delay: 0.45s;
+  }
+  .js .chibi .ch-confetti > :nth-child(3) {
+    animation-delay: 0.9s;
+  }
+  .js .chibi .ch-confetti > :nth-child(4) {
+    animation-delay: 1.35s;
+  }
+
+  /* typing: hands tap in turn, the head nods along, the screen flickers */
+  .js .pose-type .arm-l .ch-fore {
+    animation: ch-tap 0.24s ease-in-out infinite alternate;
+  }
+  .js .pose-type .arm-r .ch-fore {
+    animation: ch-tap 0.24s ease-in-out -0.12s infinite alternate;
+  }
+  .js .pose-type .ch-head {
+    animation: ch-nod 1.1s ease-in-out infinite;
+  }
+  .js .chibi .ch-glow {
+    animation: ch-glow 1.3s steps(2, jump-none) infinite;
+  }
+
+  /* walking: steps, a bob on every step, arms and suitcase swing */
   .js .pose-walk .ch-all {
     animation: ch-bob 0.3s ease-in-out infinite alternate;
   }
@@ -5608,21 +5720,79 @@ html {
   .js .pose-walk .ch-leg-r {
     animation: ch-step 0.6s ease-in-out -0.3s infinite;
   }
-  .js .chibi .ch-swing-l {
+  .js .pose-walk .arm-l .ch-up {
     animation: ch-swing 0.6s ease-in-out infinite alternate;
   }
-  .js .chibi .ch-swing-r {
+  .js .pose-walk .arm-r .ch-up {
     animation: ch-swing 0.6s ease-in-out -0.6s infinite alternate;
   }
-  .js .chibi .ch-steam path {
-    animation: ch-steam 2.2s ease-in-out infinite;
+  .js .chibi .ch-case {
+    animation: ch-case 0.6s ease-in-out infinite alternate;
   }
-  .js .chibi .ch-steam path + path {
-    animation-delay: -1.1s;
+
+  /* wrench: two hard turns from the elbow, a spark on each */
+  .js .prop-wrench .arm-r .ch-fore {
+    animation: ch-turn 1.8s ease-in-out infinite;
   }
-  .js .chibi .ch-glow {
-    animation: ch-glow 1.6s ease-in-out infinite alternate;
+  .js .chibi .ch-sparks path {
+    animation: ch-spark 1.8s ease-out infinite;
   }
+  .js .chibi .ch-sparks path + path {
+    animation-name: ch-spark-2;
+  }
+  .js .pose-raise .ch-head {
+    animation: ch-look-up 1.8s ease-in-out infinite;
+  }
+
+  /* pencil: little loops in the air, like signing something */
+  .js .prop-pencil .arm-r .ch-fore {
+    animation: ch-scribble 0.7s ease-in-out infinite;
+  }
+
+  /* paper plane: wind up, throw, follow through */
+  .js .pose-point .arm-r .ch-up {
+    animation: ch-throw-up 2.6s cubic-bezier(0.5, 0, 0.2, 1) infinite;
+  }
+  .js .pose-point .arm-r .ch-fore {
+    animation: ch-throw-fore 2.6s cubic-bezier(0.5, 0, 0.2, 1) infinite;
+  }
+  .js .pose-point .ch-all {
+    animation: ch-throw-lean 2.6s cubic-bezier(0.5, 0, 0.2, 1) infinite;
+  }
+
+  /* reading: a page turns now and then, the head follows the lines */
+  .js .chibi .ch-page {
+    animation: ch-page 3.6s ease-in-out infinite;
+  }
+  .js .prop-book .ch-head {
+    animation: ch-read 3.6s ease-in-out infinite;
+  }
+
+  /* lost: turning the map around, head tilting the other way */
+  .js .prop-map .ch-front {
+    animation: ch-map 2.8s ease-in-out infinite;
+  }
+  .js .prop-map .ch-head {
+    animation: ch-puzzled 2.8s ease-in-out infinite;
+  }
+  .js .chibi .ch-o {
+    animation: ch-o 2.8s ease-in-out infinite;
+  }
+
+  /* zipped: lips sealed, a wink, the zip tab swinging, one bead of sweat */
+  .js .chibi .ch-zip-tab {
+    animation: ch-tab 1.4s ease-in-out infinite;
+  }
+  .js .chibi .ch-sweat {
+    animation: ch-sweat 3.2s ease-in infinite;
+  }
+  .js .pose-zip .ch-head {
+    animation: ch-nope 3.2s ease-in-out infinite;
+  }
+  .js .pose-zip .ch-look {
+    translate: 1.4px 0;
+  }
+
   .js .lost-q {
     animation: ch-q 2.4s ease-in-out infinite;
   }
@@ -5631,26 +5801,24 @@ html {
   .js .rail-me .pose-walk .ch-all,
   .js .rail-me .pose-walk .ch-leg-l,
   .js .rail-me .pose-walk .ch-leg-r,
-  .js .rail-me .ch-swing-l,
-  .js .rail-me .ch-swing-r {
+  .js .rail-me .pose-walk .ch-up {
     animation-play-state: paused;
   }
   .js .rail-me.moving .pose-walk .ch-all,
   .js .rail-me.moving .pose-walk .ch-leg-l,
   .js .rail-me.moving .pose-walk .ch-leg-r,
-  .js .rail-me.moving .ch-swing-l,
-  .js .rail-me.moving .ch-swing-r {
+  .js .rail-me.moving .pose-walk .ch-up {
     animation-play-state: running;
   }
 
-  /* entrances: he pops into each scene a beat after it starts */
+  /* entrances: he drops into each scene and lands with a squash */
   .js .scene .scene-chibi,
   .js .credits .credits-chibi {
     opacity: 0;
   }
   .js .scene.in .scene-chibi,
   .js .credits.in .credits-chibi {
-    animation: ch-in 0.7s var(--ease-spring) 0.45s both;
+    animation: ch-in 0.75s cubic-bezier(0.3, 0.7, 0.4, 1) 0.45s both;
   }
   .js #s-texas.in .scene-chibi {
     animation-delay: 1.5s;
@@ -5658,7 +5826,7 @@ html {
   .js .hero-me,
   .js .ph-chibi,
   .js .lost-chibi {
-    animation: ch-in 0.7s var(--ease-spring) 0.35s both;
+    animation: ch-in 0.75s cubic-bezier(0.3, 0.7, 0.4, 1) 0.35s both;
   }
 }
 
@@ -5670,16 +5838,23 @@ html {
 }
 
 @keyframes ch-in {
-  from {
+  0% {
     opacity: 0;
-    translate: 0 26px;
-    scale: 0.6;
+    translate: 0 -34px;
+    scale: 0.92 1.1;
   }
-  60% {
+  45% {
     opacity: 1;
-    scale: 1.06;
+    translate: 0 0;
+    scale: 1.14 0.86;
   }
-  to {
+  68% {
+    scale: 0.96 1.05;
+  }
+  84% {
+    scale: 1.02 0.98;
+  }
+  100% {
     opacity: 1;
     translate: 0 0;
     scale: 1;
@@ -5688,7 +5863,7 @@ html {
 
 @keyframes ch-breathe {
   50% {
-    transform: translateY(-1.4px);
+    transform: translateY(-1.2px) scale(1.008, 0.995);
   }
 }
 
@@ -5707,63 +5882,179 @@ html {
 
 @keyframes ch-blink {
   0%,
-  93%,
+  88%,
+  91%,
+  94%,
   100% {
     transform: scaleY(1);
   }
-  96% {
-    transform: scaleY(0.1);
+  89.5%,
+  95.5% {
+    transform: scaleY(0.08);
   }
 }
 
 @keyframes ch-wave {
-  0%,
-  100% {
-    transform: rotate(0);
+  from {
+    transform: rotate(-22deg);
   }
-  50% {
-    transform: rotate(30deg);
+  to {
+    transform: rotate(20deg);
   }
 }
 
-@keyframes ch-type {
-  from {
+@keyframes ch-wave-up {
+  50% {
     transform: rotate(-6deg);
   }
-  to {
-    transform: rotate(6deg);
+}
+
+@keyframes ch-sway {
+  0%,
+  100% {
+    transform: rotate(-1.4deg);
+  }
+  50% {
+    transform: rotate(1.4deg);
   }
 }
 
-@keyframes ch-hop {
-  from {
-    transform: translateY(0);
+@keyframes ch-lean {
+  0%,
+  100% {
+    transform: rotate(2deg);
   }
-  to {
-    transform: translateY(-5px);
+  50% {
+    transform: rotate(5deg);
   }
 }
 
-@keyframes ch-cheer-l {
-  to {
+@keyframes ch-talk {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  18% {
+    transform: scaleY(1);
+  }
+  32% {
+    transform: scaleY(0.5);
+  }
+  50% {
+    transform: scaleY(0.95);
+  }
+  66% {
+    transform: scaleY(0.3);
+  }
+  82% {
+    transform: scaleY(0.8);
+  }
+}
+
+@keyframes ch-wave-ring {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes ch-jump {
+  0%,
+  100% {
+    transform: translateY(0) scale(1.08, 0.92);
+  }
+  12% {
+    transform: translateY(0) scale(1.08, 0.92);
+  }
+  38% {
+    transform: translateY(-11px) scale(0.94, 1.07);
+  }
+  58% {
+    transform: translateY(-12px) scale(1, 1);
+  }
+  82% {
+    transform: translateY(0) scale(1.04, 0.96);
+  }
+}
+
+@keyframes ch-pump-l {
+  0%,
+  12%,
+  100% {
     transform: rotate(-16deg);
   }
+  45% {
+    transform: rotate(10deg);
+  }
 }
 
-@keyframes ch-cheer-r {
-  to {
+@keyframes ch-pump-r {
+  0%,
+  12%,
+  100% {
     transform: rotate(16deg);
   }
+  45% {
+    transform: rotate(-10deg);
+  }
 }
 
-@keyframes ch-poke {
+@keyframes ch-head-lag {
   0%,
-  60%,
   100% {
-    transform: rotate(0);
+    transform: translateY(1.5px);
   }
-  75% {
+  45% {
+    transform: translateY(-1.5px) rotate(-2deg);
+  }
+  70% {
+    transform: translateY(0) rotate(2deg);
+  }
+}
+
+@keyframes ch-confetti {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) rotate(0) scale(0.6);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-16px) rotate(200deg) scale(1);
+  }
+}
+
+@keyframes ch-tap {
+  from {
     transform: rotate(-8deg);
+  }
+  to {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes ch-nod {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(1.4px) rotate(1.5deg);
+  }
+}
+
+@keyframes ch-glow {
+  to {
+    opacity: 0.6;
   }
 }
 
@@ -5786,30 +6077,268 @@ html {
 
 @keyframes ch-swing {
   from {
-    transform: rotate(-12deg);
+    transform: rotate(-14deg);
   }
   to {
-    transform: rotate(12deg);
+    transform: rotate(14deg);
   }
 }
 
-@keyframes ch-steam {
-  0% {
+@keyframes ch-case {
+  from {
+    transform: rotate(-7deg);
+  }
+  to {
+    transform: rotate(7deg);
+  }
+}
+
+@keyframes ch-turn {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(26deg);
+  }
+  38% {
+    transform: rotate(-6deg);
+  }
+  55% {
+    transform: rotate(26deg);
+  }
+  68% {
+    transform: rotate(-6deg);
+  }
+  82% {
+    transform: rotate(0);
+  }
+}
+
+@keyframes ch-spark {
+  0%,
+  36%,
+  52%,
+  100% {
     opacity: 0;
-    transform: translateY(6px);
+    transform: scale(0.3);
   }
   40% {
-    opacity: 0.9;
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  48% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes ch-spark-2 {
+  0%,
+  66%,
+  82%,
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  78% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes ch-look-up {
+  0%,
+  100% {
+    transform: rotate(2deg);
+  }
+  40% {
+    transform: rotate(4deg) translateY(-0.6px);
+  }
+}
+
+@keyframes ch-scribble {
+  0%,
+  100% {
+    transform: rotate(-6deg) translateX(0);
+  }
+  25% {
+    transform: rotate(4deg) translateX(1px);
+  }
+  50% {
+    transform: rotate(8deg) translateX(0);
+  }
+  75% {
+    transform: rotate(-2deg) translateX(-1px);
+  }
+}
+
+@keyframes ch-throw-up {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  38% {
+    transform: rotate(-34deg);
+  }
+  50% {
+    transform: rotate(16deg);
+  }
+  64% {
+    transform: rotate(0);
+  }
+}
+
+@keyframes ch-throw-fore {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  38% {
+    transform: rotate(-52deg);
+  }
+  50% {
+    transform: rotate(12deg);
+  }
+  64% {
+    transform: rotate(0);
+  }
+}
+
+@keyframes ch-throw-lean {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  38% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+  64% {
+    transform: rotate(0);
+  }
+}
+
+@keyframes ch-page {
+  0%,
+  62% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  80% {
+    opacity: 1;
+    transform: scaleX(-1);
+  }
+  86% {
+    opacity: 0;
+    transform: scaleX(-1);
+  }
+  87%,
+  94% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes ch-read {
+  0%,
+  100% {
+    transform: rotate(-2deg) translateY(1px);
+  }
+  45% {
+    transform: rotate(2.5deg) translateY(1.5px);
+  }
+  70% {
+    transform: rotate(-3deg) translateY(0);
+  }
+}
+
+@keyframes ch-map {
+  0%,
+  100% {
+    transform: rotate(-7deg);
+  }
+  50% {
+    transform: rotate(7deg);
+  }
+}
+
+@keyframes ch-puzzled {
+  0%,
+  100% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(-5deg);
+  }
+}
+
+@keyframes ch-o {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.7, 1.15);
+  }
+}
+
+@keyframes ch-tab {
+  0%,
+  100% {
+    transform: rotate(-16deg);
+  }
+  50% {
+    transform: rotate(16deg);
+  }
+}
+
+@keyframes ch-sweat {
+  0%,
+  20% {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  32% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(7px);
   }
   100% {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(9px);
   }
 }
 
-@keyframes ch-glow {
-  to {
-    opacity: 0.55;
+@keyframes ch-nope {
+  0%,
+  62%,
+  100% {
+    transform: rotate(0);
+  }
+  68% {
+    transform: rotate(-6deg);
+  }
+  74% {
+    transform: rotate(6deg);
+  }
+  80% {
+    transform: rotate(-4deg);
+  }
+  86% {
+    transform: rotate(0);
   }
 }
 

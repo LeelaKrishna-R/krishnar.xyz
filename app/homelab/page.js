@@ -13,7 +13,7 @@ export default function HomelabPage() {
       <PageHead
         title="Homelab"
         sfx={{ text: "BEEP BOOP", color: "#bfe0c8", rotate: 7, size: 1.15 }}
-        me={{ pose: "wave", prop: "wrench", face: "grin" }}
+        me={{ pose: "raise", prop: "wrench", face: "grin" }}
       >
         <p className="lede">
           Two Dell OptiPlex micro PCs running Proxmox. They host the{" "}

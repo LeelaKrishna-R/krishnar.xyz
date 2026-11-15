@@ -15,7 +15,7 @@ export default async function BlogIndex() {
         title="Writing"
         lede="Short posts about why I made things, and how I check they work."
         sfx={{ text: "SCRITCH!", color: "#c9d7f2", rotate: -6 }}
-        me={{ pose: "stand", prop: "pencil" }}
+        me={{ pose: "raise", prop: "pencil" }}
       />
       <div className="wrap narrow end">
         <ul className="rows cards">
