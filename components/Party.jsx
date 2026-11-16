@@ -18,7 +18,7 @@ const CODE = [
   "b",
   "a",
 ];
-const COLORS = ["#f0b429", "#f4b8a4", "#bfe0c8", "#9ac4e8", "#e0685a", "#f2c76b"];
+const COLORS = ["#f0b429", "#f4b8a4", "#bfe0c8", "#9ac4e8", "#e0685a", "#bdeedd"];
 
 export default function Party() {
   const [on, setOn] = useState(0);

@@ -63,7 +63,7 @@ export default async function HomelabPage() {
             ))}
           </div>
           <p className="key">
-            <span className="guest vm">gold</span> VM, the rest are containers
+            <span className="guest vm">green</span> VM, the rest are containers
           </p>
         </section>
 

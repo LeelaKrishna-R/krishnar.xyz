@@ -5,15 +5,15 @@ import fs from 'fs';
 const R = 'E:/krishnar-site/repo/';
 const { MARK_SVG: inner, MARK_VIEWBOX } = await import('file:///E:/krishnar-site/repo/lib/markSvg.js');
 const tile = (pad) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect x="7" y="8" width="54" height="54" rx="14" fill="#231c15"/>
-  <rect x="3" y="3" width="54" height="54" rx="14" fill="#e9a934" stroke="#231c15" stroke-width="3"/>
+  <rect x="7" y="8" width="54" height="54" rx="14" fill="#12161a"/>
+  <rect x="3" y="3" width="54" height="54" rx="14" fill="#22b88f" stroke="#12161a" stroke-width="3"/>
   <svg x="${5.5 - pad}" y="${5.5 - pad}" width="${50 + pad * 2}" height="${51 + pad * 2}" viewBox="${MARK_VIEWBOX}">${inner}</svg>
 </svg>`;
 const svg = tile(0);
 fs.writeFileSync(R + 'app/icon.svg', svg + '\n');
 // Opaque versions for Apple and the app manifest: paper background, a bit of margin.
 const opaque = (size) => sharp(Buffer.from(svg), { density: 72 * size / 64 * 1.2 }).resize(Math.round(size * 0.86)).png().toBuffer()
-  .then((b) => sharp({ create: { width: size, height: size, channels: 4, background: '#f3ebdc' } }).composite([{ input: b, gravity: 'center' }]).png().toBuffer());
+  .then((b) => sharp({ create: { width: size, height: size, channels: 4, background: '#f4f5f1' } }).composite([{ input: b, gravity: 'center' }]).png().toBuffer());
 fs.writeFileSync(R + 'app/apple-icon.png', await opaque(180));
 fs.writeFileSync(R + 'public/icon-192.png', await opaque(192));
 fs.writeFileSync(R + 'public/icon-512.png', await opaque(512));

@@ -14,7 +14,7 @@ export default function ContactPage() {
     <>
       <PageHead
         title="Contact"
-        sfx={{ text: "RING RING", color: "#f2c76b", rotate: -7, size: 1.15 }}
+        sfx={{ text: "RING RING", color: "#bdeedd", rotate: -7, size: 1.15 }}
         me={{ pose: "point", prop: "plane", face: "grin" }}
       >
         <p className="lede">

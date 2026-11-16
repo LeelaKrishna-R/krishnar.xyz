@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Marker from "../components/Marker";
 import Story from "../components/story/Story";
+import ProjectStrip from "../components/ProjectStrip";
 import Chibi from "../components/Chibi";
 import { Scribble } from "../components/Icons";
 import { getCommunity } from "../lib/live";
@@ -42,9 +43,9 @@ export default async function Home() {
             </p>
             <ul className="badges" aria-label="Quick facts">
               {[
-                ["volunteer dev @ Dexter AI", "#f2c76b"],
+                ["volunteer dev @ Dexter AI", "#ffd2c4"],
                 ["Shero: 13,000+ servers", "#bfe0c8"],
-                ["training local models", "#f4b8a4"],
+                ["training local models", "#cfe3f7"],
               ].map(([t, c], i) => (
                 <li key={t} className="badge" style={{ background: c, "--d": `${0.5 + i * 0.12}s`, "--r": `${[-3, 2, -2][i]}deg` }}>
                   {t}
@@ -131,6 +132,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <ProjectStrip />
 
       <Story community={community} />
     </>

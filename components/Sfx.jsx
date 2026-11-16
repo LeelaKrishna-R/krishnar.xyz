@@ -12,7 +12,7 @@ const POINTS = (() => {
   return pts.join(" ");
 })();
 
-export default function Sfx({ text, color = "#f2c76b", rotate = -8, style, delay = "0.6s", size = 1 }) {
+export default function Sfx({ text, color = "#bdeedd", rotate = -8, style, delay = "0.6s", size = 1 }) {
   return (
     <span
       className="sfx"

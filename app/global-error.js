@@ -9,8 +9,8 @@ export default function GlobalError({ reset }) {
           minHeight: "100vh",
           display: "grid",
           placeItems: "center",
-          background: "#f3ebdc",
-          color: "#231c15",
+          background: "#f4f5f1",
+          color: "#12161a",
           fontFamily: "system-ui, sans-serif",
           textAlign: "center",
           padding: 24,
@@ -18,16 +18,16 @@ export default function GlobalError({ reset }) {
       >
         <div>
           <h1 style={{ fontSize: 36, margin: 0 }}>The site failed to load</h1>
-          <p style={{ color: "#64574a" }}>Try again, or email hello@ravuri.dev if it keeps happening.</p>
+          <p style={{ color: "#56606a" }}>Try again, or email hello@ravuri.dev if it keeps happening.</p>
           <button
             type="button"
             onClick={() => reset()}
             style={{
               marginTop: 12,
               padding: "10px 18px",
-              border: "2px solid #231c15",
+              border: "2px solid #12161a",
               borderRadius: 999,
-              background: "#e9a934",
+              background: "#22b88f",
               fontWeight: 700,
               fontSize: 16,
               cursor: "pointer",

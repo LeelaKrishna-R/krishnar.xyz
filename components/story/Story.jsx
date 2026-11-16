@@ -73,7 +73,7 @@ export default function Story({ community }) {
 
       <Scene
         id="s-2019"
-        sfx={{ text: "BEEP!", color: "#f2c76b", rotate: -8, delay: "1.05s" }}
+        sfx={{ text: "BEEP!", color: "#bdeedd", rotate: -8, delay: "1.05s" }}
         me={{ pose: "type", prop: "laptop" }}
         kicker="2019 · Chennai"
         title="It started with one Discord bot."
@@ -83,7 +83,7 @@ export default function Story({ community }) {
               <span># general</span>
             </div>
             <div className="msg" style={{ "--d": "0.2s" }}>
-              <span className="av" style={{ background: "#e9a934" }}>K</span>
+              <span className="av" style={{ background: "#22b88f" }}>K</span>
               <div>
                 <b>krishna</b>
                 <p>!hello</p>
@@ -99,7 +99,7 @@ export default function Story({ community }) {
               </div>
             </div>
             <div className="msg" style={{ "--d": "1.6s" }}>
-              <span className="av" style={{ background: "#e9a934" }}>K</span>
+              <span className="av" style={{ background: "#22b88f" }}>K</span>
               <div>
                 <b>krishna</b>
                 <p>it works!!</p>
@@ -393,12 +393,12 @@ export default function Story({ community }) {
               <span className="stamp">NDA</span>
               {/* the giant rubber stamp that slams it down (and knocks me over) */}
               <svg className="big-stamp" viewBox="0 0 80 100">
-                <path d="M33 26 H47 L49 52 H31 Z" fill="#c98a4b" stroke="#231c15" strokeWidth="2.5" strokeLinejoin="round" />
-                <circle cx="40" cy="17" r="13" fill="#c98a4b" stroke="#231c15" strokeWidth="2.5" />
+                <path d="M33 26 H47 L49 52 H31 Z" fill="#c98a4b" stroke="#12161a" strokeWidth="2.5" strokeLinejoin="round" />
+                <circle cx="40" cy="17" r="13" fill="#c98a4b" stroke="#12161a" strokeWidth="2.5" />
                 <path d="M33 12 Q37 7 43 8" stroke="#f3d3a6" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-                <rect x="9" y="51" width="62" height="24" rx="5" fill="#b8402a" stroke="#231c15" strokeWidth="2.5" />
+                <rect x="9" y="51" width="62" height="24" rx="5" fill="#b8402a" stroke="#12161a" strokeWidth="2.5" />
                 <path d="M15 57 H44" stroke="#e57a5f" strokeWidth="2.5" strokeLinecap="round" />
-                <rect x="5" y="74" width="70" height="11" rx="3" fill="#5b1d10" stroke="#231c15" strokeWidth="2.5" />
+                <rect x="5" y="74" width="70" height="11" rx="3" fill="#5b1d10" stroke="#12161a" strokeWidth="2.5" />
               </svg>
             </div>
           </div>
