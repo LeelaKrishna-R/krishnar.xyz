@@ -1,4 +1,4 @@
-// A little cartoon me: messy hair, big glasses, beard, the gold dot, the cream
+// A little cartoon me: messy hair, big glasses, beard, the cream
 // shirt and the thin chain from the portrait. Drawn by hand in SVG so it stays
 // sharp, weighs nothing and can act: arms bend at the elbow, he blinks (now and
 // then twice), his eyes follow the pointer (ScrollFx sets --lx/--ly), and each
@@ -204,8 +204,6 @@ function Head({ face, headset }) {
         strokeLinejoin="round"
       />
       <path d="M37 15 C 43 12, 49 13, 53 16 M71 10 C 76 12, 80 15, 82 19 M49 27 C 53 25, 57 26, 59 29" stroke={HAIR_HI} strokeWidth="1.9" strokeLinecap="round" fill="none" />
-      {/* the gold dot */}
-      <circle cx="60.5" cy="41.5" r="2.3" fill={GOLD} stroke="#b98014" strokeWidth="0.8" />
       <Face face={face} />
       {headset ? (
         <g className="ch-headset">
