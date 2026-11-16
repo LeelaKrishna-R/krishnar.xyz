@@ -147,7 +147,7 @@ export default function Story({ community }) {
           now it watches servers for risky permissions and warns the staff before anyone can abuse them. More than
           13,000 servers use it.
         </p>
-        <Link className="more" href="/work/shero">
+        <Link className="more" href="/work/shero" data-hue="shero">
           More about Shero →
         </Link>
       </Scene>
@@ -274,10 +274,10 @@ export default function Story({ community }) {
           </p>
         ) : null}
         <p className="more-row">
-          <Link className="more" href="/work/copilot">
+          <Link className="more" href="/work/copilot" data-hue="copilot">
             Copilot →
           </Link>
-          <Link className="more" href="/work/dexter">
+          <Link className="more" href="/work/dexter" data-hue="dexter">
             The bots →
           </Link>
         </p>
@@ -401,10 +401,10 @@ export default function Story({ community }) {
         </p>
         <p>I&apos;ve also built several projects for clients. They&apos;re under NDA, so the folder stays shut.</p>
         <p className="more-row">
-          <Link className="more" href="/work/friday">
+          <Link className="more" href="/work/friday" data-hue="friday">
             Friday →
           </Link>
-          <Link className="more" href="/work/iris">
+          <Link className="more" href="/work/iris" data-hue="iris">
             Iris →
           </Link>
         </p>

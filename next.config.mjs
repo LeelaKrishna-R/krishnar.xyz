@@ -22,7 +22,9 @@ const csp = [
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
-  "upgrade-insecure-requests",
+  // production only: the live site is https anyway (HSTS), and on a local
+  // http server WebKit would upgrade every request and load nothing
+  ...(prod ? ["upgrade-insecure-requests"] : []),
 ].join("; ");
 
 const securityHeaders = [

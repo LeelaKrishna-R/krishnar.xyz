@@ -45,7 +45,7 @@ export default async function ProjectPage({ params }) {
   const community = p.live === "discord" ? await getCommunity() : null;
 
   return (
-    <article className="end">
+    <article className="end" data-hue={p.slug}>
       <PageHead title={p.name} lede={p.lede} back={{ href: "/work", label: "Work" }} />
 
       <div className="wrap narrow">
@@ -128,14 +128,14 @@ export default async function ProjectPage({ params }) {
 
       <nav className="pager" aria-label="More projects">
         {prev ? (
-          <Link href={`/work/${prev.slug}`}>
+          <Link href={`/work/${prev.slug}`} data-hue={prev.slug}>
             <small>previous</small>← {prev.name}
           </Link>
         ) : (
           <span />
         )}
         {next ? (
-          <Link href={`/work/${next.slug}`} style={{ textAlign: "right" }}>
+          <Link href={`/work/${next.slug}`} data-hue={next.slug} style={{ textAlign: "right" }}>
             <small>next</small>
             {next.name} →
           </Link>

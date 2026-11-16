@@ -4,6 +4,7 @@ import PageHead from "../../../components/PageHead";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPost, formatDate } from "../../../lib/posts";
+import { hueFor } from "../../../lib/projects";
 import { site } from "../../../lib/site";
 import { meta } from "../../../lib/meta";
 import { JsonLd, blogPosting } from "../../../lib/jsonld";
@@ -31,7 +32,7 @@ export default async function Post({ params }) {
   const older = all[i + 1];
 
   return (
-    <>
+    <div className="hue-scope" data-hue={hueFor(slug)}>
       <JsonLd data={blogPosting(post, slug)} />
       <ReadPencil />
       <PageHead
@@ -67,6 +68,6 @@ export default async function Post({ params }) {
           </nav>
         ) : null}
       </div>
-    </>
+    </div>
   );
 }

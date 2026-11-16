@@ -9,7 +9,7 @@ export function Rows({ children, cards = false }) {
 export function ProjectRow({ p, thumb = false }) {
   return (
     <li data-reveal>
-      <Link className={`row${thumb && p.media.img ? " thumb" : ""}`} href={`/work/${p.slug}`}>
+      <Link className={`row${thumb && p.media.img ? " thumb" : ""}`} href={`/work/${p.slug}`} data-hue={p.slug}>
         {thumb && p.media.img ? (
           <>
             <span className={`row-img${p.media.contain ? " iris" : ""}`}>

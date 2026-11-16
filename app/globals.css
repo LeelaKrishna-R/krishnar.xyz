@@ -1822,7 +1822,7 @@ a.row:hover .row-img {
   background: #c9d7f2;
 }
 .srv:nth-child(5n + 5) {
-  background: #e6d3f4;
+  background: #f9cfa0;
 }
 
 .srv-count {
@@ -4434,24 +4434,28 @@ body:has(.credits) .footer a:hover {
   transition: transform 0.35s var(--ease-spring);
 }
 
-#broke .log li:nth-child(5n + 1) {
+#broke .log li:nth-child(6n + 1) {
   background: #f6dc7c;
 }
-#broke .log li:nth-child(5n + 2) {
+#broke .log li:nth-child(6n + 2) {
   background: #f4b8a4;
   rotate: 1.4deg;
 }
-#broke .log li:nth-child(5n + 3) {
+#broke .log li:nth-child(6n + 3) {
   background: #bfe0c8;
   rotate: -0.6deg;
 }
-#broke .log li:nth-child(5n + 4) {
+#broke .log li:nth-child(6n + 4) {
   background: #c9d7f2;
   rotate: 1deg;
 }
-#broke .log li:nth-child(5n + 5) {
-  background: #e6d3f4;
+#broke .log li:nth-child(6n + 5) {
+  background: #f9cfa0;
   rotate: -1.6deg;
+}
+#broke .log li:nth-child(6n) {
+  background: #dce8aa;
+  rotate: 0.8deg;
 }
 
 #broke .log li::before {
@@ -8059,5 +8063,170 @@ html {
   .brand-mark {
     width: 30px;
     height: 30px;
+  }
+}
+
+/* ---------- each project has its own colour ----------
+   data-hue="<slug>" (Rows, project pages, their pager links, the home page's
+   "more" links, posts written about a project) sets --hue; everything below
+   reads it. Light and dark get their own shade so both keep their contrast. */
+[data-hue] {
+  --hue: var(--gold);
+  --hue-tint: color-mix(in oklab, var(--hue) 13%, var(--card));
+  --hue-wash: color-mix(in oklab, var(--hue) 45%, var(--card));
+  --hue-text: color-mix(in oklab, var(--hue) 55%, var(--ink));
+}
+[data-hue="copilot"] { --hue: #e4573f; }
+[data-hue="dexter"] { --hue: #5b84ee; }
+[data-hue="friday"] { --hue: #19a39a; }
+[data-hue="iris"] { --hue: #e06aa0; }
+[data-hue="shero"] { --hue: #3e9f5c; }
+[data-hue="net-triage"] { --hue: #2399d0; }
+[data-hue="lazarus"] { --hue: #84a321; }
+[data-hue="agent-budget"] { --hue: #e0a22a; }
+[data-hue="homelab-audit"] { --hue: #e8842c; }
+[data-hue="homelab-harden"] { --hue: #a8714a; }
+
+:root[data-theme="dark"] [data-hue] {
+  --hue-tint: color-mix(in oklab, var(--hue) 11%, var(--card));
+  --hue-wash: color-mix(in oklab, var(--hue) 30%, var(--card));
+  --hue-text: color-mix(in oklab, var(--hue) 80%, var(--ink));
+}
+:root[data-theme="dark"] [data-hue="copilot"] { --hue: #ff8a70; }
+:root[data-theme="dark"] [data-hue="dexter"] { --hue: #8eaeff; }
+:root[data-theme="dark"] [data-hue="friday"] { --hue: #4fd1c5; }
+:root[data-theme="dark"] [data-hue="iris"] { --hue: #f59cc4; }
+:root[data-theme="dark"] [data-hue="shero"] { --hue: #6fcf8f; }
+:root[data-theme="dark"] [data-hue="net-triage"] { --hue: #6cc4f0; }
+:root[data-theme="dark"] [data-hue="lazarus"] { --hue: #b6d34e; }
+:root[data-theme="dark"] [data-hue="agent-budget"] { --hue: #f2b544; }
+:root[data-theme="dark"] [data-hue="homelab-audit"] { --hue: #ffa45e; }
+:root[data-theme="dark"] [data-hue="homelab-harden"] { --hue: #d09a6e; }
+
+.hue-scope {
+  display: contents;
+}
+
+/* cards on /work, the blog list: tinted paper, a shadow in the project's colour */
+.rows.cards a.row[data-hue] {
+  background: var(--hue-tint);
+  box-shadow: 4px 4px 0 var(--hue);
+}
+
+.rows.cards a.row[data-hue]:hover {
+  background: var(--hue-tint);
+  box-shadow: 6px 7px 0 var(--hue);
+}
+
+a.row[data-hue]:hover .row-name {
+  color: var(--hue-text);
+}
+
+.rows.cards a.row[data-hue] .row-img {
+  background: var(--hue-wash);
+}
+
+/* Iris is drawn on her own off-white backdrop */
+.rows.cards a.row[data-hue] .row-img.iris {
+  background: #fbf8fb;
+}
+
+.rows.cards a.row[data-hue] .row-year {
+  justify-self: end;
+  padding: 3px 8px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--hue-wash);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* project pages and posts */
+[data-hue] .ph-title .marker path {
+  stroke: var(--hue);
+}
+
+[data-hue] .ph-title .marker .thin {
+  stroke: var(--hue-text);
+}
+
+[data-hue] .tape {
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--hue) 72%, transparent) 0 6px,
+    color-mix(in srgb, var(--hue) 50%, transparent) 6px 12px
+  );
+}
+
+[data-hue] .media .frame,
+[data-hue] .media .demo-clip,
+[data-hue] .media > .term {
+  box-shadow: 5px 5px 0 var(--hue);
+}
+
+[data-hue] .back:hover,
+[data-hue] .pager a:hover {
+  color: var(--hue-text);
+}
+
+[data-hue] .btn-gold {
+  background: var(--hue-wash);
+}
+
+/* dark mode: the bright shade itself, under the same dark text the gold button uses */
+:root[data-theme="dark"] [data-hue] .btn-gold {
+  background: var(--hue);
+  border-color: var(--hue);
+}
+
+[data-hue] .chips .chip {
+  border-color: color-mix(in srgb, var(--hue) 55%, transparent);
+  background: var(--hue-tint);
+  color: var(--ink);
+}
+
+[data-hue] .case h2::before {
+  content: "";
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  margin-right: 0.45em;
+  border: 1.5px solid var(--line);
+  border-radius: 3px 2px 4px 2px;
+  background: var(--hue);
+  vertical-align: 0.02em;
+}
+
+[data-hue] .article a {
+  text-decoration-color: var(--hue);
+}
+
+.pager a[data-hue] small::after {
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-left: 7px;
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+  background: var(--hue);
+  vertical-align: -0.05em;
+}
+
+/* the home page's "More about Shero →" links */
+.more[data-hue] {
+  text-decoration-color: var(--hue);
+  text-decoration-thickness: 3px;
+}
+
+.more[data-hue]:hover {
+  color: var(--hue-text);
+}
+
+@media print {
+  .rows.cards a.row[data-hue],
+  [data-hue] .media .frame,
+  [data-hue] .media .demo-clip {
+    box-shadow: none;
   }
 }

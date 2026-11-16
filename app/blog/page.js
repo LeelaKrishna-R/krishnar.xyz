@@ -1,6 +1,7 @@
 import PageHead from "../../components/PageHead";
 import Link from "next/link";
 import { getAllPosts, formatDate } from "../../lib/posts";
+import { hueFor } from "../../lib/projects";
 import { meta } from "../../lib/meta";
 
 export const metadata = meta({
@@ -23,7 +24,7 @@ export default async function BlogIndex() {
         <ul className="rows cards">
           {posts.map((p) => (
             <li key={p.slug} data-reveal>
-              <Link className="row" href={`/blog/${p.slug}`}>
+              <Link className="row" href={`/blog/${p.slug}`} data-hue={hueFor(p.slug)}>
                 <span className="row-name">{p.title}</span>
                 <span className="row-year">{formatDate(p.date)}</span>
                 <span className="row-line">{p.excerpt}</span>
