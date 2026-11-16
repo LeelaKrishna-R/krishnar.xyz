@@ -115,8 +115,8 @@ export default function Story({ community }) {
         }
       >
         <p>
-          I was an engineering student in Madurai with a summer job in Chennai, and I wrote my first Discord bot on the
-          side. The first time it answered me in chat, that was it. I&apos;ve been making bots ever since.
+          I was an engineering student in Madurai on a summer job in Chennai when I wrote my first Discord bot. The
+          moment it answered me in chat, I was hooked, and I&apos;ve been building bots ever since.
         </p>
       </Scene>
 
@@ -144,9 +144,9 @@ export default function Story({ community }) {
         }
       >
         <p>
-          I started Shero that April as a way for servers to advertise each other. It grew into something more useful:
-          now it watches servers for risky permissions and warns the staff before anyone can abuse them. More than
-          13,000 servers use it.
+          I started Shero that April as a way for servers to advertise each other, then grew it into a security tool:
+          it audits a server for risky roles and permissions, keeps watching every day and alerts the staff before
+          anyone can abuse them. More than 13,000 servers use it.
         </p>
         <Link className="more" href="/work/shero" data-hue="shero">
           More about Shero →
@@ -204,8 +204,8 @@ export default function Story({ community }) {
         }
       >
         <p>
-          Engineering degree done in 2021, an internship at Caliber Embed in Coimbatore in 2023, then one very long
-          flight to Denton for a master&apos;s in AI at UNT.
+          An engineering degree in 2021, an internship at Caliber Embed in Coimbatore in 2023, then a very long flight
+          to Denton for a master&apos;s in AI at UNT, finished in 2025.
         </p>
       </Scene>
 
@@ -262,10 +262,10 @@ export default function Story({ community }) {
         }
       >
         <p>
-          I&apos;m a volunteer developer at Dexter AI. Copilot is a cohost for streamers that you just talk to: say the word and it
-          switches OBS scenes, keeps chat in line, starts a poll or a giveaway, or designs your overlay.
+          I&apos;m a volunteer developer at Dexter AI. Copilot is an AI cohost for streamers that you just talk to: say the
+          word and it switches OBS scenes, moderates chat, runs a poll or a giveaway, or designs your overlay.
         </p>
-        <p>I also rewrote the six bots that run its Discord server. Meet the cast.</p>
+        <p>I also rebuilt the six bots that run its Discord community, from moderation to music. Meet the cast.</p>
         {community ? (
           <p className="live-pill">
             <span className="dot-live" aria-hidden="true" />
@@ -334,11 +334,12 @@ export default function Story({ community }) {
         }
       >
         <p>
-          Two little Dell PCs running Proxmox keep my bots up, and a GPU at home trains and runs my own models. Things
-          break. I write every one down, like the night a disk filled up at 2:47 am and everything on it went read-only.
+          Two Dell micro PCs running Proxmox host my bots, DNS, monitoring and backups, and a GPU at home trains and runs
+          my own models. Everything is monitored, backed up nightly and restore-tested every month, and every incident
+          gets a written fix.
         </p>
         <Link className="more" href="/homelab">
-          The homelab, and what broke →
+          The homelab and its incident log →
         </Link>
       </Scene>
 
@@ -395,7 +396,7 @@ export default function Story({ community }) {
           Friday is an AI I built for myself: she reads my mail and sends me a brief every morning and evening. Iris gives
           AI agents a face, a little character on the Mac desktop who talks for them.
         </p>
-        <p>I&apos;ve also built several projects for clients. They&apos;re under NDA, so the folder stays shut.</p>
+        <p>I&apos;ve also delivered several projects for clients. They&apos;re under NDA, so the folder stays shut.</p>
         <p className="more-row">
           <Link className="more" href="/work/friday" data-hue="friday">
             Friday →
@@ -438,8 +439,8 @@ export default function Story({ community }) {
         }
       >
         <p>
-          I&apos;m studying for the CCNA, because I want to understand the network under everything I run. Subnetting
-          drills are boring, but everything else sits on top of them.
+          I&apos;m studying for the CCNA because I want to understand the network under everything I run, down to how a
+          packet finds its way from one subnet to the next.
         </p>
       </Scene>
 
@@ -482,7 +483,7 @@ export default function Story({ community }) {
           <div className="end-links">
             {[
               ["/work", "Work", "everything I've made"],
-              ["/homelab", "Homelab", "the machines and what broke"],
+              ["/homelab", "Homelab", "the machines and how I run them"],
               ["/blog", "Writing", "why I made things, and how I test them"],
               ["/about", "About", "the short version of me"],
             ].map(([href, label, sub], i) => (

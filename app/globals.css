@@ -1501,11 +1501,11 @@ a.row:hover .row-img {
 
 .scene {
   position: relative;
-  min-height: 74vh;
+  min-height: 62vh;
   scroll-margin-top: 64px;
   display: flex;
   align-items: center;
-  padding: clamp(64px, 9vw, 110px) 0;
+  padding: clamp(48px, 6.5vw, 84px) 0;
   overflow: hidden;
 }
 

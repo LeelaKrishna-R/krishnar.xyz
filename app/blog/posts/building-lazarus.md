@@ -4,7 +4,7 @@ date: "2026-06-27"
 author: "Leelakrishna Ravuri"
 ---
 
-A service in my homelab kept dying. I'd get an alert, SSH in, run the same two commands, and go back to what I was doing. After enough of that I figured a script could do it for me.
+Restarting a stuck service in my homelab was always the same routine: get the alert, SSH in, run the same two commands, go back to what I was doing. That's exactly the kind of job a script should do.
 
 Restarting a service is easy. The scary part is giving a script permission to run commands on your machines, so most of [lazarus](https://github.com/LeelaKrishna-R/lazarus) is about not doing anything stupid.
 
@@ -21,6 +21,6 @@ You list your hosts in a YAML file and give each one some checks: can it open a 
 
 ## Small on purpose
 
-It's Python with one dependency (PyYAML) and 42 tests. The exit code is 0 when everything's fine, 1 when something's down and 2 for a config problem, so it drops straight into cron.
+It's Python with one dependency (PyYAML) and 65 tests. The exit code is 0 when everything's fine, 1 when something's down and 2 for a config problem, so it drops straight into cron.
 
 The code is on [GitHub](https://github.com/LeelaKrishna-R/lazarus).

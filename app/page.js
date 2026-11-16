@@ -38,8 +38,8 @@ export default async function Home() {
               </svg>
             </h1>
             <p className="lede">
-              I work on Dexter Copilot, an AI that cohosts live streams. At home I train my own models and run the two
-              little servers my bots live on. It all started with one Discord bot in 2019.
+              I build AI tools and the infrastructure under them. I work on Dexter Copilot, an AI that cohosts live streams,
+              and at home I run a two-node Proxmox lab and train my own models. It all started with one Discord bot in 2019.
             </p>
             <ul className="badges" aria-label="Quick facts">
               {[

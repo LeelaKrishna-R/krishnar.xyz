@@ -191,6 +191,7 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
     rgb: new THREE.MeshStandardMaterial({ color: "#000000", emissive: "#ff5a36", emissiveIntensity: 1, toneMapped: false }),
   };
 
+  const halos = [];
   const card = new THREE.Group();
   scene.add(card);
   const add = (geo, mat, x = 0, y = 0, z = 0, parent = card) => {
@@ -255,6 +256,18 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   sweepGeo.setAttribute("color", new THREE.BufferAttribute(sweepColors, 3));
   const sweepMat = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
   add(sweepGeo, sweepMat).scale.z = 1;
+  // a soft halo around it, so it glows like real LEDs (no post-processing: two
+  // wider, faint, additive tubes that share the sweep's colours)
+  [
+    [0.5, 0.2],
+    [1.05, 0.065],
+  ].forEach(([r, o]) => {
+    const g = new THREE.TubeGeometry(sweepCurve, SWEEP_SEG, r, 8, false);
+    g.setAttribute("color", sweepGeo.attributes.color);
+    const m = new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: o, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false });
+    halos.push(m);
+    add(g, m);
+  });
   // the RADEON lettering on the top front edge, over the first fan
   const radTex = textTexture([["RADEON", "italic 800 150px system-ui, sans-serif"]], { w: 1024, h: 200, color: "#9da3ab" });
   textures.push(radTex);
@@ -361,6 +374,33 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   add(new THREE.BoxGeometry(0.12, 12.4, 4.6), M.bracket, -16.75, -0.4, -0.5);
   [-3.2, -1.1, 1.0, 3.1].forEach((y, i) => add(new THREE.BoxGeometry(0.5, i === 0 ? 1.4 : 1.6, 0.62), M.plug, -16.95, y - 0.6, 0.4));
 
+  // --- airflow: faint particles pushed up out of the fins, faster with the fans ---
+  const AIR = 150;
+  const airPos = new Float32Array(AIR * 3);
+  const airSeed = new Float32Array(AIR);
+  for (let i = 0; i < AIR; i++) {
+    airPos[i * 3] = -15 + Math.random() * 30;
+    airPos[i * 3 + 1] = 7 + Math.random() * 6;
+    airPos[i * 3 + 2] = -1.6 + Math.random() * 3.2;
+    airSeed[i] = 0.6 + Math.random() * 0.8;
+  }
+  const airGeo = new THREE.BufferGeometry();
+  airGeo.setAttribute("position", new THREE.BufferAttribute(airPos, 3));
+  const dot = (() => {
+    const c = document.createElement("canvas");
+    c.width = c.height = 64;
+    const g = c.getContext("2d");
+    const grad = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    grad.addColorStop(0, "rgba(255,255,255,1)");
+    grad.addColorStop(1, "rgba(255,255,255,0)");
+    g.fillStyle = grad;
+    g.fillRect(0, 0, 64, 64);
+    return new THREE.CanvasTexture(c);
+  })();
+  textures.push(dot);
+  const airMat = new THREE.PointsMaterial({ size: 0.42, map: dot, color: "#cfe9ff", transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending });
+  card.add(new THREE.Points(airGeo, airMat));
+
   // --- lights and a soft contact shadow ---
   const key = new THREE.DirectionalLight("#ffffff", 1.4);
   key.position.set(12, 22, 18);
@@ -385,6 +425,12 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   let fanMode = reducedMotion ? "off" : "game";
   let flipTarget = 0;
   let flip = 0;
+  let intro = reducedMotion ? 0 : 1; // the entrance swing, 1 -> 0
+  let hover = 0;
+  let hoverTarget = 0;
+  let rimAngle = 0;
+  renderer.domElement.addEventListener("pointerenter", () => (hoverTarget = 1));
+  renderer.domElement.addEventListener("pointerleave", () => (hoverTarget = 0));
   let scrollTarget = 0; // -1 (scene below the middle of the screen) .. 1 (above)
   let scrollNow = 0;
   let hue = 0;
@@ -409,6 +455,7 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
     logoMat.emissive.copy(c);
     glow.color.copy(c);
     glow.intensity = rgbMode === "off" ? 0 : 18;
+    halos.forEach((m, k) => (m.visible = rgbMode !== "off"));
   }
 
   function resize() {
@@ -442,7 +489,8 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
     }
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
-    const target = FAN_SPEEDS[fanMode];
+    hover += (hoverTarget - hover) * Math.min(1, dt * 3);
+    const target = FAN_SPEEDS[fanMode] * (1 + 0.8 * hover);
     fans.forEach((f) => {
       f.speed += (target - f.speed) * Math.min(1, dt * 1.6); // spin up and down smoothly
       f.spin.rotation.z += f.speed * f.dir * dt;
@@ -454,9 +502,31 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
       }
       f.blur.material.opacity = Math.min(0.55, f.speed / 60);
     });
+    // airflow follows the average fan speed
+    const fanAvg = fans.reduce((a, f) => a + f.speed, 0) / fans.length;
+    airMat.opacity = Math.min(0.5, fanAvg / 40);
+    if (fanAvg > 0.2) {
+      for (let i = 0; i < AIR; i++) {
+        airPos[i * 3 + 1] += dt * fanAvg * 0.16 * airSeed[i];
+        airPos[i * 3] += dt * Math.sin(now / 900 + i) * 0.4;
+        if (airPos[i * 3 + 1] > 13.5) {
+          airPos[i * 3 + 1] = 7;
+          airPos[i * 3] = -15 + Math.random() * 30;
+        }
+      }
+      airGeo.attributes.position.needsUpdate = true;
+    }
+    // the rim light drifts round, so highlights travel across the metal
+    rimAngle += dt * 0.35;
+    rim.position.set(Math.cos(rimAngle) * 24, 8, Math.sin(rimAngle) * 24);
+    // entrance: swing in and settle
+    if (intro > 0) intro = Math.max(0, intro - dt / 1.6);
+    const e = intro * intro * intro;
+    card.position.y = -2.5 * e;
+    card.scale.setScalar(1 - 0.08 * e);
     flip += (flipTarget - flip) * Math.min(1, dt * 4);
     scrollNow += (scrollTarget - scrollNow) * Math.min(1, dt * 5);
-    card.rotation.y = -0.35 + flip + scrollNow * 0.7;
+    card.rotation.y = -0.35 + flip + scrollNow * 0.7 - 1.5 * e;
     card.rotation.x = 0.05 + scrollNow * 0.32;
     applyRgb(dt);
     controls.update(dt);

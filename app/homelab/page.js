@@ -10,7 +10,7 @@ export const revalidate = 60;
 
 export const metadata = meta({
   title: "Homelab",
-  description: "Two small Dell PCs running Proxmox at home, what runs on them, and what broke.",
+  description: "Two small Dell PCs running Proxmox at home, what runs on them, and how I keep it running.",
   path: "/homelab",
 });
 
@@ -81,7 +81,7 @@ export default async function HomelabPage() {
         </section>
 
         <section id="broke">
-          <h2 style={{ fontSize: "clamp(24px, 3vw, 30px)", marginBottom: 14 }}>Things that broke</h2>
+          <h2 style={{ fontSize: "clamp(24px, 3vw, 30px)", marginBottom: 14 }}>Incident log</h2>
           <ol className="log">
             {incidents.map((x) => (
               <li key={x.date} data-reveal>
