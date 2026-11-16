@@ -11,6 +11,7 @@ import { ArrowUpRight } from "../../../components/Icons";
 import { projects, getProject } from "../../../lib/projects";
 import { getCommunity } from "../../../lib/live";
 import { meta } from "../../../lib/meta";
+import { blurs } from "../../../lib/blurs";
 
 export const revalidate = 600;
 export const dynamicParams = false;
@@ -60,7 +61,7 @@ export default async function ProjectPage({ params }) {
           </figure>
         ) : p.media.img ? (
           <div className={`sticker frame${p.media.contain ? " iris" : ""}`}>
-            <Image src={p.media.img} alt={p.media.alt} fill sizes="(max-width: 760px) 92vw, 680px" quality={90} priority />
+            <Image src={p.media.img} alt={p.media.alt} fill sizes="(max-width: 760px) 92vw, 680px" quality={90} priority placeholder={blurs[p.media.img] ? "blur" : "empty"} blurDataURL={blurs[p.media.img]} />
           </div>
         ) : (
           <Term lines={p.media.term} label={`Example output from ${p.name}`} />

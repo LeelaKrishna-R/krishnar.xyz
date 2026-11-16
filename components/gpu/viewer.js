@@ -177,10 +177,10 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   } catch {
     return null; // no WebGL: the caller shows a note instead
   }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, inline ? 1.75 : 2));
+  renderer.setPixelRatio(Math.min(Math.max(window.devicePixelRatio || 1, 1.5), 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 1.12;
   renderer.domElement.setAttribute("aria-hidden", "true");
   el.appendChild(renderer.domElement);
 
@@ -305,8 +305,8 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   cap.lineTo(0, 5.6);
   cap.closePath();
   const capGeo = new THREE.ExtrudeGeometry(cap, { depth: 0.14, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 1 });
-  add(capGeo, M.gun, -16.05, 0.2, 2.82);
-  add(capGeo, M.gun, 16.05, 0.2, 2.82).scale.x = -1;
+  add(capGeo, M.knurl, -16.05, 0.2, 2.82);
+  add(capGeo, M.knurl, 16.05, 0.2, 2.82).scale.x = -1;
   // the RGB sweep: a lit band that curves from the top edge down and around the
   // right fan (pink into orange on the stock lighting)
   const sweepCurve = new THREE.CatmullRomCurve3([
@@ -328,6 +328,7 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   const ribPos = new Float32Array(RIB * 2 * 3);
   const ribCol = new Float32Array(RIB * 2 * 3);
   const ribIdx = [];
+  const ribUv = new Float32Array(RIB * 2 * 2);
   for (let i = 0; i < RIB; i++) {
     const t = i / (RIB - 1);
     const p = sweepCurve.getPointAt(t);
@@ -336,13 +337,32 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
     const ny = d.x;
     const w = 0.42;
     ribPos.set([p.x + nx * w, p.y + ny * w, 2.9, p.x - nx * w, p.y - ny * w, 2.9], i * 6);
+    ribUv.set([t, 1, t, 0], i * 4);
     if (i < RIB - 1) ribIdx.push(i * 2, i * 2 + 1, i * 2 + 2, i * 2 + 1, i * 2 + 3, i * 2 + 2);
   }
   const ribGeo = new THREE.BufferGeometry();
   ribGeo.setAttribute("position", new THREE.BufferAttribute(ribPos, 3));
   ribGeo.setAttribute("color", new THREE.BufferAttribute(ribCol, 3));
+  ribGeo.setAttribute("uv", new THREE.BufferAttribute(ribUv, 2));
+  const ribText = (() => {
+    const c = document.createElement("canvas");
+    c.width = 2048;
+    c.height = 64;
+    const g = c.getContext("2d");
+    g.fillStyle = "#ffffff";
+    g.fillRect(0, 0, 2048, 64);
+    g.fillStyle = "rgba(20,10,10,0.55)";
+    g.font = "italic 800 34px system-ui, sans-serif";
+    g.textBaseline = "middle";
+    g.fillText("PHANTOM GAMING", 760, 34);
+    const t = new THREE.CanvasTexture(c);
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = 8;
+    return t;
+  })();
+  textures.push(ribText);
   ribGeo.setIndex(ribIdx);
-  const ribMat = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false, transparent: true, opacity: 0.75, side: THREE.DoubleSide });
+  const ribMat = new THREE.MeshBasicMaterial({ vertexColors: true, map: ribText, toneMapped: false, transparent: true, opacity: 0.85, side: THREE.DoubleSide });
   halos.push(ribMat);
   add(ribGeo, ribMat);
   // a soft halo around it, so it glows like real LEDs (no post-processing: two
@@ -507,10 +527,14 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   scene.add(glow);
   const shadowTex = radialTexture();
   textures.push(shadowTex);
-  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(46, 16), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }));
+  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(52, 18), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, opacity: 0.7, depthWrite: false }));
   shadow.rotation.x = -Math.PI / 2;
   shadow.position.y = -9.5;
   scene.add(shadow);
+  const core = new THREE.Mesh(new THREE.PlaneGeometry(36, 7), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, opacity: 0.9, depthWrite: false }));
+  core.rotation.x = -Math.PI / 2;
+  core.position.y = -9.45;
+  scene.add(core);
 
   card.rotation.set(0.05, -0.35, 0);
 

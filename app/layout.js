@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import ScrollFx from "../components/ScrollFx";
 import Party from "../components/Party";
 import GpuEgg from "../components/GpuEgg";
+import SmoothScroll from "../components/SmoothScroll";
 import { site } from "../lib/site";
 import { homeTitle } from "../lib/meta";
 
@@ -78,6 +79,7 @@ export default function RootLayout({ children }) {
         <ScrollFx />
         <Party />
         <GpuEgg />
+        <SmoothScroll />
         {/* Vercel Web Analytics: page views only, no cookies, nothing personal */}
         <Analytics />
       </body>
