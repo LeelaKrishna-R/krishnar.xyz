@@ -314,7 +314,7 @@ export default function Story({ community }) {
               </div>
             </div>
             <div className="models">
-              <div className="sticker gpu">
+              <div className="sticker gpu" data-gpu-egg title="psst. click me">
                 <div className="fans">
                   {[0, 1].map((k) => (
                     <svg key={k} className="fan" viewBox="-20 -20 40 40">
@@ -357,8 +357,8 @@ export default function Story({ community }) {
 
       <Scene
         id="s-side"
-        sfx={{ text: "THUD!", color: "#f4b8a4", rotate: 7, delay: "1.75s" }}
-        me={{ pose: "zip", face: "zip" }}
+        sfx={{ text: "THUD!", color: "#f4b8a4", rotate: 7, delay: "2.02s" }}
+        me={{ pose: "ko", face: "ko" }}
         flip
         kicker="2026 · on the side"
         title="Friday, Iris, and work I can't show you."
@@ -391,6 +391,15 @@ export default function Story({ community }) {
               <i style={{ width: "62%" }} />
               <i style={{ width: "72%" }} />
               <span className="stamp">NDA</span>
+              {/* the giant rubber stamp that slams it down (and knocks me over) */}
+              <svg className="big-stamp" viewBox="0 0 80 100">
+                <path d="M33 26 H47 L49 52 H31 Z" fill="#c98a4b" stroke="#231c15" strokeWidth="2.5" strokeLinejoin="round" />
+                <circle cx="40" cy="17" r="13" fill="#c98a4b" stroke="#231c15" strokeWidth="2.5" />
+                <path d="M33 12 Q37 7 43 8" stroke="#f3d3a6" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+                <rect x="9" y="51" width="62" height="24" rx="5" fill="#b8402a" stroke="#231c15" strokeWidth="2.5" />
+                <path d="M15 57 H44" stroke="#e57a5f" strokeWidth="2.5" strokeLinecap="round" />
+                <rect x="5" y="74" width="70" height="11" rx="3" fill="#5b1d10" stroke="#231c15" strokeWidth="2.5" />
+              </svg>
             </div>
           </div>
         }

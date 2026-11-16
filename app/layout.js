@@ -5,6 +5,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import ScrollFx from "../components/ScrollFx";
 import Party from "../components/Party";
+import GpuEgg from "../components/GpuEgg";
 import { site } from "../lib/site";
 import { homeTitle } from "../lib/meta";
 
@@ -76,6 +77,7 @@ export default function RootLayout({ children }) {
         <Footer />
         <ScrollFx />
         <Party />
+        <GpuEgg />
         {/* Vercel Web Analytics: page views only, no cookies, nothing personal */}
         <Analytics />
       </body>

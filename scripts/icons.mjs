@@ -1,16 +1,13 @@
-// scripts/icons.mjs: build the site icons from the chibi head the site itself renders.
-// Needs the site running on :3211 and sharp (scratch). Writes app/icon.svg, app/apple-icon.png, app/favicon.ico, public/icon-192.png, public/icon-512.png.
+// scripts/icons.mjs: build the site icons from the small face in lib/markSvg.js
+// (the same picture as the nav mark). Needs sharp (scratch). Writes app/icon.svg, app/apple-icon.png, app/favicon.ico, public/icon-192.png, public/icon-512.png.
 import sharp from 'sharp';
 import fs from 'fs';
 const R = 'E:/krishnar-site/repo/';
-const html = await (await fetch('http://127.0.0.1:3211/')).text();
-const m = html.match(/<svg class="chibi chibi-head[^"]*"[^>]*>([\s\S]*?)<\/svg>/);
-if (!m) throw new Error('no chibi head in the page');
-const inner = m[1].replace(/ class="[^"]*"/g, '');
+const { MARK_SVG: inner, MARK_VIEWBOX } = await import('file:///E:/krishnar-site/repo/lib/markSvg.js');
 const tile = (pad) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <rect x="7" y="8" width="54" height="54" rx="14" fill="#231c15"/>
   <rect x="3" y="3" width="54" height="54" rx="14" fill="#e9a934" stroke="#231c15" stroke-width="3"/>
-  <svg x="${6 - pad}" y="${4.5 - pad}" width="${48 + pad * 2}" height="${51 + pad * 2}" viewBox="15 -3 90 104">${inner}</svg>
+  <svg x="${5.5 - pad}" y="${5.5 - pad}" width="${50 + pad * 2}" height="${51 + pad * 2}" viewBox="${MARK_VIEWBOX}">${inner}</svg>
 </svg>`;
 const svg = tile(0);
 fs.writeFileSync(R + 'app/icon.svg', svg + '\n');

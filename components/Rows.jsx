@@ -13,7 +13,7 @@ export function ProjectRow({ p, thumb = false }) {
         {thumb && p.media.img ? (
           <>
             <span className={`row-img${p.media.contain ? " iris" : ""}`}>
-              <Image src={p.media.img} alt="" fill sizes="132px" />
+              <Image src={p.media.img} alt="" fill sizes="132px" quality={90} />
             </span>
             <span className="row-text">
               <span className="row-name">{p.name}</span>

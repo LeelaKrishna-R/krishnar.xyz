@@ -5,9 +5,10 @@
 // pose has its own loop with squash and stretch. Loops are transform-only and
 // pause off-screen with the rest of the story (.scene:not(.on)).
 //
-//   pose: stand | wave | cheer | hold | type | raise | point | walk | zip
+//   pose: stand | wave | cheer | hold | type | raise | point | walk | zip | ko
 //   prop: laptop | suitcase | headset | book | pencil | plane | map | paper | wrench
-//   face: smile | grin | o | happy | talk | zip
+//   face: smile | grin | o | happy | talk | zip | ko (curious, then X-eyed with
+//         stars once the NDA stamp lands: see #s-side in globals.css)
 //   head: true draws only the head (for small avatars)
 
 // Each arm is [shoulder, elbow] in degrees: 0 hangs straight down, positive
@@ -20,6 +21,10 @@ const ARMS = {
   zip: [
     [10, 2],
     [-10, -2],
+  ],
+  ko: [
+    [16, 10],
+    [-16, -10],
   ],
   wave: [
     [12, 4],
@@ -111,9 +116,17 @@ function Face({ face }) {
     <g className="ch-face">
       {/* eyes: blink together; the pupils inside follow the pointer */}
       <g className="ch-eyes">
-        <Eye cx={43} closed={happy || face === "zip"} />
-        <Eye cx={77} closed={happy} />
+        <g className="ko-pre">
+          <Eye cx={43} closed={happy || face === "zip"} />
+          <Eye cx={77} closed={happy} />
+        </g>
       </g>
+      {face === "ko" ? (
+        <g className="ko-post" stroke={INK} strokeWidth="2.8" strokeLinecap="round">
+          <path d="M38.5 53.5 L47.5 62.5 M47.5 53.5 L38.5 62.5" />
+          <path d="M72.5 53.5 L81.5 62.5 M81.5 53.5 L72.5 62.5" />
+        </g>
+      ) : null}
       {/* glasses */}
       <g fill="rgba(255,255,255,0.16)" stroke="#17110d" strokeWidth="3">
         <rect x="29.5" y="48" width="26" height="19.5" rx="7" />
@@ -134,6 +147,11 @@ function Face({ face }) {
         <ellipse className="ch-o" cx="60" cy="83" rx="3.4" ry="4" fill="#7a3328" stroke={INK} strokeWidth="1.4" />
       ) : face === "talk" ? (
         <ellipse className="ch-talk" cx="60" cy="83" rx="5" ry="4.2" fill="#7a3328" stroke={INK} strokeWidth="1.4" />
+      ) : face === "ko" ? (
+        <g>
+          <ellipse className="ko-pre" cx="60" cy="83" rx="3.2" ry="3.8" fill="#7a3328" stroke={INK} strokeWidth="1.4" />
+          <path className="ko-post" d="M51.5 83 q2.1 -3 4.2 0 t4.2 0 t4.2 0 t4.2 0" stroke="#d39274" strokeWidth="2.4" strokeLinecap="round" fill="none" />
+        </g>
       ) : face === "zip" ? (
         <g className="ch-zip">
           <path d="M51 82.5 H69" stroke="#c9ccd1" strokeWidth="3.6" strokeLinecap="round" />
@@ -351,6 +369,22 @@ function FrontProp({ prop }) {
   return null;
 }
 
+// Knocked out: three little stars circling over his head. Each one rides the
+// same elliptical orbit (keyframes ko-orbit in globals.css), a third of a lap
+// apart, and stays upright.
+function KoStars() {
+  const star = "M0 -5.5 L1.6 -1.7 5.5 -1.5 2.5 1.1 3.4 5 0 2.9 -3.4 5 -2.5 1.1 -5.5 -1.5 -1.6 -1.7 Z";
+  return (
+    <g className="ko-post ko-stars" transform="translate(60 4)">
+      {[0, 1, 2].map((k) => (
+        <g key={k} className="ko-star" style={{ "--k": k }}>
+          <path d={star} fill="#f2c76b" stroke={INK} strokeWidth="1.2" strokeLinejoin="round" />
+        </g>
+      ))}
+    </g>
+  );
+}
+
 function Confetti() {
   return (
     <g className="ch-confetti" strokeWidth="1" stroke={INK}>
@@ -383,7 +417,7 @@ export default function Chibi({ pose = "stand", prop, face = "smile", head = fal
   const hands = GRIPS[prop] || [];
   return (
     <svg
-      className={`chibi pose-${pose}${prop ? ` prop-${prop}` : ""} ${className}`}
+      className={`chibi pose-${pose} face-${face}${prop ? ` prop-${prop}` : ""} ${className}`}
       viewBox="8 -4 104 168"
       style={style}
       {...a11y}
@@ -408,6 +442,7 @@ export default function Chibi({ pose = "stand", prop, face = "smile", head = fal
           right
         )}
         {pose === "cheer" ? <Confetti /> : null}
+        {face === "ko" ? <KoStars /> : null}
       </g>
     </svg>
   );

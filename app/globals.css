@@ -453,8 +453,8 @@ a.inline:hover {
 }
 
 .brand-mark {
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   flex: none;
   transition: transform 0.4s var(--ease-spring);
 }
@@ -8038,15 +8038,15 @@ html {
   place-items: end center;
   overflow: hidden;
   background: var(--gold);
-  border: 2.5px solid var(--line);
+  border: 2px solid var(--line);
   border-radius: 10px;
   box-shadow: 3px 3px 0 var(--shadow);
 }
 
-.mark-tile .chibi {
-  width: 92%;
-  height: auto;
-  margin-bottom: -2px;
+.mark-tile .mark-face {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* the full name fits on one line next to the menu buttons on small phones */
@@ -8228,5 +8228,448 @@ a.row[data-hue]:hover .row-name {
   [data-hue] .media .frame,
   [data-hue] .media .demo-clip {
     box-shadow: none;
+  }
+}
+
+/* ---------- the NDA gag (#s-side) ----------
+   The folder drops in, a giant rubber stamp slams NDA onto it at 2s (THUD!),
+   and the shock knocks me over: X eyes, stars circling. Without motion (or
+   without scripts) he is simply lying there, X-eyed, next to the stamped
+   folder. Times: folder lands 1.8s, hit 2.0s, face swaps 2.05s. */
+.big-stamp {
+  position: absolute;
+  right: -18px;
+  bottom: -14px;
+  width: 98px;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.face-ko .ko-pre {
+  opacity: 0;
+}
+
+.ko-star:nth-child(1) {
+  translate: 30px 0;
+}
+.ko-star:nth-child(2) {
+  translate: -15px 6.9px;
+}
+.ko-star:nth-child(3) {
+  translate: -15px -6.9px;
+  scale: 0.86;
+}
+
+/* lying down, as the scene ends (lower on desktop, where there is room) */
+#s-side {
+  --ko-x: -6px;
+  --ko-y: 30px;
+}
+
+@media (max-width: 860px) {
+  #s-side {
+    --ko-x: 4px;
+    --ko-y: -10px;
+  }
+}
+
+#s-side .scene-chibi {
+  transform: translate(var(--ko-x), var(--ko-y)) rotate(84deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .chibi .ko-star {
+    animation: ko-orbit 1.5s linear infinite;
+    animation-delay: calc(var(--k) * -0.5s);
+  }
+
+  .js #s-side .scene-chibi {
+    transform: none;
+  }
+  .js #s-side.in .scene-chibi {
+    animation:
+      ch-in 0.75s cubic-bezier(0.3, 0.7, 0.4, 1) 0.45s both,
+      ko-fall 1.45s linear 1.25s both;
+  }
+
+  .js .scene .face-ko .ko-pre {
+    opacity: 1;
+  }
+  .js .scene .face-ko .ko-post {
+    opacity: 0;
+  }
+  .js .scene.in .face-ko .ko-pre {
+    animation: ko-off 0.01s linear 2.05s both;
+  }
+  .js .scene.in .face-ko .ko-post {
+    animation: ko-on 0.01s linear 2.05s both;
+  }
+
+  .js .scene.in .big-stamp {
+    animation: big-stamp 1.5s linear 0.9s both;
+  }
+  .js .scene.in .side-shot .stamp {
+    animation: ink 0.14s ease-out 2s both;
+  }
+}
+
+@keyframes big-stamp {
+  0% {
+    opacity: 0;
+    translate: 0 -150px;
+    rotate: -18deg;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+  20% {
+    opacity: 1;
+    translate: 0 -105px;
+    rotate: -9deg;
+    animation-timing-function: ease-in-out;
+  }
+  55% {
+    translate: 0 -128px;
+    rotate: -14deg;
+    animation-timing-function: cubic-bezier(0.7, 0, 1, 0.6);
+  }
+  73% {
+    translate: 0 0;
+    rotate: -12deg;
+    scale: 1;
+    animation-timing-function: ease-out;
+  }
+  77% {
+    translate: 0 3px;
+    scale: 1.07 0.84;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+  86% {
+    opacity: 1;
+    translate: 0 -40px;
+    scale: 1;
+    rotate: -5deg;
+    animation-timing-function: ease-in;
+  }
+  100% {
+    opacity: 0;
+    translate: 0 -170px;
+    rotate: 6deg;
+  }
+}
+
+@keyframes ink {
+  from {
+    opacity: 0;
+    scale: 1.12;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* he peeks at the folder, jumps at the THUD, then keels over */
+@keyframes ko-fall {
+  0% {
+    transform: none;
+    animation-timing-function: ease-in-out;
+  }
+  30% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(4deg);
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1);
+  }
+  56% {
+    transform: translateY(-16px) rotate(-8deg);
+    animation-timing-function: ease-out;
+  }
+  64% {
+    transform: translateY(-14px) rotate(-5deg);
+    animation-timing-function: cubic-bezier(0.55, 0, 0.9, 0.5);
+  }
+  88% {
+    transform: translate(var(--ko-x), var(--ko-y)) rotate(88deg);
+    animation-timing-function: ease-out;
+  }
+  94% {
+    transform: translate(var(--ko-x), calc(var(--ko-y) - 3px)) rotate(80deg);
+    animation-timing-function: ease-in-out;
+  }
+  100% {
+    transform: translate(var(--ko-x), var(--ko-y)) rotate(84deg);
+  }
+}
+
+@keyframes ko-off {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes ko-on {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ko-orbit {
+  0% {
+    translate: 30.0px 0.0px;
+    scale: 0.86;
+  }
+  8.33% {
+    translate: 26.0px 4.0px;
+    scale: 0.93;
+  }
+  16.67% {
+    translate: 15.0px 6.9px;
+    scale: 0.98;
+  }
+  25% {
+    translate: 0.0px 8.0px;
+    scale: 1.00;
+  }
+  33.33% {
+    translate: -15.0px 6.9px;
+    scale: 0.98;
+  }
+  41.67% {
+    translate: -26.0px 4.0px;
+    scale: 0.93;
+  }
+  50% {
+    translate: -30.0px 0.0px;
+    scale: 0.86;
+  }
+  58.33% {
+    translate: -26.0px -4.0px;
+    scale: 0.79;
+  }
+  66.67% {
+    translate: -15.0px -6.9px;
+    scale: 0.74;
+  }
+  75% {
+    translate: -0.0px -8.0px;
+    scale: 0.72;
+  }
+  83.33% {
+    translate: 15.0px -6.9px;
+    scale: 0.74;
+  }
+  91.67% {
+    translate: 26.0px -4.0px;
+    scale: 0.79;
+  }
+  100% {
+    translate: 30.0px -0.0px;
+    scale: 0.86;
+  }
+}
+
+/* ---------- hidden surprise #2: the GPU in 3D (components/GpuEgg.jsx) ---------- */
+.gpu[data-gpu-egg] {
+  cursor: pointer;
+}
+
+html.gpu-open,
+html.gpu-open body {
+  overflow: hidden;
+}
+
+.gpu-egg {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  color: #eef0f3;
+  background:
+    radial-gradient(70% 60% at 50% 42%, #1d1f24 0%, #0d0e11 60%, #060607 100%);
+  animation: gpu-in 0.45s var(--ease-out) both;
+}
+
+.gpu-stage {
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+  cursor: grab;
+}
+
+.gpu-stage:active {
+  cursor: grabbing;
+}
+
+.gpu-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: gpu-rise 0.9s var(--ease-out) 0.1s both;
+}
+
+.gpu-head {
+  position: absolute;
+  top: clamp(16px, 4vw, 36px);
+  left: clamp(16px, 4vw, 40px);
+  right: 72px;
+  max-width: 560px;
+  pointer-events: none;
+}
+
+.gpu-kicker {
+  margin: 0 0 6px;
+  font: 600 13px/1 var(--f-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9aa3ad;
+}
+
+.gpu-head h2 {
+  margin: 0;
+  font: 800 clamp(20px, 3vw, 30px) / 1.1 var(--f-display);
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.gpu-spec {
+  margin: 8px 0 0;
+  font: 400 14.5px/1.5 var(--f-body);
+  color: #b4bbc4;
+}
+
+.gpu-close {
+  position: absolute;
+  top: clamp(14px, 3.5vw, 32px);
+  right: clamp(14px, 3.5vw, 32px);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font: 600 18px/1 var(--f-body);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition:
+    background-color 0.2s,
+    transform 0.25s var(--ease-out);
+}
+
+.gpu-close:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: rotate(90deg);
+}
+
+.gpu-hud {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(44px, 7vw, 64px);
+  translate: -50% 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  width: min(100% - 32px, 720px);
+}
+
+.gpu-btn {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: #eef0f3;
+  font: 600 14px/1 var(--f-body);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    transform 0.25s var(--ease-out);
+}
+
+.gpu-btn small {
+  font: 500 11px/1 var(--f-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9aa3ad;
+}
+
+.gpu-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.gpu-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.gpu-close:focus-visible,
+.gpu-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.gpu-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(14px, 2.5vw, 24px);
+  margin: 0;
+  text-align: center;
+  font: 500 12px/1.4 var(--f-mono);
+  color: #8c949e;
+  pointer-events: none;
+}
+
+.gpu-note {
+  position: absolute;
+  inset: 45% 16px auto;
+  margin: 0;
+  text-align: center;
+  font: 500 15px/1.5 var(--f-mono);
+  color: #b4bbc4;
+}
+
+@media (max-width: 600px) {
+  .gpu-spec {
+    font-size: 13px;
+  }
+  .gpu-hint {
+    display: none;
+  }
+  .gpu-hud {
+    bottom: 18px;
+  }
+  .gpu-btn {
+    padding: 10px 13px;
+    font-size: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gpu-egg,
+  .gpu-stage canvas {
+    animation: none;
+  }
+}
+
+@keyframes gpu-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes gpu-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
   }
 }

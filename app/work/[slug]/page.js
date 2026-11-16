@@ -60,7 +60,7 @@ export default async function ProjectPage({ params }) {
           </figure>
         ) : p.media.img ? (
           <div className={`sticker frame${p.media.contain ? " iris" : ""}`}>
-            <Image src={p.media.img} alt={p.media.alt} fill sizes="(max-width: 760px) 92vw, 680px" priority />
+            <Image src={p.media.img} alt={p.media.alt} fill sizes="(max-width: 760px) 92vw, 680px" quality={90} priority />
           </div>
         ) : (
           <Term lines={p.media.term} label={`Example output from ${p.name}`} />
