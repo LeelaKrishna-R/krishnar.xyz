@@ -11,11 +11,12 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { ParametricGeometry } from "three/examples/jsm/geometries/ParametricGeometry.js";
 
 const L = 33; // length
 const H = 14; // height
-const FAN_X = [-10.6, 0, 10.6];
-const FAN_R = 4.7;
+const FAN_X = [-10.45, 0, 10.45];
+const FAN_R = 4.9;
 
 const RGB_MODES = {
   phantom: null,
@@ -116,17 +117,57 @@ function hubTexture(middle) {
   return t;
 }
 
-function blade() {
-  // a curved, swept blade, root at the hub, wider at the tip
-  const s = new THREE.Shape();
-  s.moveTo(0.15, 1.1);
-  s.bezierCurveTo(0.9, 2.0, 1.5, 3.2, 1.2, 4.35);
-  s.bezierCurveTo(0.4, 4.5, -0.6, 4.35, -1.25, 4.05);
-  s.bezierCurveTo(-0.6, 3.1, -0.45, 2.0, -0.45, 1.15);
-  s.closePath();
-  const g = new THREE.ExtrudeGeometry(s, { depth: 0.08, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.03, bevelSegments: 1, curveSegments: 16 });
-  g.translate(0, 0, -0.04);
-  return g;
+function blade(r0 = 1.25, r1 = 4.45) {
+  // a real fan blade: swept forward toward the tip, twisted (steeper at the
+  // root) and cambered, so it catches the light like moulded plastic
+  return new ParametricGeometry(
+    (u, v, t) => {
+      const r = r0 + (r1 - r0) * u;
+      const chord = 0.3 + 0.34 * u;
+      const a = 0.5 * u * u + (v - 0.5) * chord;
+      const z = (v - 0.5) * (0.85 - 0.4 * u) + 0.14 * Math.sin(Math.PI * v);
+      t.set(Math.cos(a) * r, Math.sin(a) * r, z);
+    },
+    20,
+    10,
+  );
+}
+
+// fine surface textures made in a canvas: grain for the matte plastic, brushed
+// streaks for metal, a diamond knurl for the shroud bands
+function surfaceTexture(kind) {
+  const c = document.createElement("canvas");
+  c.width = c.height = 256;
+  const g = c.getContext("2d");
+  g.fillStyle = "#808080";
+  g.fillRect(0, 0, 256, 256);
+  if (kind === "grain") {
+    const img = g.getImageData(0, 0, 256, 256);
+    for (let i = 0; i < img.data.length; i += 4) {
+      const n = 128 + (Math.random() - 0.5) * 70;
+      img.data[i] = img.data[i + 1] = img.data[i + 2] = n;
+    }
+    g.putImageData(img, 0, 0);
+  } else if (kind === "brushed") {
+    for (let y = 0; y < 256; y++) {
+      g.fillStyle = `rgb(${110 + Math.random() * 40 | 0},${110 + Math.random() * 40 | 0},${110 + Math.random() * 40 | 0})`;
+      g.fillRect(0, y, 256, 1);
+    }
+  } else {
+    g.strokeStyle = "#5a5a5a";
+    g.lineWidth = 3;
+    for (let k = -256; k < 512; k += 16) {
+      g.beginPath();
+      g.moveTo(k, 0);
+      g.lineTo(k + 256, 256);
+      g.moveTo(k + 256, 0);
+      g.lineTo(k, 256);
+      g.stroke();
+    }
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  return t;
 }
 
 export function mount(el, { reducedMotion = false, inline = false } = {}) {
@@ -176,15 +217,24 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
 
   // --- materials ---
   const textures = [];
+  const grain = surfaceTexture("grain");
+  grain.repeat.set(6, 3);
+  const brushed = surfaceTexture("brushed");
+  brushed.repeat.set(1, 6);
+  const knurl = surfaceTexture("knurl");
+  knurl.repeat.set(14, 1);
+  textures.push(grain, brushed, knurl);
   const M = {
-    shroud: new THREE.MeshPhysicalMaterial({ color: "#121316", metalness: 0.35, roughness: 0.5, clearcoat: 0.35, clearcoatRoughness: 0.4 }),
-    gun: new THREE.MeshStandardMaterial({ color: "#8a8f97", metalness: 1, roughness: 0.3 }),
+    shroud: new THREE.MeshPhysicalMaterial({ color: "#0c0d0f", metalness: 0.1, roughness: 0.78, bumpMap: grain, bumpScale: 0.3, clearcoat: 0.12, clearcoatRoughness: 0.6, envMapIntensity: 0.35 }),
+    gun: new THREE.MeshStandardMaterial({ color: "#8b9098", metalness: 1, roughness: 0.32, roughnessMap: brushed, bumpMap: brushed, bumpScale: 0.15 }),
+    knurl: new THREE.MeshStandardMaterial({ color: "#5d6168", metalness: 0.95, roughness: 0.38, bumpMap: knurl, bumpScale: 1.2 }),
+    duct: new THREE.MeshStandardMaterial({ color: "#09090a", roughness: 0.9, side: THREE.DoubleSide }),
     darkMetal: new THREE.MeshStandardMaterial({ color: "#1c1d21", metalness: 0.85, roughness: 0.42 }),
     fin: new THREE.MeshStandardMaterial({ color: "#b8bdc4", metalness: 1, roughness: 0.28 }),
     pipe: new THREE.MeshStandardMaterial({ color: "#d8dadf", metalness: 1, roughness: 0.18 }),
     pcb: new THREE.MeshStandardMaterial({ color: "#0f1512", roughness: 0.75 }),
     gold: new THREE.MeshStandardMaterial({ color: "#d9aa4f", metalness: 1, roughness: 0.25 }),
-    fan: new THREE.MeshStandardMaterial({ color: "#0b0b0d", metalness: 0.1, roughness: 0.55 }),
+    fan: new THREE.MeshPhysicalMaterial({ color: "#0d0d0f", metalness: 0.05, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.5, side: THREE.DoubleSide }),
     plug: new THREE.MeshStandardMaterial({ color: "#0d0d0e", roughness: 0.6 }),
     bracket: new THREE.MeshStandardMaterial({ color: "#c9ccd2", metalness: 1, roughness: 0.32 }),
     // RGB stays saturated: emissive, outside the tone mapper
@@ -213,6 +263,24 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   // side walls of the shroud (top and bottom lips)
   add(new THREE.BoxGeometry(L - 1.2, 0.35, 1.3), M.shroud, 0, 6.85, 2.05);
   add(new THREE.BoxGeometry(L - 1.2, 0.35, 1.3), M.shroud, 0, -6.25, 2.05);
+  // recessed ducts the fans sit in, so you see depth behind the blades
+  FAN_X.forEach((x) => {
+    const duct = add(new THREE.CylinderGeometry(FAN_R + 0.15, FAN_R + 0.15, 1.7, 72, 1, true), M.duct, x, 0.1, 1.95);
+    duct.rotation.x = Math.PI / 2;
+  });
+  // layered bands: a knurled gunmetal strip along the top (RADEON sits on it)
+  // and a shorter one along the bottom, both with angled ends
+  const band = (x0, x1, y0, y1) => {
+    const b = new THREE.Shape();
+    b.moveTo(x0 + 0.8, y0);
+    b.lineTo(x1, y0);
+    b.lineTo(x1 - 0.8, y1);
+    b.lineTo(x0, y1);
+    b.closePath();
+    return new THREE.ExtrudeGeometry(b, { depth: 0.14, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.05, bevelSegments: 2 });
+  };
+  add(band(-15.4, 2.2, 5.3, 6.45), M.knurl, 0, 0, 2.84);
+  add(band(-14.2, 7.4, -6.0, -5.3), M.knurl, 0, 0, 2.84);
 
   // gunmetal rings around the fans and slanted accent plates between them
   FAN_X.forEach((x) => {
@@ -227,8 +295,8 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   accent.closePath();
   const accentGeo = new THREE.ExtrudeGeometry(accent, { depth: 0.12, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 1 });
   add(accentGeo, M.gun, -5.8, 0.3, 2.83);
-  // the striped trim along the bottom front edge
-  for (let i = 0; i < 3; i++) add(new THREE.BoxGeometry(L - 6 - i * 3, 0.12, 0.1), M.gun, 1.5 + i * 1.5, -5.2 - i * 0.32, 2.86);
+  // thin silver pinstripes above the bottom band
+  for (let i = 0; i < 2; i++) add(new THREE.BoxGeometry(18 - i * 4, 0.07, 0.06), M.gun, -4.2 + i * 1.6, -5.05 + i * 0.22, 2.9);
   // angled gunmetal caps at both ends of the shroud
   const cap = new THREE.Shape();
   cap.moveTo(0, -5.6);
@@ -256,6 +324,27 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   sweepGeo.setAttribute("color", new THREE.BufferAttribute(sweepColors, 3));
   const sweepMat = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
   add(sweepGeo, sweepMat).scale.z = 1;
+  const RIB = 160;
+  const ribPos = new Float32Array(RIB * 2 * 3);
+  const ribCol = new Float32Array(RIB * 2 * 3);
+  const ribIdx = [];
+  for (let i = 0; i < RIB; i++) {
+    const t = i / (RIB - 1);
+    const p = sweepCurve.getPointAt(t);
+    const d = sweepCurve.getTangentAt(t);
+    const nx = -d.y;
+    const ny = d.x;
+    const w = 0.42;
+    ribPos.set([p.x + nx * w, p.y + ny * w, 2.9, p.x - nx * w, p.y - ny * w, 2.9], i * 6);
+    if (i < RIB - 1) ribIdx.push(i * 2, i * 2 + 1, i * 2 + 2, i * 2 + 1, i * 2 + 3, i * 2 + 2);
+  }
+  const ribGeo = new THREE.BufferGeometry();
+  ribGeo.setAttribute("position", new THREE.BufferAttribute(ribPos, 3));
+  ribGeo.setAttribute("color", new THREE.BufferAttribute(ribCol, 3));
+  ribGeo.setIndex(ribIdx);
+  const ribMat = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false, transparent: true, opacity: 0.75, side: THREE.DoubleSide });
+  halos.push(ribMat);
+  add(ribGeo, ribMat);
   // a soft halo around it, so it glows like real LEDs (no post-processing: two
   // wider, faint, additive tubes that share the sweep's colours)
   [
@@ -271,7 +360,7 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   // the RADEON lettering on the top front edge, over the first fan
   const radTex = textTexture([["RADEON", "italic 800 150px system-ui, sans-serif"]], { w: 1024, h: 200, color: "#9da3ab" });
   textures.push(radTex);
-  add(new THREE.PlaneGeometry(5.2, 1.0), new THREE.MeshStandardMaterial({ map: radTex, transparent: true, metalness: 0.8, roughness: 0.35 }), -11.2, 5.85, 2.94);
+  add(new THREE.PlaneGeometry(4.6, 0.88), new THREE.MeshStandardMaterial({ map: radTex, transparent: true, metalness: 0.8, roughness: 0.3 }), -11.4, 5.88, 3.06);
 
   // --- fans ---
   const bladeGeo = blade();
@@ -283,12 +372,11 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
       const pivot = new THREE.Group();
       pivot.rotation.z = (k / 11) * Math.PI * 2;
       const b = new THREE.Mesh(bladeGeo, M.fan);
-      b.rotation.y = 0.38;
       pivot.add(b);
       spin.add(pivot);
     }
     // the striped ring that ties the blade tips together
-    spin.add(new THREE.Mesh(new THREE.TorusGeometry(4.25, 0.07, 8, 96), M.gun));
+    spin.add(new THREE.Mesh(new THREE.TorusGeometry(4.45, 0.08, 10, 120), M.gun));
     const hub = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.55, 48), M.shroud);
     hub.rotation.x = Math.PI / 2;
     spin.add(hub);
@@ -297,6 +385,9 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
     const cap = new THREE.Mesh(new THREE.CircleGeometry(1.15, 48), new THREE.MeshStandardMaterial({ map: capTex, metalness: 0.6, roughness: 0.4 }));
     cap.position.z = 0.29;
     spin.add(cap);
+    const hubRing = new THREE.Mesh(new THREE.TorusGeometry(1.2, 0.1, 12, 64), M.gun);
+    hubRing.position.z = 0.28;
+    spin.add(hubRing);
     // a faint disc that fills in as the blades blur at speed
     const blur = new THREE.Mesh(new THREE.RingGeometry(1.2, 4.35, 64), new THREE.MeshBasicMaterial({ color: "#050506", transparent: true, opacity: 0, depthWrite: false }));
     blur.position.z = 0.12;
@@ -402,13 +493,16 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   card.add(new THREE.Points(airGeo, airMat));
 
   // --- lights and a soft contact shadow ---
-  const key = new THREE.DirectionalLight("#ffffff", 1.4);
+  const key = new THREE.DirectionalLight("#ffffff", 1.7);
+  const fill = new THREE.DirectionalLight("#ffe9d6", 0.5);
+  fill.position.set(-20, -6, 16);
+  scene.add(fill);
   key.position.set(12, 22, 18);
   scene.add(key);
   const rim = new THREE.DirectionalLight("#cfe3ff", 1.6);
   rim.position.set(-18, 6, -22);
   scene.add(rim);
-  const glow = new THREE.PointLight("#ff5a36", 18, 22, 2);
+  const glow = new THREE.PointLight("#ff5a36", 5, 14, 2);
   glow.position.set(-4, 9.5, 2);
   scene.add(glow);
   const shadowTex = radialTexture();
@@ -450,11 +544,21 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
       for (let j = 0; j < radial; j++) segColor.toArray(sweepColors, (i * radial + j) * 3);
     }
     sweepGeo.attributes.color.needsUpdate = true;
+    for (let i = 0; i < RIB; i++) {
+      const t = i / (RIB - 1);
+      if (rgbMode === "phantom") segColor.copy(PINK).lerp(ORANGE, t);
+      else if (rgbMode === "rainbow") segColor.setHSL((hue + t * 0.45) % 1, 0.95, 0.56);
+      else segColor.copy(RGB_MODES[rgbMode]);
+      segColor.multiplyScalar(0.8);
+      segColor.toArray(ribCol, i * 6);
+      segColor.toArray(ribCol, i * 6 + 3);
+    }
+    ribGeo.attributes.color.needsUpdate = true;
     const c = rgbMode === "phantom" ? tmp.copy(PINK).lerp(ORANGE, 0.4) : rgbMode === "rainbow" ? tmp.setHSL(hue, 0.95, 0.56) : RGB_MODES[rgbMode];
     M.rgb.emissive.copy(c);
     logoMat.emissive.copy(c);
     glow.color.copy(c);
-    glow.intensity = rgbMode === "off" ? 0 : 18;
+    glow.intensity = rgbMode === "off" ? 0 : 5;
     halos.forEach((m, k) => (m.visible = rgbMode !== "off"));
   }
 
