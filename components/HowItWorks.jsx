@@ -250,7 +250,7 @@ function Homelab() {
           <div className="sticker diag-card hl-out">
             <small>once a month</small>
             <b>restore drill</b>
-            <span className="hl-drill">restored · booted · healthy ✓</span>
+            <span className="hl-drill">booted · healthy ✓</span>
           </div>
         </>
       }

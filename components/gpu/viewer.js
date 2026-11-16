@@ -18,6 +18,7 @@ const FAN_X = [-10.6, 0, 10.6];
 const FAN_R = 4.7;
 
 const RGB_MODES = {
+  phantom: null,
   rainbow: null,
   ember: new THREE.Color("#ff5a36"),
   ice: new THREE.Color("#dff3ff"),
@@ -76,6 +77,45 @@ function radialTexture() {
   return new THREE.CanvasTexture(c);
 }
 
+// fan hub caps, as on the card: red with the PG mark on the outer fans, dark
+// with a silver ring and the maker's name on the middle one
+function hubTexture(middle) {
+  const c = document.createElement("canvas");
+  c.width = c.height = 256;
+  const g = c.getContext("2d");
+  const grad = g.createRadialGradient(110, 100, 10, 128, 128, 128);
+  if (middle) {
+    grad.addColorStop(0, "#2a2c31");
+    grad.addColorStop(1, "#0d0e10");
+  } else {
+    grad.addColorStop(0, "#e2283d");
+    grad.addColorStop(1, "#8e0c1c");
+  }
+  g.fillStyle = grad;
+  g.beginPath();
+  g.arc(128, 128, 128, 0, Math.PI * 2);
+  g.fill();
+  g.strokeStyle = "#c9ccd2";
+  g.lineWidth = 12;
+  g.beginPath();
+  g.arc(128, 128, 116, 0, Math.PI * 2);
+  g.stroke();
+  g.fillStyle = "#ffffff";
+  g.textAlign = "center";
+  g.textBaseline = "middle";
+  if (middle) {
+    g.font = "italic 800 58px system-ui, sans-serif";
+    g.fillText("ASRock", 128, 132);
+  } else {
+    g.font = "italic 900 118px system-ui, sans-serif";
+    g.fillText("PG", 124, 134);
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  return t;
+}
+
 function blade() {
   // a curved, swept blade, root at the hub, wider at the tip
   const s = new THREE.Shape();
@@ -89,14 +129,14 @@ function blade() {
   return g;
 }
 
-export function mount(el, { reducedMotion = false } = {}) {
+export function mount(el, { reducedMotion = false, inline = false } = {}) {
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
   } catch {
     return null; // no WebGL: the caller shows a note instead
   }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, inline ? 1.75 : 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
@@ -120,8 +160,14 @@ export function mount(el, { reducedMotion = false } = {}) {
   controls.minDistance = 20;
   controls.maxDistance = 140;
   controls.autoRotate = !reducedMotion;
-  controls.autoRotateSpeed = 0.9;
-  controls.target.set(0, 1.5, 0);
+  controls.autoRotateSpeed = inline ? 0.6 : 0.9;
+  controls.target.set(0, inline ? 0.6 : 1.5, 0);
+  if (inline) {
+    // on the page: turn side to side only, never zoom, and let vertical swipes scroll
+    controls.enableZoom = false;
+    controls.minPolarAngle = controls.maxPolarAngle = 1.38;
+    renderer.domElement.style.touchAction = "pan-y";
+  }
   controls.addEventListener("start", () => (controls.autoRotate = false));
 
   // --- materials ---
@@ -175,7 +221,7 @@ export function mount(el, { reducedMotion = false } = {}) {
   accent.lineTo(0.35, 5.4);
   accent.closePath();
   const accentGeo = new THREE.ExtrudeGeometry(accent, { depth: 0.12, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 1 });
-  [-5.4, 5.4].forEach((x) => add(accentGeo, M.gun, x - 0.4, 0.3, 2.83));
+  add(accentGeo, M.gun, -5.8, 0.3, 2.83);
   // the striped trim along the bottom front edge
   for (let i = 0; i < 3; i++) add(new THREE.BoxGeometry(L - 6 - i * 3, 0.12, 0.1), M.gun, 1.5 + i * 1.5, -5.2 - i * 0.32, 2.86);
   // angled gunmetal caps at both ends of the shroud
@@ -188,9 +234,27 @@ export function mount(el, { reducedMotion = false } = {}) {
   const capGeo = new THREE.ExtrudeGeometry(cap, { depth: 0.14, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 1 });
   add(capGeo, M.gun, -16.05, 0.2, 2.82);
   add(capGeo, M.gun, 16.05, 0.2, 2.82).scale.x = -1;
-  // the RGB bar along the top front edge
-  const bar = add(new THREE.BoxGeometry(L - 7, 0.26, 0.14), M.rgb, -1, 6.35, 2.86);
-  bar.name = "rgb-bar";
+  // the RGB sweep: a lit band that curves from the top edge down and around the
+  // right fan (pink into orange on the stock lighting)
+  const sweepCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(2.6, 6.55, 2.93),
+    new THREE.Vector3(4.6, 3.6, 2.93),
+    new THREE.Vector3(5.45, 0.1, 2.93),
+    new THREE.Vector3(6.6, -3.6, 2.93),
+    new THREE.Vector3(9.4, -5.55, 2.93),
+    new THREE.Vector3(13.2, -5.95, 2.93),
+    new THREE.Vector3(15.6, -5.2, 2.93),
+  ]);
+  const SWEEP_SEG = 120;
+  const sweepGeo = new THREE.TubeGeometry(sweepCurve, SWEEP_SEG, 0.17, 8, false);
+  const sweepColors = new Float32Array(sweepGeo.attributes.position.count * 3);
+  sweepGeo.setAttribute("color", new THREE.BufferAttribute(sweepColors, 3));
+  const sweepMat = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false });
+  add(sweepGeo, sweepMat).scale.z = 1;
+  // the RADEON lettering on the top front edge, over the first fan
+  const radTex = textTexture([["RADEON", "italic 800 150px system-ui, sans-serif"]], { w: 1024, h: 200, color: "#9da3ab" });
+  textures.push(radTex);
+  add(new THREE.PlaneGeometry(5.2, 1.0), new THREE.MeshStandardMaterial({ map: radTex, transparent: true, metalness: 0.8, roughness: 0.35 }), -11.2, 5.85, 2.94);
 
   // --- fans ---
   const bladeGeo = blade();
@@ -211,7 +275,7 @@ export function mount(el, { reducedMotion = false } = {}) {
     const hub = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.55, 48), M.shroud);
     hub.rotation.x = Math.PI / 2;
     spin.add(hub);
-    const capTex = textTexture([["PG", "900 150px system-ui, sans-serif", 136]], { w: 256, h: 256, color: "#c9ccd2", bg: "#111215" });
+    const capTex = hubTexture(i === 1);
     textures.push(capTex);
     const cap = new THREE.Mesh(new THREE.CircleGeometry(1.15, 48), new THREE.MeshStandardMaterial({ map: capTex, metalness: 0.6, roughness: 0.4 }));
     cap.position.z = 0.29;
@@ -313,19 +377,28 @@ export function mount(el, { reducedMotion = false } = {}) {
   card.rotation.set(0.05, -0.35, 0);
 
   // --- state ---
-  let rgbMode = "rainbow";
+  let rgbMode = "phantom";
   let fanMode = reducedMotion ? "off" : "game";
   let flipTarget = 0;
   let flip = 0;
   let hue = 0;
   const tmp = new THREE.Color();
 
+  const PINK = new THREE.Color("#ff2f7d");
+  const ORANGE = new THREE.Color("#ff7a26");
+  const segColor = new THREE.Color();
   function applyRgb(dt) {
-    let c;
-    if (rgbMode === "rainbow") {
-      hue = (hue + dt * 0.12) % 1;
-      c = tmp.setHSL(hue, 0.95, 0.55);
-    } else c = RGB_MODES[rgbMode];
+    if (rgbMode === "rainbow") hue = (hue + dt * 0.12) % 1;
+    const radial = 9; // radialSegments + 1
+    for (let i = 0; i <= SWEEP_SEG; i++) {
+      const t = i / SWEEP_SEG;
+      if (rgbMode === "phantom") segColor.copy(PINK).lerp(ORANGE, t);
+      else if (rgbMode === "rainbow") segColor.setHSL((hue + t * 0.45) % 1, 0.95, 0.56);
+      else segColor.copy(RGB_MODES[rgbMode]);
+      for (let j = 0; j < radial; j++) segColor.toArray(sweepColors, (i * radial + j) * 3);
+    }
+    sweepGeo.attributes.color.needsUpdate = true;
+    const c = rgbMode === "phantom" ? tmp.copy(PINK).lerp(ORANGE, 0.4) : rgbMode === "rainbow" ? tmp.setHSL(hue, 0.95, 0.56) : RGB_MODES[rgbMode];
     M.rgb.emissive.copy(c);
     logoMat.emissive.copy(c);
     glow.color.copy(c);
@@ -344,7 +417,7 @@ export function mount(el, { reducedMotion = false } = {}) {
   let touched = false;
   controls.addEventListener("start", () => (touched = true));
   function frameCard() {
-    const fit = Math.min(2.4, Math.max(1, 1.35 / camera.aspect));
+    const fit = Math.min(2.4, Math.max(inline ? 0.64 : 1, 1.35 / camera.aspect));
     const dir = HOME.clone().sub(controls.target).normalize();
     camera.position.copy(controls.target).add(dir.multiplyScalar(HOME.distanceTo(new THREE.Vector3(0, 1.5, 0)) * fit));
   }
@@ -353,10 +426,14 @@ export function mount(el, { reducedMotion = false } = {}) {
   resize();
 
   let raf = 0;
+  let active = true;
   let last = performance.now();
   function frame(now) {
     raf = requestAnimationFrame(frame);
-    if (document.hidden) return;
+    if (document.hidden || !active) {
+      last = now;
+      return;
+    }
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
     const target = FAN_SPEEDS[fanMode];
@@ -394,6 +471,9 @@ export function mount(el, { reducedMotion = false } = {}) {
     },
     setRgb(m) {
       rgbMode = m;
+    },
+    setActive(v) {
+      active = v;
     },
     flip() {
       flipTarget = flipTarget ? 0 : Math.PI;

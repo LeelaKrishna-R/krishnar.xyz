@@ -1,17 +1,17 @@
 "use client";
-// Hidden surprise #2: a 3D model of my GPU you can turn around. Opens when you
-// click the "my GPU" sticker on the home page or type "gpu" anywhere. The
+// The full-screen view of my GPU in 3D. Opens from the ⤢ button on the home
+// page model (components/GpuInline.jsx) or by typing "gpu" anywhere. The
 // three.js scene (components/gpu/viewer.js) is only downloaded at that moment.
 // Drag to orbit, scroll or pinch to zoom; arrow keys and +/- do the same;
 // F cycles the fans, R the RGB, B flips to the backplate, Esc closes.
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const FAN_LABEL = { off: "0 dB (fans off)", game: "gaming", max: "full blast" };
-const RGB_LABEL = { rainbow: "rainbow", ember: "ember", ice: "ice", off: "off" };
+const RGB_LABEL = { phantom: "phantom", rainbow: "rainbow", ember: "ember", ice: "ice", off: "off" };
 
 export default function GpuEgg() {
   const [open, setOpen] = useState(false);
-  const [state, setState] = useState({ ready: false, failed: false, fan: "game", rgb: "rainbow", back: false });
+  const [state, setState] = useState({ ready: false, failed: false, fan: "game", rgb: "phantom", back: false });
   const stage = useRef(null);
   const api = useRef(null);
   const closeBtn = useRef(null);
@@ -37,11 +37,17 @@ export default function GpuEgg() {
         setOpen(true);
       }
     };
+    const onOpen = () => {
+      opener.current = document.activeElement;
+      setOpen(true);
+    };
     document.addEventListener("click", onClick);
     document.addEventListener("keydown", onKey);
+    window.addEventListener("gpu-egg:open", onOpen);
     return () => {
       document.removeEventListener("click", onClick);
       document.removeEventListener("keydown", onKey);
+      window.removeEventListener("gpu-egg:open", onOpen);
     };
   }, []);
 

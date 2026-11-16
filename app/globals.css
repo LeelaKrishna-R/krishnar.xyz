@@ -3208,13 +3208,6 @@ a.row:hover .row-img {
   background: #7a888e;
 }
 
-.stream-cap {
-  position: absolute;
-  right: 12px;
-  bottom: 8px;
-  font: 500 14px/1 var(--f-hand);
-  color: #87959b;
-}
 
 /* --- models: a GPU and a loss curve --- */
 .models {
@@ -7570,6 +7563,7 @@ html {
   background: color-mix(in srgb, var(--green) 16%, transparent);
   color: var(--green-text);
   font: 700 11.5px/1.6 var(--f-mono);
+  white-space: nowrap;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -8823,5 +8817,121 @@ html.gpu-open body {
   100% {
     opacity: 0;
     transform: scale(1.9);
+  }
+}
+
+/* ---------- my GPU in 3D, in the homelab scene (components/GpuInline.jsx) ---------- */
+.models:has(.gpu3d) {
+  grid-template-columns: 1fr;
+  gap: 0;
+  width: min(100%, 560px);
+}
+
+.gpu3d {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  rotate: -0.6deg;
+}
+
+.gpu3d-stage {
+  position: relative;
+  height: clamp(200px, 26vw, 270px);
+  background: radial-gradient(80% 90% at 50% 40%, #ffffff 0%, #e6ece9 100%);
+  cursor: grab;
+}
+
+:root[data-theme="dark"] .gpu3d-stage {
+  background: radial-gradient(80% 90% at 50% 40%, #222c31 0%, #0d1215 100%);
+}
+
+.gpu3d-stage:active {
+  cursor: grabbing;
+}
+
+.gpu3d-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.gpu3d-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  padding: 9px 12px 10px;
+  border-top: 2px solid var(--line);
+  background: var(--card);
+}
+
+.gpu3d-label {
+  font: 700 15px/1.2 var(--f-hand);
+}
+
+.gpu3d-label small {
+  display: block;
+  font: 500 11.5px/1.3 var(--f-mono);
+  color: var(--muted);
+}
+
+.gpu3d-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.gpu3d-btns button {
+  padding: 5px 10px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  font: 600 12px/1 var(--f-mono);
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--shadow);
+  transition:
+    transform 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out);
+}
+
+.gpu3d-btns button:hover:not(:disabled) {
+  transform: translate(-1px, -2px);
+  box-shadow: 3px 4px 0 var(--shadow);
+}
+
+.gpu3d-btns button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.gpu3d-note {
+  position: absolute;
+  inset: 40% 16px auto;
+  margin: 0;
+  text-align: center;
+  font: 500 13px/1.4 var(--f-mono);
+  color: var(--muted);
+}
+
+.models:has(.gpu3d) .loss {
+  width: 54%;
+  justify-self: end;
+  margin-top: 16px;
+  margin-right: -10px;
+  rotate: 2.5deg;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 600px) {
+  .gpu3d-btns button {
+    padding: 5px 8px;
+    font-size: 11.5px;
+  }
+  .models:has(.gpu3d) .loss {
+    width: 66%;
+    margin-right: 0;
   }
 }

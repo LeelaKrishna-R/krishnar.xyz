@@ -5,6 +5,7 @@ import StoryRail from "./StoryRail";
 import { Scribble } from "../Icons";
 import Sfx from "../Sfx";
 import Chibi from "../Chibi";
+import GpuInline from "../GpuInline";
 import { site } from "../../lib/site";
 
 // The home page story, told like a cartoon short: seven scenes, grouped by
@@ -245,7 +246,6 @@ export default function Story({ community }) {
                   </div>
                 </div>
               </div>
-              <span className="stream-cap">lines from Dexter&apos;s demo</span>
             </div>
             <div className="cast">
               <span className="note cast-note">and the cast in its Discord</span>
@@ -289,8 +289,8 @@ export default function Story({ community }) {
         kicker="2026 · at home"
         title="A homelab and a busy GPU."
         visual={
-          <div className="home-shot" aria-hidden="true">
-            <div className="lab-nodes">
+          <div className="home-shot">
+            <div className="lab-nodes" aria-hidden="true">
               <div className="sticker lab-node">
                 <span className="leds">
                   <i />
@@ -314,21 +314,8 @@ export default function Story({ community }) {
               </div>
             </div>
             <div className="models">
-              <div className="sticker gpu" data-gpu-egg title="psst. click me">
-                <div className="fans">
-                  {[0, 1].map((k) => (
-                    <svg key={k} className="fan" viewBox="-20 -20 40 40">
-                      <circle r="18" />
-                      <path d="M0 0 C 6 -6, 4 -15, 0 -16 C -3 -10, -3 -4, 0 0 Z" />
-                      <path d="M0 0 C 6 -6, 4 -15, 0 -16 C -3 -10, -3 -4, 0 0 Z" transform="rotate(120)" />
-                      <path d="M0 0 C 6 -6, 4 -15, 0 -16 C -3 -10, -3 -4, 0 0 Z" transform="rotate(240)" />
-                      <circle className="hub" r="3.5" />
-                    </svg>
-                  ))}
-                </div>
-                <span className="gpu-label">my GPU</span>
-              </div>
-              <div className="sticker loss">
+              <GpuInline />
+              <div className="sticker loss" aria-hidden="true">
                 <svg viewBox="0 0 260 150">
                   <path className="axis" d="M30 10 V 125 H 250" />
                   <path className="curve" pathLength="1" d="M34 22 C 60 30, 70 70, 100 88 S 160 108, 190 113 S 230 117, 248 118" />
