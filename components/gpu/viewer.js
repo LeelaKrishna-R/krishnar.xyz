@@ -163,10 +163,14 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   controls.autoRotateSpeed = inline ? 0.6 : 0.9;
   controls.target.set(0, inline ? 0.6 : 1.5, 0);
   if (inline) {
-    // on the page: turn side to side only, never zoom, and let vertical swipes scroll
+    // on the page: orbit in every direction with a mouse (over the top, underneath,
+    // all the way round), never zoom (the wheel keeps scrolling the page), and on
+    // touch screens vertical swipes still scroll while sideways ones spin it
     controls.enableZoom = false;
-    controls.minPolarAngle = controls.maxPolarAngle = 1.38;
-    renderer.domElement.style.touchAction = "pan-y";
+    controls.minPolarAngle = 0.35;
+    controls.maxPolarAngle = 2.75;
+    controls.rotateSpeed = 0.9;
+    if (matchMedia("(pointer: coarse)").matches) renderer.domElement.style.touchAction = "pan-y";
   }
   controls.addEventListener("start", () => (controls.autoRotate = false));
 
@@ -381,6 +385,8 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   let fanMode = reducedMotion ? "off" : "game";
   let flipTarget = 0;
   let flip = 0;
+  let scrollTarget = 0; // -1 (scene below the middle of the screen) .. 1 (above)
+  let scrollNow = 0;
   let hue = 0;
   const tmp = new THREE.Color();
 
@@ -417,7 +423,7 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   let touched = false;
   controls.addEventListener("start", () => (touched = true));
   function frameCard() {
-    const fit = Math.min(2.4, Math.max(inline ? 0.64 : 1, 1.35 / camera.aspect));
+    const fit = Math.min(2.4, Math.max(inline ? 0.8 : 1, (inline ? 1.4 : 1.35) / camera.aspect));
     const dir = HOME.clone().sub(controls.target).normalize();
     camera.position.copy(controls.target).add(dir.multiplyScalar(HOME.distanceTo(new THREE.Vector3(0, 1.5, 0)) * fit));
   }
@@ -449,7 +455,9 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
       f.blur.material.opacity = Math.min(0.55, f.speed / 60);
     });
     flip += (flipTarget - flip) * Math.min(1, dt * 4);
-    card.rotation.y = -0.35 + flip;
+    scrollNow += (scrollTarget - scrollNow) * Math.min(1, dt * 5);
+    card.rotation.y = -0.35 + flip + scrollNow * 0.7;
+    card.rotation.x = 0.05 + scrollNow * 0.32;
     applyRgb(dt);
     controls.update(dt);
     renderer.render(scene, camera);
@@ -474,6 +482,10 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
     },
     setActive(v) {
       active = v;
+    },
+    // the inline view turns and tilts as the page scrolls past it
+    setScroll(p) {
+      scrollTarget = Math.max(-1, Math.min(1, p));
     },
     flip() {
       flipTarget = flipTarget ? 0 : Math.PI;

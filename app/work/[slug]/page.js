@@ -105,6 +105,7 @@ export default async function ProjectPage({ params }) {
           </p>
         ) : null}
         <div className="chips">
+          {p.status ? <span className="chip chip-status">{p.status}</span> : null}
           <span className="chip">{p.year}</span>
           {p.tags.map((t) => (
             <span key={t} className="chip">
@@ -112,6 +113,7 @@ export default async function ProjectPage({ params }) {
             </span>
           ))}
         </div>
+        {p.links.length || p.post ? (
         <div className="btns">
           {p.links.map((l, n) => (
             <a key={l.href} className={`btn${n === 0 ? " btn-gold" : ""}`} href={l.href}>
@@ -124,6 +126,7 @@ export default async function ProjectPage({ params }) {
             </Link>
           ) : null}
         </div>
+        ) : null}
       </div>
 
       <nav className="pager" aria-label="More projects">

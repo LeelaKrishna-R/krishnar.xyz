@@ -8075,6 +8075,7 @@ html {
 [data-hue="friday"] { --hue: #19a39a; }
 [data-hue="iris"] { --hue: #e06aa0; }
 [data-hue="shero"] { --hue: #3e9f5c; }
+[data-hue="syntaxhost"] { --hue: #5c8a94; }
 [data-hue="net-triage"] { --hue: #2399d0; }
 [data-hue="lazarus"] { --hue: #84a321; }
 [data-hue="agent-budget"] { --hue: #e0a22a; }
@@ -8091,6 +8092,7 @@ html {
 :root[data-theme="dark"] [data-hue="friday"] { --hue: #4fd1c5; }
 :root[data-theme="dark"] [data-hue="iris"] { --hue: #f59cc4; }
 :root[data-theme="dark"] [data-hue="shero"] { --hue: #6fcf8f; }
+:root[data-theme="dark"] [data-hue="syntaxhost"] { --hue: #8fbcc6; }
 :root[data-theme="dark"] [data-hue="net-triage"] { --hue: #6cc4f0; }
 :root[data-theme="dark"] [data-hue="lazarus"] { --hue: #b6d34e; }
 :root[data-theme="dark"] [data-hue="agent-budget"] { --hue: #3fd9ae; }
@@ -8820,7 +8822,7 @@ html.gpu-open body {
   }
 }
 
-/* ---------- my GPU in 3D, in the homelab scene (components/GpuInline.jsx) ---------- */
+/* ---------- my GPU in 3D, floating in the homelab scene (components/GpuInline.jsx) ---------- */
 .models:has(.gpu3d) {
   grid-template-columns: 1fr;
   gap: 0;
@@ -8829,21 +8831,14 @@ html.gpu-open body {
 
 .gpu3d {
   position: relative;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  rotate: -0.6deg;
+  margin: -6px -48px 0;
 }
 
+/* no frame: the card floats over the page with its own soft shadow */
 .gpu3d-stage {
   position: relative;
-  height: clamp(200px, 26vw, 270px);
-  background: radial-gradient(80% 90% at 50% 40%, #ffffff 0%, #e6ece9 100%);
+  height: clamp(280px, 30vw, 380px);
   cursor: grab;
-}
-
-:root[data-theme="dark"] .gpu3d-stage {
-  background: radial-gradient(80% 90% at 50% 40%, #222c31 0%, #0d1215 100%);
 }
 
 .gpu3d-stage:active {
@@ -8860,21 +8855,15 @@ html.gpu-open body {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px 12px;
-  padding: 9px 12px 10px;
-  border-top: 2px solid var(--line);
-  background: var(--card);
+  justify-content: center;
+  gap: 6px 14px;
+  margin-top: -18px;
+  position: relative;
+  z-index: 1;
 }
 
 .gpu3d-label {
-  font: 700 15px/1.2 var(--f-hand);
-}
-
-.gpu3d-label small {
-  display: block;
-  font: 500 11.5px/1.3 var(--f-mono);
-  color: var(--muted);
+  font-size: 18px;
 }
 
 .gpu3d-btns {
@@ -8883,7 +8872,7 @@ html.gpu-open body {
 }
 
 .gpu3d-btns button {
-  padding: 5px 10px;
+  padding: 6px 11px;
   border: 1.5px solid var(--line);
   border-radius: 999px;
   background: var(--card);
@@ -8916,22 +8905,44 @@ html.gpu-open body {
 }
 
 .models:has(.gpu3d) .loss {
-  width: 54%;
+  width: 46%;
   justify-self: end;
-  margin-top: 16px;
-  margin-right: -10px;
+  margin-top: 18px;
   rotate: 2.5deg;
   position: relative;
   z-index: 2;
 }
 
 @media (max-width: 600px) {
+  .gpu3d {
+    margin: 0 -16px;
+  }
+  .gpu3d-stage {
+    height: 260px;
+  }
   .gpu3d-btns button {
     padding: 5px 8px;
     font-size: 11.5px;
   }
   .models:has(.gpu3d) .loss {
-    width: 66%;
-    margin-right: 0;
+    width: 62%;
   }
+}
+
+/* a project I've shut down: a quiet tag beside its name */
+.status-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border: 1.5px dashed var(--muted);
+  border-radius: 999px;
+  font: 600 11px/1.4 var(--f-mono);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  vertical-align: 0.2em;
+}
+
+.chip.chip-status {
+  border-style: dashed;
+  color: var(--ink);
 }

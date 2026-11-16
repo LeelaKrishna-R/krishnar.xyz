@@ -12,6 +12,7 @@ const SHORT = {
   friday: "my personal AI",
   iris: "a face for AI agents",
   shero: "13,000+ servers",
+  syntaxhost: "hosting, now shut down",
   "net-triage": "reads router logs",
   lazarus: "restarts what falls over",
   "agent-budget": "caps what AI agents spend",

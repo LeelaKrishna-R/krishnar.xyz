@@ -16,7 +16,10 @@ export function ProjectRow({ p, thumb = false }) {
               <Image src={p.media.img} alt="" fill sizes="132px" quality={90} />
             </span>
             <span className="row-text">
-              <span className="row-name">{p.name}</span>
+              <span className="row-name">
+                {p.name}
+                {p.status ? <span className="status-tag">{p.status}</span> : null}
+              </span>
               <span className="row-line" style={{ display: "block" }}>
                 {p.line}
               </span>
