@@ -12,6 +12,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { ParametricGeometry } from "three/examples/jsm/geometries/ParametricGeometry.js";
+import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 const L = 33; // length
 const H = 14; // height
@@ -177,7 +178,13 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   } catch {
     return null; // no WebGL: the caller shows a note instead
   }
-  renderer.setPixelRatio(Math.min(Math.max(window.devicePixelRatio || 1, 1.5), 2));
+  // supersample a little on 1x screens for clean edges; drops by itself if the
+  // device can't keep up (see the frame loop)
+  const coarse = matchMedia("(pointer: coarse)").matches;
+  let pixelRatio = coarse ? Math.min(window.devicePixelRatio || 1, 1.5) : Math.min(Math.max(window.devicePixelRatio || 1, inline ? 1.25 : 1.5), 2);
+  renderer.setPixelRatio(pixelRatio);
+  renderer.domElement.style.opacity = "0";
+  renderer.domElement.style.transition = "opacity 0.6s ease";
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.12;
@@ -185,10 +192,11 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   el.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
+  // the studio reflections are built in a separate idle moment (see below), so
+  // setting up the scene never blocks the page for long in one go
   const pmrem = new THREE.PMREMGenerator(renderer);
   const room = new RoomEnvironment();
-  const env = pmrem.fromScene(room, 0.04).texture;
-  scene.environment = env;
+  let env = null;
 
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 300);
   const HOME = new THREE.Vector3(22, 12, 60);
@@ -225,7 +233,9 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   knurl.repeat.set(14, 1);
   textures.push(grain, brushed, knurl);
   const M = {
-    shroud: new THREE.MeshPhysicalMaterial({ color: "#0c0d0f", metalness: 0.1, roughness: 0.78, bumpMap: grain, bumpScale: 0.3, clearcoat: 0.12, clearcoatRoughness: 0.6, envMapIntensity: 0.35 }),
+    shroud: coarse
+      ? new THREE.MeshStandardMaterial({ color: "#0c0d0f", metalness: 0.1, roughness: 0.78, bumpMap: grain, bumpScale: 0.3, envMapIntensity: 0.35 })
+      : new THREE.MeshPhysicalMaterial({ color: "#0c0d0f", metalness: 0.1, roughness: 0.78, bumpMap: grain, bumpScale: 0.3, clearcoat: 0.12, clearcoatRoughness: 0.6, envMapIntensity: 0.35 }),
     gun: new THREE.MeshStandardMaterial({ color: "#8b9098", metalness: 1, roughness: 0.32, roughnessMap: brushed, bumpMap: brushed, bumpScale: 0.15 }),
     knurl: new THREE.MeshStandardMaterial({ color: "#5d6168", metalness: 0.95, roughness: 0.38, bumpMap: knurl, bumpScale: 1.2 }),
     duct: new THREE.MeshStandardMaterial({ color: "#09090a", roughness: 0.9, side: THREE.DoubleSide }),
@@ -234,7 +244,9 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
     pipe: new THREE.MeshStandardMaterial({ color: "#d8dadf", metalness: 1, roughness: 0.18 }),
     pcb: new THREE.MeshStandardMaterial({ color: "#0f1512", roughness: 0.75 }),
     gold: new THREE.MeshStandardMaterial({ color: "#d9aa4f", metalness: 1, roughness: 0.25 }),
-    fan: new THREE.MeshPhysicalMaterial({ color: "#0d0d0f", metalness: 0.05, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.5, side: THREE.DoubleSide }),
+    fan: coarse
+      ? new THREE.MeshStandardMaterial({ color: "#0d0d0f", metalness: 0.05, roughness: 0.42, side: THREE.DoubleSide })
+      : new THREE.MeshPhysicalMaterial({ color: "#0d0d0f", metalness: 0.05, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.5, side: THREE.DoubleSide }),
     plug: new THREE.MeshStandardMaterial({ color: "#0d0d0e", roughness: 0.6 }),
     bracket: new THREE.MeshStandardMaterial({ color: "#c9ccd2", metalness: 1, roughness: 0.32 }),
     // RGB stays saturated: emissive, outside the tone mapper
@@ -384,17 +396,15 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
 
   // --- fans ---
   const bladeGeo = blade();
+  const rotorGeo = mergeGeometries(
+    Array.from({ length: 11 }, (_, k) => bladeGeo.clone().rotateZ((k / 11) * Math.PI * 2)),
+  );
+  bladeGeo.dispose();
   const fans = FAN_X.map((x, i) => {
     const spin = new THREE.Group();
     spin.position.set(x, 0.1, 2.1);
     card.add(spin);
-    for (let k = 0; k < 11; k++) {
-      const pivot = new THREE.Group();
-      pivot.rotation.z = (k / 11) * Math.PI * 2;
-      const b = new THREE.Mesh(bladeGeo, M.fan);
-      pivot.add(b);
-      spin.add(pivot);
-    }
+    spin.add(new THREE.Mesh(rotorGeo, M.fan));
     // the striped ring that ties the blade tips together
     spin.add(new THREE.Mesh(new THREE.TorusGeometry(4.45, 0.08, 10, 120), M.gun));
     const hub = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 0.55, 48), M.shroud);
@@ -557,7 +567,10 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   const PINK = new THREE.Color("#ff2f7d");
   const ORANGE = new THREE.Color("#ff7a26");
   const segColor = new THREE.Color();
+  let drawnMode = null;
   function applyRgb(dt) {
+    if (rgbMode !== "rainbow" && rgbMode === drawnMode) return;
+    drawnMode = rgbMode;
     if (rgbMode === "rainbow") hue = (hue + dt * 0.12) % 1;
     const radial = 9; // radialSegments + 1
     for (let i = 0; i <= SWEEP_SEG; i++) {
@@ -609,14 +622,53 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
   let raf = 0;
   let active = true;
   let last = performance.now();
+  // compile every shader in the background first (parallel compile where the
+  // browser has it): compiling them inside the first frame froze the page for
+  // ~0.9 s on Windows. Until then nothing is drawn; then the card fades in.
+  let ready = false;
+  const idleSlot = window.requestIdleCallback || ((cb) => setTimeout(cb, 50));
+  const compiled = new Promise((res) => idleSlot(res, { timeout: 800 }))
+    .then(() => {
+      // 128 px is plenty for soft studio reflections and builds ~4x faster than 256
+      env = pmrem.fromScene(room, 0.04, 0.1, 100, { size: 128 }).texture;
+      scene.environment = env;
+      return renderer.compileAsync ? renderer.compileAsync(scene, camera) : null;
+    })
+    .catch(() => {});
+  compiled.then(() => {
+    ready = true;
+    last = performance.now();
+    renderer.domElement.style.opacity = "1";
+  });
+  // adaptive resolution: if frames run long for a couple of seconds, step down
+  let slowFor = 0;
+  let dragging = false;
+  let lastScroll = -1e9;
+  controls.addEventListener("start", () => (dragging = true));
+  controls.addEventListener("end", () => (dragging = false));
   function frame(now) {
     raf = requestAnimationFrame(frame);
-    if (document.hidden || !active) {
+    if (!ready || document.hidden || !active) {
       last = now;
       return;
     }
-    const dt = Math.min(0.05, (now - last) / 1000);
+    const busy = dragging || now - lastScroll < 400 || hoverTarget > 0;
+    const minGap = busy ? 0 : coarse ? 1000 / 31 : 1000 / 61;
+    if (now - last < minGap) return;
+    const raw = (now - last) / 1000;
+    const dt = Math.min(0.05, raw);
     last = now;
+    // slow device: frames arriving well behind the cap for a while
+    const expected = Math.max(minGap / 1000, 1 / 60);
+    if (raw > expected * 1.4 + 0.004 && pixelRatio > 1) {
+      slowFor += raw;
+      if (slowFor > 1.5) {
+        pixelRatio = Math.max(1, pixelRatio - 0.25);
+        renderer.setPixelRatio(pixelRatio);
+        resize();
+        slowFor = 0;
+      }
+    } else slowFor = Math.max(0, slowFor - raw * 0.5);
     hover += (hoverTarget - hover) * Math.min(1, dt * 3);
     const target = FAN_SPEEDS[fanMode] * (1 + 0.8 * hover);
     fans.forEach((f) => {
@@ -684,6 +736,7 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
     // the inline view turns and tilts as the page scrolls past it
     setScroll(p) {
       scrollTarget = Math.max(-1, Math.min(1, p));
+      lastScroll = performance.now();
     },
     flip() {
       flipTarget = flipTarget ? 0 : Math.PI;
@@ -716,7 +769,7 @@ export function mount(el, { reducedMotion = false, inline = false } = {}) {
       });
       Object.values(M).forEach((m) => m.dispose());
       textures.forEach((t) => t.dispose());
-      env.dispose();
+      env?.dispose();
       pmrem.dispose();
       room.traverse?.((o) => o.geometry?.dispose());
       renderer.dispose();

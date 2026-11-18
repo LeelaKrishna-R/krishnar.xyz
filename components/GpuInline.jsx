@@ -19,12 +19,19 @@ export default function GpuInline() {
     let disposed = false;
     let vis;
     let onScroll;
+    // parse the 3D code (three.js is big) in the first idle moment after the page
+    // loads, while you're still reading the top, not later in the middle of a scroll
+    const idleFirst = window.requestIdleCallback || ((cb) => setTimeout(cb, 1500));
+    idleFirst(() => import("./gpu/viewer"), { timeout: 5000 });
     const near = new IntersectionObserver(
       (entries) => {
         if (!entries.some((e) => e.isIntersecting)) return;
         near.disconnect();
         const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-        import("./gpu/viewer").then(({ mount }) => {
+        // fetch the 3D code now, but build the scene in an idle moment so the
+        // setup never lands in the middle of a scroll frame
+        const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 120));
+        import("./gpu/viewer").then(({ mount }) => new Promise((done) => idle(() => done(mount), { timeout: 1200 }))).then((mount) => {
           if (disposed || !stage.current) return;
           const a = mount(stage.current, { reducedMotion: reduced, inline: true });
           if (!a) return setSt((s) => ({ ...s, failed: true }));
@@ -50,7 +57,7 @@ export default function GpuInline() {
           }
         });
       },
-      { rootMargin: "600px 0px" },
+      { rootMargin: "1200px 0px" },
     );
     near.observe(box.current);
     return () => {
