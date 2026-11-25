@@ -9,7 +9,7 @@ export function Rows({ children, cards = false }) {
 
 export function ProjectRow({ p, thumb = false }) {
   return (
-    <li data-reveal>
+    <li data-reveal data-area={p.areas?.length ? p.areas.join(" ") : undefined}>
       <Link className={`row${thumb && p.media.img ? " thumb" : ""}`} href={`/work/${p.slug}`} data-hue={p.slug}>
         {thumb && p.media.img ? (
           <>

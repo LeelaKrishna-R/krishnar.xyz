@@ -9492,3 +9492,314 @@ html.lenis body {
     white-space: nowrap;
   }
 }
+
+/* ---------- quick jump (Ctrl K / Cmd K / "/") ---------- */
+.qj {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  justify-items: center;
+  align-items: start;
+  padding: min(14vh, 120px) 16px 16px;
+}
+.qj-backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklab, var(--paper) 55%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: qj-fade 0.16s var(--ease-out);
+}
+.qj-box {
+  position: relative;
+  width: min(580px, 100%);
+  max-height: min(70vh, 560px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: qj-pop 0.24s var(--ease-spring);
+}
+.qj-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 2px solid var(--line);
+}
+.qj-glass {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: none;
+  stroke: var(--gold-text);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+.qj-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 600 17px/1.3 var(--f-body);
+}
+.qj-input::placeholder {
+  color: var(--muted);
+  font-weight: 500;
+}
+.qj kbd {
+  font: 600 11px/1 var(--f-mono);
+  padding: 3px 6px;
+  border: 1.5px solid var(--faint);
+  border-bottom-width: 2.5px;
+  border-radius: 6px;
+  color: var(--muted);
+  background: var(--card-2);
+}
+.qj-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 8px 8px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.qj-group {
+  display: block;
+  padding: 10px 10px 4px;
+  font: 700 11px/1 var(--f-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.qj-opt {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 9px 10px 9px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+}
+.qj-opt::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 9px;
+  bottom: 9px;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--hue, var(--gold));
+  opacity: 0;
+  transform: scaleY(0.4);
+  transition:
+    opacity 0.14s,
+    transform 0.18s var(--ease-spring);
+}
+.qj-opt[aria-selected="true"] {
+  background: color-mix(in oklab, var(--hue, var(--gold)) 14%, var(--card));
+}
+.qj-opt[aria-selected="true"]::before {
+  opacity: 1;
+  transform: none;
+}
+.qj-name {
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.qj-hint {
+  min-width: 0;
+  color: var(--muted);
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.qj-empty {
+  margin: 0;
+  padding: 18px 18px 8px;
+  color: var(--muted);
+}
+.qj-foot {
+  margin: 0;
+  padding: 10px 16px;
+  border-top: 2px dashed var(--faint);
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 40px;
+}
+@keyframes qj-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes qj-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.97);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qj-backdrop,
+  .qj-box {
+    animation: none;
+  }
+}
+@media (max-width: 560px) {
+  .qj {
+    padding-top: 72px;
+  }
+  .qj-opt {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .qj-hint {
+    font-size: 13px;
+    max-width: 100%;
+  }
+  .qj-esc {
+    display: none;
+  }
+}
+@media (pointer: coarse) {
+  .qj-foot-keys {
+    display: none;
+  }
+}
+
+/* ---------- /work area filter ---------- */
+.work-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 26px;
+}
+.work-chips .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 6px 14px;
+  border: 2px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font: 700 14px/1.2 var(--f-body);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.18s var(--ease-out),
+    box-shadow 0.18s var(--ease-out),
+    background-color 0.18s;
+}
+.work-chips .chip:hover {
+  transform: translate(-1px, -2px);
+  box-shadow: 3px 4px 0 var(--shadow);
+}
+.work-chips .chip:active {
+  transform: translate(1px, 1px);
+  box-shadow: 0 0 0 var(--shadow);
+}
+.work-chips .chip[aria-pressed="true"] {
+  background: var(--gold);
+  color: var(--on-accent);
+}
+.chip-n {
+  min-width: 22px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--ink) 9%, transparent);
+  font: 700 12px/1.4 var(--f-mono);
+  text-align: center;
+}
+.work-chips .chip[aria-pressed="true"] .chip-n {
+  background: color-mix(in oklab, var(--on-accent) 16%, transparent);
+}
+.work-list[data-filter="ai"] li[data-area]:not([data-area~="ai"]),
+.work-list[data-filter="bots"] li[data-area]:not([data-area~="bots"]),
+.work-list[data-filter="infra"] li[data-area]:not([data-area~="infra"]),
+.work-list[data-filter="ai"] .block:not(:has(li[data-area~="ai"])),
+.work-list[data-filter="bots"] .block:not(:has(li[data-area~="bots"])),
+.work-list[data-filter="infra"] .block:not(:has(li[data-area~="infra"])),
+.work-list:not([data-filter="all"]) .work-older {
+  display: none;
+}
+
+/* ---------- /about skills ---------- */
+.skills-note {
+  margin: -6px 0 18px;
+}
+.skills {
+  margin: 0;
+  display: grid;
+  gap: 0;
+  border-top: 2px dashed var(--faint);
+}
+.skills-row {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 8px 18px;
+  padding: 14px 0;
+  border-bottom: 2px dashed var(--faint);
+}
+.skills-row dt {
+  font: 800 15px/1.4 var(--f-display);
+  padding-top: 4px;
+}
+.skills-row dd {
+  margin: 0;
+}
+.skills-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.skill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border: 1.5px solid color-mix(in oklab, var(--ink) 28%, transparent);
+  border-radius: 999px;
+  font: 600 13.5px/1.35 var(--f-body);
+  color: var(--ink);
+  background: var(--card);
+}
+a.skill.linked {
+  color: var(--ink);
+  border: 2px solid var(--line);
+  background: color-mix(in oklab, var(--hue, var(--gold)) 12%, var(--card));
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.18s var(--ease-out),
+    box-shadow 0.18s var(--ease-out),
+    background-color 0.18s;
+}
+a.skill.linked:hover {
+  transform: translate(-1px, -2px);
+  box-shadow: 3px 4px 0 var(--shadow);
+  background: color-mix(in oklab, var(--hue, var(--gold)) 26%, var(--card));
+}
+.skill-go {
+  font-size: 11px;
+  color: var(--hue-text, var(--gold-text));
+  transition: transform 0.18s var(--ease-spring);
+}
+a.skill.linked:hover .skill-go {
+  transform: translate(2px, -2px);
+}
+@media (max-width: 640px) {
+  .skills-row {
+    grid-template-columns: 1fr;
+  }
+  .skills-row dt {
+    padding-top: 0;
+  }
+}

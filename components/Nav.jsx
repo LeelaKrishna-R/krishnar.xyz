@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Mark from "./Mark";
 import { nav } from "../lib/site";
-import { Sun, Moon, MenuIcon, CloseIcon } from "./Icons";
+import { Sun, Moon, MenuIcon, CloseIcon, Search } from "./Icons";
 
 function activeHref(pathname) {
   const hit = nav.find((n) => pathname === n.href || pathname.startsWith(n.href + "/"));
@@ -101,6 +101,16 @@ export default function Nav() {
           </nav>
 
           <div className="nav-tools">
+            <button
+              type="button"
+              className="icon-btn jump-btn"
+              onClick={(e) => window.dispatchEvent(new CustomEvent("quickjump:open", { detail: { from: e.currentTarget } }))}
+              aria-label="Quick jump to a page, project or post"
+              aria-keyshortcuts="Control+K Meta+K /"
+              title="Quick jump (Ctrl K)"
+            >
+              <Search />
+            </button>
             <button type="button" className="icon-btn theme-btn" onClick={toggleTheme} aria-label="Switch light or dark theme">
               <Moon className="moon" />
               <Sun className="sun" />

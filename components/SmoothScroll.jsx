@@ -4,7 +4,7 @@
 // native scrolling is already smooth) and for anyone who asked for reduced
 // motion. It drives the real scroll position, so every scroll observer and
 // scroll-linked animation keeps working; in-page links still land under the
-// nav. The full-screen GPU view pauses it while open.
+// nav. The full-screen GPU view and the quick-jump box pause it while open.
 import { useEffect } from "react";
 
 export default function SmoothScroll() {
@@ -20,7 +20,7 @@ export default function SmoothScroll() {
         lerp: 0.11,
         smoothWheel: true,
         anchors: true,
-        prevent: (node) => !!node.closest?.(".gpu-egg"),
+        prevent: (node) => !!node.closest?.(".gpu-egg, .qj"),
       });
       const loop = (t) => {
         lenis.raf(t);
@@ -29,7 +29,8 @@ export default function SmoothScroll() {
       raf = requestAnimationFrame(loop);
       let locked = false;
       mo = new MutationObserver(() => {
-        const now = document.documentElement.classList.contains("gpu-open");
+        const c = document.documentElement.classList;
+        const now = c.contains("gpu-open") || c.contains("qj-open");
         if (now === locked) return;
         locked = now;
         if (now) lenis.stop();

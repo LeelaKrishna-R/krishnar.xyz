@@ -8,6 +8,8 @@ import Party from "../components/Party";
 import GpuEgg from "../components/GpuEgg";
 import SmoothScroll from "../components/SmoothScroll";
 import CardFx from "../components/CardFx";
+import QuickJump from "../components/QuickJump";
+import { quickJumpItems } from "../lib/quickjump";
 import { site } from "../lib/site";
 import { homeTitle } from "../lib/meta";
 
@@ -61,7 +63,8 @@ export const viewport = {
 // stays hidden. The opening sequence plays once per visit (no-intro after).
 const boot = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";d.dataset.theme=t}catch(e){d.dataset.theme="light"}d.classList.add("js");try{if(sessionStorage.getItem("intro"))d.classList.add("no-intro");else{sessionStorage.setItem("intro","1");setTimeout(function(){d.classList.add("no-intro")},2600)}}catch(e){}setTimeout(function(){if(!window.__fx)d.classList.remove("js")},3000)})();`;
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const jump = await quickJumpItems();
   return (
     <html
       lang="en"
@@ -84,6 +87,7 @@ export default function RootLayout({ children }) {
         <GpuEgg />
         <SmoothScroll />
         <CardFx />
+        <QuickJump items={jump} />
         {/* Vercel Web Analytics: page views only, no cookies, nothing personal */}
         <Analytics />
       </body>

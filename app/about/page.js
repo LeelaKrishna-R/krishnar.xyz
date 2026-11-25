@@ -2,6 +2,7 @@ import PageHead from "../../components/PageHead";
 import Link from "next/link";
 import Calendar from "../../components/Calendar";
 import { timeline } from "../../lib/timeline";
+import { skillGroups } from "../../lib/skills";
 import { getGithub } from "../../lib/live";
 import { links, site } from "../../lib/site";
 import { meta } from "../../lib/meta";
@@ -41,6 +42,43 @@ export default async function AboutPage() {
             I&apos;m looking for roles in infrastructure, networking or developer tooling. Email is the best way to reach me:{" "}
             <a href={`mailto:${site.email}`}>{site.email}</a>. My resume is <Link href="/resume">here</Link>.
           </p>
+        </section>
+
+        <section className="block" aria-labelledby="skills-h">
+          <h2 id="skills-h">What I work with</h2>
+          <p className="note skills-note">The linked ones open something I built with it.</p>
+          <dl className="skills">
+            {skillGroups.map((g) => (
+              <div className="skills-row" key={g.group} data-reveal>
+                <dt>{g.group}</dt>
+                <dd>
+                  <ul className="skills-list">
+                    {g.items.map((s) =>
+                      s.href ? (
+                        <li key={s.name}>
+                          {s.href.startsWith("/") ? (
+                            <Link className="skill linked" href={s.href} data-hue={s.hue} title={`Used in ${s.where}`} aria-label={`${s.name}, used in ${s.where}`}>
+                              {s.name}
+                              <span className="skill-go" aria-hidden="true">↗</span>
+                            </Link>
+                          ) : (
+                            <a className="skill linked" href={s.href} title={`Used in ${s.where}`} aria-label={`${s.name}, used in ${s.where}`}>
+                              {s.name}
+                              <span className="skill-go" aria-hidden="true">↗</span>
+                            </a>
+                          )}
+                        </li>
+                      ) : (
+                        <li key={s.name}>
+                          <span className="skill">{s.name}</span>
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </dd>
+              </div>
+            ))}
+          </dl>
         </section>
 
         <section className="block">
