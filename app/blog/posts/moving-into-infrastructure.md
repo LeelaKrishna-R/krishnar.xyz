@@ -14,7 +14,7 @@ I run a [homelab](/homelab) and it's where I learn the most. When something brea
 
 ## The CCNA
 
-I'm studying for the CCNA because I don't want the network to be a black box. I want to know how a packet gets from one machine to another, what a switch is doing, and how subnets split things up. Subnetting drills are boring, but everything else sits on top of them.
+I'm studying for the CCNA because I don't want the network to be a black box. I want to know how a packet gets from one machine to another, what a switch is doing, and how subnets split things up. Subnetting takes drilling, and everything else sits on top of it.
 
 ## And AI
 

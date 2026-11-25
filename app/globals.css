@@ -9400,3 +9400,34 @@ html.lenis body {
     opacity: 0;
   }
 }
+
+/* phones: keep the cartoon me off the things people read (QA 2026-11-25) */
+@media (max-width: 860px) {
+  /* hero: stand in front of the portrait's lower corner, clear of the name under it */
+  .hero-me {
+    bottom: 58px;
+  }
+  /* Copilot scene: peek over the stream card instead of covering the last of the cast */
+  #s-dexter .scene-chibi {
+    top: -138px;
+    bottom: auto;
+    right: -2px;
+  }
+}
+
+/* flags and commands inside project stories */
+.inline-code {
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--card-2);
+  border: 1px solid var(--faint);
+  font: 500 0.88em/1.4 var(--f-mono);
+  white-space: nowrap;
+}
+
+/* phones: the recorded terminal clips scroll sideways; say so */
+@media (max-width: 760px) {
+  .demo-note::after {
+    content: " · swipe →";
+  }
+}

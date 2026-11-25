@@ -11,7 +11,7 @@ export default function ImpactBand({ members }) {
     { n: 2600, plus: true, label: "commits on those bots since the rewrite in May", href: "/work/dexter", hue: "dexter" },
     { n: 16, of: 16, label: "real Cisco fault cases net-triage gets right", href: "/work/net-triage", hue: "net-triage" },
     { n: 18, label: "health checks a minute across my homelab", href: "/homelab" },
-    { n: 65, label: "tests behind lazarus, which restarts what falls over", href: "/work/lazarus", hue: "lazarus" },
+    { n: 98, label: "tests behind lazarus, which restarts what falls over", href: "/work/lazarus", hue: "lazarus" },
   ];
   return (
     <section className="impact" aria-labelledby="impact-h">

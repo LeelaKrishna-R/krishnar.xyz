@@ -10,7 +10,7 @@ Getting an answer out of a model is one API call. The problem is that it sounds 
 
 ## Answers in a fixed shape
 
-net-triage asks the model for three things: a category, a short explanation, and the evidence lines. The Anthropic SDK's structured outputs and a Zod schema check the answer before my code uses it. If it doesn't fit, it's rejected.
+net-triage asks the model for a fixed set of fields: the kind of fault, how bad it is, the root cause, the evidence lines, a fix and a confidence. The Anthropic SDK's structured outputs and a Zod schema check the answer before my code uses it. If it doesn't fit, it's rejected.
 
 ## The test set
 
@@ -18,12 +18,12 @@ I keep a folder of real Cisco IOS logs and show-command output, each with the an
 
 When I first wrote this in June there were 6 cases. Now there are 16, covering 10 kinds of failure, and it gets all 16 right for about 20 cents a run.
 
-Sixteen clear-cut cases isn't a lot. What it gives me is a way to tell whether a prompt change made things better or worse, without guessing.
+Sixteen clear-cut cases are the starting set, one or more for every kind of fault. What they give me is a way to tell whether a prompt or model change made things better or worse, without guessing. Adversarial and multi-fault cases come next.
 
 ## Smaller things
 
 - Every run prints the tokens used and what they cost.
 - It runs straight from the TypeScript source with Node's type stripping, so there's no build step.
-- There are 18 tests, with a fake model client so running them costs nothing.
+- There are 36 tests, with a fake model client so running them costs nothing.
 
 The code is on [GitHub](https://github.com/LeelaKrishna-R/net-triage).

@@ -15,6 +15,21 @@ import { meta } from "../../../lib/meta";
 import { blurs } from "../../../lib/blurs";
 
 export const revalidate = 600;
+
+// Command-line flags and commands inside the story text become inline code
+// that doesn't break across lines.
+const CODE = /(--[a-z][\w-]*|lazarus metrics|guardBefore|environment:|0\.0\.0\.0)/g;
+function withCode(text) {
+  return text.split(CODE).map((part, i) =>
+    i % 2 ? (
+      <code key={i} className="inline-code">
+        {part}
+      </code>
+    ) : (
+      part
+    ),
+  );
+}
 export const dynamicParams = false;
 
 // The recorded terminal clips are SVGs in public/demos; their own width and
@@ -89,7 +104,7 @@ export default async function ProjectPage({ params }) {
           {p.story.map(([h, text]) => (
             <section key={h}>
               <h2>{h}</h2>
-              <p>{text}</p>
+              <p>{withCode(text)}</p>
             </section>
           ))}
         </div>

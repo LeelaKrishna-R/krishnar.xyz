@@ -19,7 +19,12 @@ export function ProjectRow({ p, thumb = false }) {
             <span className="row-text">
               <span className="row-name">
                 {p.name}
-                {p.status ? <span className="status-tag">{p.status}</span> : null}
+                {p.status ? (
+                  <>
+                    {" "}
+                    <span className="status-tag">{p.status}</span>
+                  </>
+                ) : null}
               </span>
               <span className="row-line" style={{ display: "block" }}>
                 {p.line}
