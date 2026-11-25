@@ -8964,3 +8964,27 @@ html.lenis body {
 .lenis.lenis-stopped {
   overflow: clip;
 }
+
+/* ---------- load-time pass (2026-11-25) ---------- */
+/* the hero's intro line slides up but is never invisible, so the browser can
+   count it as painted straight away (it was the page's largest paint) */
+@media (prefers-reduced-motion: no-preference) {
+  .js .hero .lede {
+    animation: lift 0.5s var(--ease-out) 0.2s both;
+  }
+}
+
+@keyframes lift {
+  from {
+    translate: 0 16px;
+  }
+}
+
+/* settled loops (components/ScrollFx.jsx): ~10 s after a scene or a cartoon
+   me comes into view, its endless loops rest; they play again on return or
+   touch. Entrances and scroll effects have finished long before. */
+.chibi.ch-rest,
+.chibi.ch-rest *,
+.js .scene.rest .scene-visual * {
+  animation-play-state: paused !important;
+}

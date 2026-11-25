@@ -16,8 +16,10 @@ import { homeTitle } from "../lib/meta";
 // Vercel's production builds.
 const display = localFont({ src: "./fonts/bricolage.woff2", weight: "700 800", variable: "--font-display", display: "swap" });
 const body = localFont({ src: "./fonts/figtree.woff2", weight: "400 700", variable: "--font-body", display: "swap" });
-const hand = localFont({ src: "./fonts/shantell.woff2", weight: "500", variable: "--font-hand", display: "swap" });
-const mono = localFont({ src: "./fonts/jetbrains-mono.woff2", weight: "500 700", variable: "--font-mono", display: "swap" });
+// only the heading and body fonts are preloaded; the hand-lettering and code
+// fonts arrive a moment later without competing with the first paint
+const hand = localFont({ src: "./fonts/shantell.woff2", weight: "500", variable: "--font-hand", display: "swap", preload: false });
+const mono = localFont({ src: "./fonts/jetbrains-mono.woff2", weight: "500 700", variable: "--font-mono", display: "swap", preload: false });
 
 export const metadata = {
   metadataBase: new URL(site.url),

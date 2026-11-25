@@ -21,8 +21,14 @@ export default function GpuInline() {
     let onScroll;
     // parse the 3D code (three.js is big) in the first idle moment after the page
     // loads, while you're still reading the top, not later in the middle of a scroll
-    const idleFirst = window.requestIdleCallback || ((cb) => setTimeout(cb, 1500));
-    idleFirst(() => import("./gpu/viewer"), { timeout: 5000 });
+    // (desktop on a good connection only: phones and data-saver visitors fetch
+    // it when they scroll near, so nobody downloads 3D they never see)
+    const conn = navigator.connection;
+    const cheap = matchMedia("(pointer: fine)").matches && !conn?.saveData && !/2g|3g/.test(conn?.effectiveType || "");
+    if (cheap) {
+      const idleFirst = window.requestIdleCallback || ((cb) => setTimeout(cb, 1500));
+      idleFirst(() => import("./gpu/viewer"), { timeout: 5000 });
+    }
     const near = new IntersectionObserver(
       (entries) => {
         if (!entries.some((e) => e.isIntersecting)) return;
