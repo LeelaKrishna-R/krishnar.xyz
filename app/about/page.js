@@ -27,16 +27,18 @@ export default async function AboutPage() {
             communication engineering at Kalasalingam University, then moved to Texas for a master&apos;s in AI at UNT.
           </p>
           <p>
-            I&apos;m a volunteer developer at Dexter AI, on <Link href="/work/copilot">Dexter Copilot</Link> itself and the bots
-            around it. I train and run models on my own hardware, I&apos;ve done several freelance projects (under NDA,
-            so they&apos;re not listed here), and I&apos;ve been making Discord bots since 2019.
+            I&apos;m a volunteer developer at Dexter AI, on <Link href="/work/copilot">Dexter Copilot</Link> itself and the six
+            bots that run its community. I&apos;ve been building Discord bots since 2019, grew{" "}
+            <Link href="/work/shero">Shero</Link> into a security bot used in more than 13,000 servers, and I&apos;ve delivered
+            several freelance projects (under NDA, so they&apos;re not listed here).
           </p>
           <p>
-            Lately I care a lot about the stuff underneath: servers, networks, keeping things up. That&apos;s why
-            there&apos;s a <Link href="/homelab">homelab</Link> and why I&apos;m studying for the CCNA.
+            The part I enjoy most is the layer underneath: servers, networks and keeping things running. I run a
+            two-node Proxmox <Link href="/homelab">homelab</Link> with monitoring, nightly backups and monthly restore
+            drills, train and run models on my own GPU, and I&apos;m studying for the CCNA.
           </p>
           <p>
-            I&apos;m open to work in infrastructure, networking or dev tooling. Email is the best way to reach me:{" "}
+            I&apos;m looking for roles in infrastructure, networking or developer tooling. Email is the best way to reach me:{" "}
             <a href={`mailto:${site.email}`}>{site.email}</a>. My resume is <Link href="/resume">here</Link>.
           </p>
         </section>

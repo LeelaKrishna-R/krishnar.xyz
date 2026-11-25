@@ -14,7 +14,7 @@ export default function WorkPage() {
     <>
       <PageHead
         title="Work"
-        lede="What I've worked on since 2019, biggest first."
+        lede="What I've built since 2019, biggest first."
         sfx={{ text: "TA-DA!", color: "#bdeedd", rotate: -8 }}
         me={{ pose: "cheer", face: "happy" }}
       />

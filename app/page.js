@@ -3,6 +3,8 @@ import Link from "next/link";
 import Marker from "../components/Marker";
 import Story from "../components/story/Story";
 import ProjectStrip from "../components/ProjectStrip";
+import ImpactBand from "../components/ImpactBand";
+import RoleRotator from "../components/RoleRotator";
 import Chibi from "../components/Chibi";
 import { Scribble } from "../components/Icons";
 import { getCommunity } from "../lib/live";
@@ -37,9 +39,12 @@ export default async function Home() {
                 <path d="M12 1 L14.5 9.5 L23 12 L14.5 14.5 L12 23 L9.5 14.5 L1 12 L9.5 9.5 Z" />
               </svg>
             </h1>
+            <p className="hero-tag">
+              I build <RoleRotator />
+            </p>
             <p className="lede">
-              I build AI tools and the infrastructure under them. I work on Dexter Copilot, an AI that cohosts live streams,
-              and at home I run a two-node Proxmox lab and train my own models. It all started with one Discord bot in 2019.
+              I work on Dexter Copilot, an AI that cohosts live streams, and at home I run a two-node Proxmox lab and train
+              my own models. It all started with one Discord bot in 2019.
             </p>
             <ul className="badges" aria-label="Quick facts">
               {[
@@ -134,6 +139,8 @@ export default async function Home() {
       </section>
 
       <ProjectStrip />
+
+      <ImpactBand members={community?.members} />
 
       <Story community={community} />
     </>

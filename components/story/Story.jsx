@@ -45,7 +45,14 @@ function Scene({ id, flip, kicker, title, children, visual, sfx, me }) {
       <div className="wrap scene-grid">
         <div className="scene-text">
           <p className="kicker">{kicker}</p>
-          <h2 id={`${id}-h`}>{title}</h2>
+          <h2 id={`${id}-h`}>
+            {title.split(" ").map((w, i, all) => (
+              <span key={i} className="w" style={{ "--w": i }}>
+                {w}
+                {i < all.length - 1 ? " " : ""}
+              </span>
+            ))}
+          </h2>
           {children}
         </div>
         <div className="scene-visual">

@@ -7,6 +7,7 @@ import Term from "../../../components/Term";
 import HowItWorks from "../../../components/HowItWorks";
 import PageHead from "../../../components/PageHead";
 import CopyButton from "../../../components/CopyButton";
+import CountUp from "../../../components/CountUp";
 import { ArrowUpRight } from "../../../components/Icons";
 import { projects, getProject } from "../../../lib/projects";
 import { getCommunity } from "../../../lib/live";
@@ -67,6 +68,21 @@ export default async function ProjectPage({ params }) {
           <Term lines={p.media.term} label={`Example output from ${p.name}`} />
         )}
       </div>
+
+      {p.stats ? (
+        <ul className="glance" aria-label="At a glance">
+          {p.stats.map((s) => (
+            <li key={s.label} data-reveal>
+              <b>
+                {s.plain ? s.n : <CountUp value={s.n} />}
+                {s.of || ""}
+                {s.plus || ""}
+              </b>
+              <span>{s.label}</span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
 
       {p.story ? (
         <div className="prose case">

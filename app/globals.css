@@ -8988,3 +8988,211 @@ html.lenis body {
 .js .scene.rest .scene-visual * {
   animation-play-state: paused !important;
 }
+
+/* ---------- experience pass (2026-11-25) ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* "I build ___": the word slides in from below, underlined in the accent */
+.rotor {
+  display: inline-block;
+  vertical-align: bottom;
+  overflow: hidden;
+  padding-bottom: 2px;
+}
+
+.rotor-word {
+  display: inline-block;
+  font-weight: 700;
+  color: var(--ink);
+  background: linear-gradient(var(--gold), var(--gold)) 0 100% / 100% 3px no-repeat;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rotor-word.swap {
+    animation: rotor-in 0.45s var(--ease-out) both;
+  }
+}
+
+@keyframes rotor-in {
+  from {
+    opacity: 0;
+    translate: 0 0.7em;
+  }
+}
+
+/* by the numbers */
+.impact {
+  padding: 0 0 clamp(30px, 5vw, 56px);
+}
+
+.impact-note {
+  display: block;
+  margin: 0 0 10px;
+  font-size: 19px;
+}
+
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.impact-card {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  height: 100%;
+  padding: 18px 18px 16px;
+  border: 2px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--hue-tint, var(--card));
+  box-shadow: 4px 4px 0 var(--hue, var(--shadow));
+  color: var(--ink);
+  text-decoration: none;
+  overflow: hidden;
+  transition:
+    transform 0.35s var(--ease-spring),
+    box-shadow 0.3s var(--ease-out);
+}
+
+.impact-n {
+  font: 800 clamp(30px, 3.6vw, 42px) / 1 var(--f-display);
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.impact-of,
+.impact-plus {
+  color: var(--hue-text, var(--gold-text));
+}
+
+.impact-label {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+@media (max-width: 760px) {
+  .impact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .impact-card {
+    padding: 14px 14px 12px;
+  }
+  .impact-label {
+    font-size: 13.5px;
+  }
+}
+
+/* project pages: at a glance */
+.glance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: -8px 0 30px;
+  padding: 0;
+  list-style: none;
+}
+
+.glance li {
+  display: grid;
+  gap: 2px;
+  min-width: 120px;
+  padding: 10px 14px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: var(--hue-tint, var(--card));
+  box-shadow: 3px 3px 0 var(--hue, var(--shadow));
+}
+
+.glance b {
+  font: 800 26px/1.05 var(--f-display);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.glance li > span {
+  font: 500 12.5px/1.3 var(--f-mono);
+  color: var(--muted);
+}
+
+/* chapter titles rise in word by word as the chapter arrives */
+.scene-text > h2 .w {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .scene .scene-text > h2 {
+    animation: none !important;
+  }
+  .js .scene .scene-text > h2 .w {
+    opacity: 0;
+    translate: 0 0.45em;
+  }
+  .js .scene.in .scene-text > h2 .w {
+    animation: word-in 0.55s var(--ease-out) calc(0.08s + var(--w) * 0.07s) both;
+  }
+}
+
+@keyframes word-in {
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* desktop: cards tip toward the pointer and a soft light follows it (CardFx) */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .rows.cards a.row.fx-on,
+  .impact-card.fx-on {
+    transform: perspective(900px) rotateX(var(--ty, 0deg)) rotateY(var(--tx, 0deg)) translate(-2px, -3px);
+    transition:
+      transform 0.12s linear,
+      box-shadow 0.3s var(--ease-out);
+  }
+  .rows.cards a.row::after,
+  .impact-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--hue, var(--gold)) 22%, transparent), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
+  }
+  .rows.cards a.row.fx-on::after,
+  .impact-card.fx-on::after {
+    opacity: 1;
+  }
+  .impact-card.fx-on {
+    box-shadow: 6px 7px 0 var(--hue, var(--shadow));
+  }
+}
+
+.rows.cards a.row {
+  position: relative;
+}
+
+/* "I build ___." sits on its own line above the intro (a swap reflows nothing else) */
+.hero-tag {
+  margin: 20px 0 6px;
+  font: 700 clamp(19px, 2vw, 23px) / 1.3 var(--f-body);
+  color: var(--ink);
+}
+
+.hero-tag .rotor-word {
+  font-weight: 800;
+}
