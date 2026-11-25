@@ -5,6 +5,7 @@ import { nodes, running, incidents } from "../../lib/lab";
 import { meta } from "../../lib/meta";
 import { getLab } from "../../lib/live";
 import LabStatus from "../../components/LabStatus";
+import LabNodes3D from "../../components/LabNodes3D";
 
 export const revalidate = 60;
 
@@ -35,6 +36,7 @@ export default async function HomelabPage() {
 
       <div className="wrap narrow end">
         <section className="block">
+          <LabNodes3D status={lab?.nodes} />
           <div className="rack">
             <div className="cable rack-cable" aria-hidden="true">
               <i />

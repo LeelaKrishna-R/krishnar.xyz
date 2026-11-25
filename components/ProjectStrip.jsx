@@ -8,7 +8,7 @@ import { projects } from "../lib/projects";
 // seamless, so it is hidden from screen readers and the tab order.
 const SHORT = {
   copilot: "AI cohost for streamers",
-  dexter: "six Discord bots",
+  dexter: "seven Discord bots",
   friday: "my personal AI",
   iris: "a face for AI agents",
   shero: "13,000+ servers",

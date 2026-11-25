@@ -307,6 +307,9 @@ function DexterBots() {
         <li>
           <b>Clarity + Cadence</b> music, on Lavalink
         </li>
+        <li>
+          <b>DexCraft</b> the community&apos;s Minecraft events
+        </li>
       </ul>
     </>
   );

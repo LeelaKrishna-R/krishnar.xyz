@@ -22,6 +22,7 @@ const bots = [
   { name: "Steward", img: "steward" },
   { name: "Clarity", img: "clarity" },
   { name: "Cadence", img: "cadence" },
+  { name: "DexCraft", img: "dexcraft" },
 ];
 
 // Fixed positions so the server cloud looks placed by hand, not random.
@@ -277,7 +278,7 @@ export default function Story({ community }) {
           I&apos;m a volunteer developer at Dexter AI. Copilot is an AI cohost for streamers that you just talk to: say the
           word and it switches OBS scenes, moderates chat, runs a poll or a giveaway, or designs your overlay.
         </p>
-        <p>I also rebuilt the six bots that run its Discord community, from moderation to music. Meet the cast.</p>
+        <p>I also rebuilt the bots that run its Discord community, seven of them now, from moderation to music to Minecraft. Meet the cast.</p>
         {community ? (
           <p className="live-pill">
             <span className="dot-live" aria-hidden="true" />
@@ -462,7 +463,7 @@ export default function Story({ community }) {
             {[
               ["starring", "Krishna Ravuri"],
               ["and", "Dexter Copilot"],
-              ["featuring", "Spark · Warden · Sentinel · Steward · Clarity · Cadence"],
+              ["featuring", "Spark · Warden · Sentinel · Steward · Clarity · Cadence · DexCraft"],
               ["also starring", "Shero · Friday · Iris"],
               ["filmed on location in", "Chennai · Madurai · Coimbatore · Denton"],
               ["special effects", "two Dell OptiPlex micro PCs and a GPU at home"],

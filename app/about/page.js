@@ -27,7 +27,7 @@ export default async function AboutPage() {
             communication engineering at Kalasalingam University, then moved to Texas for a master&apos;s in AI at UNT.
           </p>
           <p>
-            I&apos;m a volunteer developer at Dexter AI, on <Link href="/work/copilot">Dexter Copilot</Link> itself and the six
+            I&apos;m a volunteer developer at Dexter AI, on <Link href="/work/copilot">Dexter Copilot</Link> itself and the seven
             bots that run its community. I&apos;ve been building Discord bots since 2019, grew{" "}
             <Link href="/work/shero">Shero</Link> into a security bot used in more than 13,000 servers, and I&apos;ve delivered
             several freelance projects (under NDA, so they&apos;re not listed here).
