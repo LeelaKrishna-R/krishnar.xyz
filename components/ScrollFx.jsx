@@ -126,27 +126,44 @@ export default function ScrollFx() {
       owner.set(target, el);
       so.observe(target);
     });
-    // Looping animations play when you arrive, then settle: ~10 s after a
-    // scene or a cartoon me comes into view its loops rest (.rest / .ch-rest),
-    // and they play again when you come back or touch the character. Endless
-    // SVG loops can't run on the compositor, so on a phone they kept the main
-    // thread 30-90% busy while the page just sat there.
-    const timers = new Map();
-    const wake = (el, cls, ms) => {
-      el.classList.remove(cls);
-      clearTimeout(timers.get(el));
-      timers.set(el, setTimeout(() => el.classList.add(cls), ms));
+    // Endless loops play when you arrive, then rest: once a scene or a cartoon
+    // me has been in view ~10 s, its *infinite* animations are paused, and they
+    // play again when you come back or touch the character. One-time entrances
+    // are never touched (pausing everything froze the 2019 chat empty for
+    // anyone who reached it more than 10 s after load). Endless SVG loops can't
+    // run on the compositor, so on a phone they kept the main thread 30-90% busy.
+    const awake = new Map(); // container -> when it last came into view or was touched
+    const rested = new WeakSet(); // animations this paused (so only these get resumed)
+    const loops = (el) => el.getAnimations({ subtree: true }).filter((a) => a.effect?.getTiming?.().iterations === Infinity);
+    const wake = (el) => {
+      awake.set(el, performance.now());
+      for (const a of loops(el)) {
+        if (rested.has(a) && a.playState === "paused") {
+          rested.delete(a);
+          a.play();
+        }
+      }
     };
-    const sleep = (el) => {
-      clearTimeout(timers.get(el));
-      timers.delete(el);
-    };
+    const sleep = (el) => awake.delete(el);
+    const restTick = setInterval(() => {
+      if (document.hidden) return;
+      const now = performance.now();
+      awake.forEach((t, el) => {
+        if (now - t < 10000) return;
+        for (const a of loops(el)) {
+          if (a.playState === "running") {
+            a.pause();
+            rested.add(a);
+          }
+        }
+      });
+    }, 2000);
     // .on marks scenes near the viewport; looping animations pause without it.
     const vis = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           e.target.classList.toggle("on", e.isIntersecting);
-          if (e.isIntersecting) wake(e.target, "rest", 10000);
+          if (e.isIntersecting) wake(e.target);
           else sleep(e.target);
         }
       },
@@ -158,7 +175,7 @@ export default function ScrollFx() {
       (entries) => {
         for (const e of entries) {
           e.target.classList.toggle("ch-off", !e.isIntersecting);
-          if (e.isIntersecting) wake(e.target, "ch-rest", 10000);
+          if (e.isIntersecting) wake(e.target);
           else sleep(e.target);
         }
       },
@@ -167,7 +184,7 @@ export default function ScrollFx() {
     document.querySelectorAll(".chibi").forEach((el) => chib.observe(el));
     const poke = (ev) => {
       const c = ev.target.closest?.(".chibi");
-      if (c) wake(c, "ch-rest", 10000);
+      if (c) wake(c);
     };
     document.addEventListener("pointerover", poke, true);
     document.addEventListener("pointerdown", poke, true);
@@ -176,7 +193,7 @@ export default function ScrollFx() {
       so.disconnect();
       vis.disconnect();
       chib.disconnect();
-      timers.forEach((t) => clearTimeout(t));
+      clearInterval(restTick);
       document.removeEventListener("pointerover", poke, true);
       document.removeEventListener("pointerdown", poke, true);
     };

@@ -258,8 +258,63 @@ function Homelab() {
   );
 }
 
+function DexterBots() {
+  return (
+    <>
+      <Flow
+        label="A member chats in Discord. Warden, which watches the server, counts the XP, sees a level-up and hands Spark a job through the shared queue. Spark, which keeps no connection to Discord open, posts the level-up card and gives the reward role."
+        loop={9}
+        steps={
+          <>
+            <div className="sticker diag-card dx-chat">
+              <b className="diag-title"># general</b>
+              <code>krishna: gg everyone</code>
+              <code>sam: that was close</code>
+              <em className="dx-xp">+15 XP</em>
+            </div>
+            <span className="diag-arrow hl-pipe" aria-hidden="true">
+              <i />
+              <b className="hl-packet" />
+            </span>
+            <div className="sticker diag-card diag-mid dx-warden">
+              <b>Warden</b>
+              <span>watches the server, counts XP</span>
+              <span className="hl-prog dx-prog" aria-hidden="true">
+                <i />
+              </span>
+              <em className="dx-lvl">level 12 reached</em>
+              <em className="dx-job">job → Spark</em>
+            </div>
+            <span className="diag-arrow hl-pipe dx-pipe-2" aria-hidden="true">
+              <i />
+              <b className="hl-packet" />
+            </span>
+            <div className="sticker diag-card dx-spark">
+              <small>Spark posts</small>
+              <b className="dx-card">Level 12!</b>
+              <span className="dx-role">+ reward role</span>
+            </div>
+          </>
+        }
+      />
+      <ul className="dx-crew" aria-label="The rest of the crew">
+        <li>
+          <b>Sentinel</b> automod, verification, server logs
+        </li>
+        <li>
+          <b>Steward</b> tickets and modmail
+        </li>
+        <li>
+          <b>Clarity + Cadence</b> music, on Lavalink
+        </li>
+      </ul>
+    </>
+  );
+}
+
 const DIAGRAMS = {
   homelab: Homelab,
+  dexter: DexterBots,
   "net-triage": NetTriage,
   lazarus: Lazarus,
   "agent-budget": AgentBudget,

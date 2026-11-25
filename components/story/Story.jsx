@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import CountUp from "../CountUp";
@@ -46,11 +47,15 @@ function Scene({ id, flip, kicker, title, children, visual, sfx, me }) {
         <div className="scene-text">
           <p className="kicker">{kicker}</p>
           <h2 id={`${id}-h`}>
+            {/* each word is its own box for the reveal; the spaces sit between
+                the boxes (a space inside an inline-block is dropped) */}
             {title.split(" ").map((w, i, all) => (
-              <span key={i} className="w" style={{ "--w": i }}>
-                {w}
-                {i < all.length - 1 ? " " : ""}
-              </span>
+              <Fragment key={i}>
+                <span className="w" style={{ "--w": i }}>
+                  {w}
+                </span>
+                {i < all.length - 1 ? " " : null}
+              </Fragment>
             ))}
           </h2>
           {children}

@@ -8980,14 +8980,7 @@ html.lenis body {
   }
 }
 
-/* settled loops (components/ScrollFx.jsx): ~10 s after a scene or a cartoon
-   me comes into view, its endless loops rest; they play again on return or
-   touch. Entrances and scroll effects have finished long before. */
-.chibi.ch-rest,
-.chibi.ch-rest *,
-.js .scene.rest .scene-visual * {
-  animation-play-state: paused !important;
-}
+/* resting endless loops is done in components/ScrollFx.jsx (infinite animations only) */
 
 /* ---------- experience pass (2026-11-25) ---------- */
 .sr-only {
@@ -9195,4 +9188,215 @@ html.lenis body {
 
 .hero-tag .rotor-word {
   font-weight: 800;
+}
+
+/* the live "Latest" commit line in the 30-second card */
+.tldr-list .latest a {
+  font-weight: 700;
+}
+
+.tldr-list .latest small {
+  color: var(--muted);
+  font: 500 12.5px/1 var(--f-mono);
+  white-space: nowrap;
+}
+
+.tldr-list .latest .dot-live {
+  margin-right: 6px;
+  vertical-align: 0.1em;
+}
+
+/* ---------- how it works: the Dexter AI bots ---------- */
+.dx-chat code {
+  margin-bottom: 3px;
+}
+
+.dx-xp,
+.dx-lvl,
+.dx-job {
+  display: inline-block;
+  font: 700 11.5px/1.6 var(--f-mono);
+  font-style: normal;
+  padding: 1px 8px;
+  border-radius: 999px;
+}
+
+.dx-xp {
+  margin-top: 4px;
+  background: color-mix(in srgb, var(--gold) 22%, transparent);
+  color: var(--gold-text);
+}
+
+.dx-warden .dx-lvl {
+  margin-top: 6px;
+  background: color-mix(in srgb, var(--green) 16%, transparent);
+  color: var(--green-text);
+}
+
+.dx-warden .dx-job {
+  margin-top: 4px;
+  border: 1.5px dashed var(--line);
+  color: var(--ink);
+}
+
+.dx-spark {
+  text-align: center;
+}
+
+.dx-card {
+  display: block;
+  margin: 6px auto 4px;
+  padding: 6px 10px;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: color-mix(in srgb, #5b84ee 18%, var(--card));
+  font: 800 18px/1.1 var(--f-display);
+}
+
+.dx-role {
+  display: block;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.dx-crew {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dx-crew li {
+  padding: 5px 11px;
+  border: 1.5px solid var(--faint);
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.dx-crew b {
+  color: var(--ink);
+  margin-right: 4px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .dx-xp {
+    animation: dx-xp var(--T) ease-out infinite;
+  }
+  .js .dx-prog i {
+    animation: dx-fill var(--T) ease-in-out infinite;
+  }
+  .js .dx-lvl {
+    animation: dx-lvl var(--T) var(--ease-spring) infinite;
+  }
+  .js .dx-job {
+    animation: dx-job var(--T) ease-out infinite;
+  }
+  .js .dx-pipe-2 .hl-packet {
+    animation-name: hl-pack-2;
+  }
+  .js .dx-card {
+    animation: dx-card var(--T) var(--ease-spring) infinite;
+  }
+  .js .dx-role {
+    animation: dx-role var(--T) ease-out infinite;
+  }
+}
+
+@keyframes dx-xp {
+  0%,
+  6% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  11%,
+  86% {
+    opacity: 1;
+    transform: none;
+  }
+  94%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes dx-fill {
+  0%,
+  28% {
+    transform: scaleX(0.25);
+  }
+  45%,
+  86% {
+    transform: scaleX(1);
+  }
+  96%,
+  100% {
+    transform: scaleX(0.25);
+  }
+}
+
+@keyframes dx-lvl {
+  0%,
+  44% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  50%,
+  86% {
+    opacity: 1;
+    transform: none;
+  }
+  94%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes dx-job {
+  0%,
+  50% {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  56%,
+  86% {
+    opacity: 1;
+    transform: none;
+  }
+  94%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes dx-card {
+  0%,
+  72% {
+    opacity: 0;
+    transform: scale(0.85) rotate(-3deg);
+  }
+  78%,
+  92% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes dx-role {
+  0%,
+  78% {
+    opacity: 0;
+  }
+  83%,
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }

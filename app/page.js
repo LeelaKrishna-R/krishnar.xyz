@@ -7,7 +7,14 @@ import ImpactBand from "../components/ImpactBand";
 import RoleRotator from "../components/RoleRotator";
 import Chibi from "../components/Chibi";
 import { Scribble } from "../components/Icons";
-import { getCommunity } from "../lib/live";
+import { getCommunity, getLatestCommit } from "../lib/live";
+
+// "3 hours ago" for the Latest line (rendered on the server, cached 10 minutes)
+function ago(iso) {
+  const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+  const [n, u] = s < 3600 ? [Math.max(1, Math.round(s / 60)), "minute"] : s < 86400 ? [Math.round(s / 3600), "hour"] : [Math.round(s / 86400), "day"];
+  return `${n} ${u}${n === 1 ? "" : "s"} ago`;
+}
 import { site } from "../lib/site";
 import { meta } from "../lib/meta";
 import { JsonLd, profilePage } from "../lib/jsonld";
@@ -17,7 +24,7 @@ export const revalidate = 600;
 export const metadata = meta({ path: "/" });
 
 export default async function Home() {
-  const community = await getCommunity();
+  const [community, latest] = await Promise.all([getCommunity(), getLatestCommit()]);
 
   return (
     <>
@@ -117,6 +124,15 @@ export default async function Home() {
                 <dt>Now</dt>
                 <dd>Volunteer developer on Dexter Copilot, an AI cohost for streamers</dd>
               </div>
+              {latest ? (
+                <div>
+                  <dt>Latest</dt>
+                  <dd className="latest">
+                    <span className="dot-live" aria-hidden="true" />
+                    <a href={latest.url}>{latest.repo}</a>: {latest.message} <small>· {ago(latest.at)}</small>
+                  </dd>
+                </div>
+              ) : null}
               <div>
                 <dt>Proof</dt>
                 <dd>Shero runs in 13,000+ servers. My homelab has monitoring and monthly restore drills. net-triage gets 16/16 real Cisco cases right.</dd>
