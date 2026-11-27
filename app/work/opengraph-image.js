@@ -9,7 +9,7 @@ export default function Image() {
   return ogImage({
     label: "ravuri.dev · work",
     title: "What I work on",
-    line: "Dexter Copilot, the Dexter AI bots, Friday, Iris, Shero and a few small tools.",
+    line: "Dexter Copilot, the Dexter AI bots, DexCraft, Friday, Iris, Shero and a few small tools.",
     me: { pose: "cheer", face: "happy" },
   });
 }

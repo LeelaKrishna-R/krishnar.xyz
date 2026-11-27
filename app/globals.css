@@ -8072,6 +8072,7 @@ html {
 }
 [data-hue="copilot"] { --hue: #e4573f; }
 [data-hue="dexter"] { --hue: #5b84ee; }
+[data-hue="dexcraft"] { --hue: #4a9a26; }
 [data-hue="friday"] { --hue: #19a39a; }
 [data-hue="iris"] { --hue: #e06aa0; }
 [data-hue="shero"] { --hue: #3e9f5c; }
@@ -8089,6 +8090,7 @@ html {
 }
 :root[data-theme="dark"] [data-hue="copilot"] { --hue: #ff8a70; }
 :root[data-theme="dark"] [data-hue="dexter"] { --hue: #8eaeff; }
+:root[data-theme="dark"] [data-hue="dexcraft"] { --hue: #8fd65a; }
 :root[data-theme="dark"] [data-hue="friday"] { --hue: #4fd1c5; }
 :root[data-theme="dark"] [data-hue="iris"] { --hue: #f59cc4; }
 :root[data-theme="dark"] [data-hue="shero"] { --hue: #6fcf8f; }

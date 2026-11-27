@@ -9,6 +9,7 @@ import { projects } from "../lib/projects";
 const SHORT = {
   copilot: "AI cohost for streamers",
   dexter: "seven Discord bots",
+  dexcraft: "a Minecraft launcher I lead",
   friday: "my personal AI",
   iris: "a face for AI agents",
   shero: "13,000+ servers",

@@ -7,7 +7,7 @@ import { meta } from "../../lib/meta";
 export const metadata = meta({
   title: "Work",
   description:
-    "Dexter Copilot, the Dexter AI bots, Friday, Iris, Shero, SyntaxHost and a few small tools for homelabs and AI agents, biggest first.",
+    "Dexter Copilot, the Dexter AI bots, the DexCraft launcher, Friday, Iris, Shero, SyntaxHost and a few small tools for homelabs and AI agents, biggest first.",
   path: "/work",
 });
 
