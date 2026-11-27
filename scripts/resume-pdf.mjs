@@ -26,9 +26,9 @@ const item = (org, place, role, when, points = [], boldPlace = false) => `
 const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>${esc(person.name)} - Resume</title>
 <style>
-  @page { size: Letter; margin: 0.4in 0.5in; }
+  @page { size: Letter; margin: 0.35in 0.5in; }
   * { box-sizing: border-box; }
-  body { margin: 0; font-family: "Times New Roman", Times, serif; font-size: 10pt; line-height: 1.16; color: #000; }
+  body { margin: 0; font-family: "Times New Roman", Times, serif; font-size: 10pt; line-height: 1.11; color: #000; }
   a { color: #0645ad; text-decoration: underline; }
   h1 { margin: 0; text-align: center; font-size: 17pt; letter-spacing: 0.02em; }
   .title { margin: 1pt 0 0; text-align: center; font-size: 13pt; font-weight: bold; }

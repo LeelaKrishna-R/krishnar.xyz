@@ -90,7 +90,7 @@ const doc = new Document({
     default: {
       document: {
         run: { font: FONT, size: PT(10) },
-        paragraph: { spacing: { line: 278 } },
+        paragraph: { spacing: { line: 266 } },
       },
     },
   },
@@ -115,7 +115,7 @@ const doc = new Document({
       properties: {
         page: {
           size: { width: 12240, height: 15840 },
-          margin: { top: 576, bottom: 576, left: 720, right: 720 },
+          margin: { top: 504, bottom: 504, left: 720, right: 720 },
         },
       },
       children: [
